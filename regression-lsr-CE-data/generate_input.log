@@ -1,0 +1,100 @@
+GUIDE Classification and Regression Trees and Forests
+ Version 41.2 (Build date: April 9, 2023)          
+ Compiled with gfortran 11.3.0 on Ubuntu 22.04.2                       
+ Copyright (c) 1997-2023 Wei-Yin Loh. All rights reserved.
+ Software based upon work partially supported by the U.S. Army Research Office,
+ National Science Foundation, National Institutes of Health,
+ Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
+  
+ Choose one of the following options:
+ 0. Read the warranty disclaimer
+ 1. Create a GUIDE input file
+ Input your choice: 1
+ Name of batch input file: cons.in
+ Input 1 for model fitting, 2 for importance or DIF scoring, 3 for data conversion ([1:3], <cr>=1): 
+ Name of batch output file: cons.out
+ Input 1 for single tree, 2 for ensemble ([1:2], <cr>=1): 
+ Input 1 for classification, 2 for regression, 3 for propensity score grouping
+ Input your choice ([1:3], <cr>=1): 2
+ Choose type of regression model:
+  1=linear, 2=quantile, 3=Poisson, 4=censored response,
+  5=multiresponse or itemresponse, 6=longitudinal data (with T variables),
+  7=binary logistic regression.
+ Input choice ([1:7], <cr>=1): 
+ Input 1 for least squares, 2 least median of squares ([1:2], <cr>=1): 1
+ Choose complexity of model to use at each node:
+ Choose 0 for stepwise linear regression (recommended for prediction)
+ Choose 1 for multiple regression
+ Choose 2 for best simple polynomial in one N or F variable
+ Choose 3 for constant fit (recommended for interpretability or if there is an R variable)
+ 0: stepwise linear, 1: multiple linear, 2: best simple polynomial, 3: constant,
+ 4: best simple stepwise ANCOVA ([0:4], <cr>=3): 3
+ Input 1 for default options, 2 otherwise ([1:2], <cr>=1): 
+  
+ Input name of data description file (max 100 characters);
+ enclose with matching quotes if it has spaces: ce2021reg.dsc
+ Reading data description file ...
+ Training sample file: ce2021.txt
+ Missing value code: NA
+ Records in data file start on line 2
+ Number of M variables associated with C variables: 19
+ 384 N variables changed to S
+ D variable is INTRDVX
+ Reading data file ...
+ Number of records in data file: 3965
+ Length of longest entry in data file: 11
+ Checking for missing values ...
+ Finished checking
+ Missing values found in D variable
+ Missing values found among categorical variables
+ Separate categories will be created for missing categorical variables
+ Missing values found among non-categorical variables
+ Finding number of levels of M variables associated with C variables ...
+ Assigning integer codes to values of 47 categorical variables
+ Finished assigning codes to 10 categorical variables
+ Finished assigning codes to 20 categorical variables
+ Finished assigning codes to 30 categorical variables
+ Finished assigning codes to 40 categorical variables
+ Associating missing values of N and S variables with M variable codes ...
+ Re-checking data ...
+ Allocating missing value information ...
+ Assigning codes to missing values, if any ...
+ Data checks complete
+ Creating missing value indicators ...
+ Rereading data ...
+ Warning: S variable DIRACC is constant
+ Warning: S variable TOTHVHRP is constant
+ Warning: S variable TOTHVHRC is constant
+ Warning: S variable ROTHRFLC is constant
+ Warning: S variable WELFREBX is constant
+ Warning: S variable OTHLYRBX is constant
+ Warning: S variable OTHLNYRB is constant
+ Smallest positive weight:  1.0725E+03
+ Largest positive weight:   9.3902E+04
+      Total  #cases w/   #missing
+     #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
+       3965       1478       3965        1        0        0      384
+     #P-var   #M-var   #B-var   #C-var   #I-var
+          0      116        0       47        0
+ Weight variable FINLWT21 in column: 31
+ Number of cases used for training: 2487
+ Number of split variables: 431
+ Number of cases excluded due to 0 W or missing D variable: 1478
+ Finished reading data file
+ Input 1 for unweighted, 2 for weighted error estimates during pruning ([1:2], <cr>=2): 2
+ Warning: No interaction tests; too many predictor variables
+ Input 0=skip LaTeX tree, 1=tree without node numbers, 2=with node numbers ([0:2], <cr>=2): 2
+ Input file name to store LaTeX code (use .tex as suffix): cons.tex 
+ You can store the variables and/or values used to split and fit in a file
+ Choose 1 to skip this step, 2 to store split and fit variables,
+ 3 to store split variables and their values
+ Input your choice ([1:3], <cr>=1): 3
+ Input file name: cons.split
+ Input 2 to save fitted values and node IDs, 1 otherwise ([1:2], <cr>=2): 
+ Input name of file to store node ID and fitted value of each case: cons.fit
+ Input 2 to write R function for predicting new cases, 1 otherwise ([1:2], <cr>=2): 
+ Input file name: cons.r
+ Input rank of top variable to split root node ([1:431], <cr>=1): 1
+ Input file is created!
+ Run GUIDE with the command: guide < cons.in
+  Press ENTER or RETURN to quit

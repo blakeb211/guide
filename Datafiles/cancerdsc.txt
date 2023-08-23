@@ -1,0 +1,13 @@
+cancerdata.txt
+NA
+2
+1 horTh r
+2 age n
+3 menostat c
+4 tsize n
+5 tgrade n
+6 pnodes n 
+7 progrec n 
+8 estrec n
+9 time t
+10 death d

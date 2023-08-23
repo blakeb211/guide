@@ -1,0 +1,1225 @@
+             GGG   U   U  I  DDDD   EEEE
+            G   G  U   U  I  D   D  E
+            G      U   U  I  D   D  E
+            G  GG  U   U  I  D   D  EEE
+            G   G  U   U  I  D   D  E
+            G   G  U   U  I  D   D  E
+             GGG    UUU   I  DDDD   EEEE
+   
+ GUIDE Classification and Regression Trees and Forests
+ Version 41.2 (Build date: April 9, 2023)          
+ Compiled with gfortran 11.3.0 on Ubuntu 22.04.2                       
+ Copyright (c) 1997-2023 Wei-Yin Loh. All rights reserved.
+ This software is based upon work partially supported by the U.S. Army Research Office,
+ National Science Foundation, National Institutes of Health,
+ Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
+  
+ This job was started on 08/20/23 at 15:51
+  
+ Least squares regression tree
+ Pruning by cross-validation
+ Data description file: ce2021reg.dsc
+ Training sample file: ce2021.txt
+ Missing value code: NA
+ Records in data file start on line 2
+ Number of M variables associated with C variables: 19
+ 384 N variables changed to S
+ D variable is INTRDVX
+ Piecewise constant model
+ Number of records in data file: 3965
+ Length of longest entry in data file: 11
+ Missing values found in D variable
+ Missing values found among categorical variables
+ Separate categories will be created for missing categorical variables
+ Missing values found among non-categorical variables
+ Warning: S variable DIRACC is constant
+ Warning: S variable TOTHVHRP is constant
+ Warning: S variable TOTHVHRC is constant
+ Warning: S variable ROTHRFLC is constant
+ Warning: S variable WELFREBX is constant
+ Warning: S variable OTHLYRBX is constant
+ Warning: S variable OTHLNYRB is constant
+ Smallest and largest positive weights are  1.0725E+03 and 9.3902E+04
+  
+ Summary information for training sample of size 2487 (excluding observations with
+ non-positive weight or missing values in d, e, t, r or z variables)
+ d=dependent, b=split and fit cat variable using indicator variables,
+ c=split-only categorical, i=fit-only categorical (via indicators),
+ s=split-only numerical, n=split and fit numerical, f=fit-only numerical,
+ m=missing-value flag variable, p=periodic variable, w=weight
+ Levels of M variables are for missing values in associated variables
+                                                  #Codes/           
+                                                  Levels/           
+  Column  Name            Minimum      Maximum    Periods   #Missing
+       1  DIRACC     s    1.000        1.000                   125
+       2  DIRACC_    m                                  2
+       3  AGE_REF    s    19.00        87.00    
+       4  AGE_REF_   m                                  0
+       5  AGE2       s    21.00        87.00                  1092
+       6  AGE2_      m                                  1
+       7  AS_COMP1   s    0.000        5.000    
+       8  AS_COMP2   s    0.000        4.000    
+       9  AS_COMP3   s    0.000        4.000    
+      10  AS_COMP4   s    0.000        4.000    
+      11  AS_COMP5   s    0.000        2.000    
+      12  BATHRMQ    s    1.000        5.000                     4
+      13  BATHRMQ_   m                                  2
+      14  BEDROOMQ   s    0.000        9.000                     4
+      15  BEDR_OMQ   m                                  2
+      16  BLS_URBN   s    1.000        2.000    
+      17  BUILDING   c                                 11
+      18  CUTENURE   c                                  5
+      19  EARNCOMP   c                                  8
+      20  EDUC_REF   s    10.00        16.00    
+      21  EDUCA2     s    0.000        16.00                  1092
+      22  EDUCA2_    m                                  1
+      23  FAM_SIZE   s    1.000        11.00    
+      24  FAM_TYPE   m                                  0
+      25  FGOVRETX   s    0.000       0.2064E+05
+      26  FGOV_ETX   m                                  0
+      27  FINCBTAX   s  -0.1050E+06   0.1039E+07
+      28  FINCBT_X   m                                  0
+      29  FINDRETX   s    0.000       0.6354E+05
+      30  FIND_ETX   m                                  0
+      31  FINLWT21   w    1072.       0.9390E+05
+      32  FJSSDEDX   s    0.000       0.4366E+05
+      33  FJSS_EDX   m                                  0
+      34  FPRIPENX   s    0.000       0.4300E+05
+      35  FPRI_ENX   m                                  0
+      36  FRRDEDX    s    0.000        5770.    
+      37  FRRDEDX_   m                                  0
+      38  FRRETIRX   s    0.000       0.1116E+06
+      39  FSALARYX   s    0.000       0.7645E+06
+      40  FSAL_RYX   m                                  0
+      41  FSSIX      s    0.000       0.3600E+05
+      42  HLFBATHQ   s    0.000        3.000                     4
+      43  HLFB_THQ   m                                  2
+      44  INC_HRS1   s    1.000        90.00                   903
+      45  INC__RS1   m                                  1
+      46  INC_HRS2   s    1.000        99.00                  1620
+      47  INC__RS2   m                                  1
+      48  INC_RANK   s   0.4980E-04    1.000    
+      49  INC__ANK   m                                  0
+      50  INCNONW1   c                                  6     1584
+      51  INCN_NW1   m                                  1
+      52  INCNONW2   c                                  6     1959
+      53  INCN_NW2   m                                  1
+      54  INCOMEY1   c                                  6      903
+      55  INCO_EY1   m                                  1
+      56  INCOMEY2   c                                  6     1620
+      57  INCO_EY2   m                                  1
+      58  INCWEEK1   s    0.000        52.00    
+      59  INCWEEK2   s    0.000        52.00                  1092
+      60  INCW_EK2   m                                  1
+      61  MISCTAXX   s    1400.       0.2217E+06              2481
+      62  MISC_AXX   m                                  2
+      63  LUMP_UMX   c                                  4
+      64  MARITAL1   c                                  5
+      65  NO_EARNR   s    0.000        5.000    
+      66  NONINCMX   s    0.000       0.9000E+06
+      67  NONI_CMX   m                                  0
+      68  NUM_AUTO   s    0.000        6.000    
+      69  OCCUCOD1   c                                 15      903
+      70  OCCU_OD1   m                                  1
+      71  OCCUCOD2   c                                 15     1620
+      72  OCCU_OD2   m                                  1
+      73  OTHRINCX   s    150.0       0.1041E+06              2394
+      74  OTHR_NCX   m                                  1
+      75  PERSLT18   s    0.000        7.000    
+      76  PERSOT64   s    0.000        3.000    
+      77  POPSIZE    s    1.000        5.000    
+      78  PRINEARN   c                                  5
+      79  RACE2      c                                  6     1092
+      80  RACE2_     m                                  1
+      81  REF_RACE   c                                  6
+      82  REGION     c                                  4       25
+      83  RENTEQVX   s    65.00        6302.                   548
+      84  RENT_QVX   m                                  1
+      85  ROOMSQ     s    1.000        16.00                     4
+      86  ROOMSQ_    m                                  2
+      87  SEX_REF    c                                  2
+      88  SEX2       c                                  2     1092
+      89  SEX2_      m                                  1
+      90  SMSASTAT   c                                  2
+      91  ST_HOUS    c                                  2
+      92  VEHQ       s    0.000        24.00    
+      93  WELFAREX   s    480.0        1200.                  2481
+      94  WELF_REX   m                                  2
+      95  TOTEXPPQ   s    712.7       0.1526E+06
+      96  TOTEXPCQ   s    0.000       0.2138E+06
+      97  FOODPQ     s    8.667       0.2913E+05
+      98  FOODCQ     s    0.000       0.2195E+05
+      99  FDHOMEPQ   s    0.000       0.1855E+05
+     100  FDHOMECQ   s    0.000        9553.    
+     101  FDAWAYPQ   s    0.000       0.1277E+05
+     102  FDAWAYCQ   s    0.000       0.1424E+05
+     103  FDXMAPPQ   s    0.000       0.1270E+05
+     104  FDXMAPCQ   s    0.000       0.1424E+05
+     105  FDMAPPQ    s    0.000        4637.    
+     106  FDMAPCQ    s    0.000        2318.    
+     107  ALCBEVPQ   s    0.000        3102.    
+     108  ALCBEVCQ   s    0.000        4670.    
+     109  HOUSPQ     s   -565.3       0.3323E+05
+     110  HOUSCQ     s    0.000       0.5628E+05
+     111  SHELTPQ    s    0.000       0.2806E+05
+     112  SHELTCQ    s    0.000       0.3575E+05
+     113  OWNDWEPQ   s    0.000       0.2777E+05
+     114  OWNDWECQ   s    0.000       0.3226E+05
+     115  MRTINTPQ   s    0.000       0.1800E+05
+     116  MRTINTCQ   s    0.000       0.1893E+05
+     117  PROPTXPQ   s    0.000        7252.    
+     118  PROPTXCQ   s    0.000        4668.    
+     119  MRPINSPQ   s    0.000       0.2636E+05
+     120  MRPINSCQ   s    0.000       0.2707E+05
+     121  RENDWEPQ   s    0.000       0.1674E+05
+     122  RENDWECQ   s    0.000       0.1685E+05
+     123  RNTXRPPQ   s    0.000       0.1674E+05
+     124  RNTXRPCQ   s    0.000       0.1685E+05
+     125  RNTAPYPQ   s    0.000        4500.    
+     126  RNTAPYCQ   s    0.000        5800.    
+     127  OTHLODPQ   s    0.000       0.2063E+05
+     128  OTHLODCQ   s    0.000       0.2452E+05
+     129  UTILPQ     s    0.000        5379.    
+     130  UTILCQ     s    0.000        5445.    
+     131  NTLGASPQ   s    0.000        1800.    
+     132  NTLGASCQ   s    0.000        1188.    
+     133  ELCTRCPQ   s    0.000        2800.    
+     134  ELCTRCCQ   s    0.000        4355.    
+     135  ALLFULPQ   s    0.000        2156.    
+     136  ALLFULCQ   s    0.000        1500.    
+     137  FULOILPQ   s    0.000        2100.    
+     138  FULOILCQ   s    0.000        1433.    
+     139  OTHFLSPQ   s    0.000        2156.    
+     140  OTHFLSCQ   s    0.000        1500.    
+     141  TELEPHPQ   s    0.000        1536.    
+     142  TELEPHCQ   s    0.000        1280.    
+     143  WATRPSPQ   s    0.000        3867.    
+     144  WATRPSCQ   s    0.000        1187.    
+     145  HOUSOPPQ   s   -2148.       0.1569E+05
+     146  HOUSOPCQ   s   -2028.        7264.    
+     147  DOMSRVPQ   s   -2408.       0.1527E+05
+     148  DOMSRVCQ   s   -2408.        7108.    
+     149  DMSXCCPQ   s   -2408.       0.1527E+05
+     150  DMSXCCCQ   s   -2408.        5905.    
+     151  BBYDAYPQ   s    0.000       0.1257E+05
+     152  BBYDAYCQ   s    0.000        6400.    
+     153  OTHHEXPQ   s    0.000       0.1320E+05
+     154  OTHHEXCQ   s    0.000        1645.    
+     155  HOUSEQPQ   s    0.000       0.1510E+05
+     156  HOUSEQCQ   s    0.000       0.5074E+05
+     157  TEXTILPQ   s    0.000        600.0    
+     158  TEXTILCQ   s    0.000        2000.    
+     159  FURNTRPQ   s    0.000       0.1416E+05
+     160  FURNTRCQ   s    0.000       0.5066E+05
+     161  FLRCVRPQ   s    0.000       0.1100E+05
+     162  FLRCVRCQ   s    0.000        6300.    
+     163  MAJAPPPQ   s    0.000        9954.    
+     164  MAJAPPCQ   s    0.000       0.1453E+05
+     165  SMLAPPPQ   s    0.000        1700.    
+     166  SMLAPPCQ   s    0.000        1603.    
+     167  MISCEQPQ   s    0.000        9300.    
+     168  MISCEQCQ   s    0.000       0.1371E+05
+     169  APPARPQ    s    0.000       0.3822E+05
+     170  APPARCQ    s    0.000       0.2027E+05
+     171  MENBOYPQ   s    0.000        3000.    
+     172  MENBOYCQ   s    0.000        3000.    
+     173  MENSIXPQ   s    0.000        3000.    
+     174  MENSIXCQ   s    0.000        3000.    
+     175  OTHAPLPQ   s    0.000       0.3822E+05
+     176  OTHAPLCQ   s    0.000       0.2027E+05
+     177  TRANSPQ    s    0.000       0.1261E+06
+     178  TRANSCQ    s    0.000       0.5713E+05
+     179  CARTKNPQ   s    0.000       0.5600E+05
+     180  CARTKNCQ   s    0.000       0.5578E+05
+     181  CARTKUPQ   s    0.000       0.1240E+06
+     182  CARTKUCQ   s    0.000       0.4700E+05
+     183  OTHVEHPQ   s    0.000       0.1945E+05
+     184  OTHVEHCQ   s    0.000        6953.    
+     185  GASMOPQ    s    0.000        4565.    
+     186  GASMOCQ    s    0.000        8775.    
+     187  VEHFINPQ   s    0.000        1450.    
+     188  VEHFINCQ   s    0.000        1156.    
+     189  MAINRPPQ   s    0.000        7300.    
+     190  MAINRPCQ   s    0.000       0.1067E+05
+     191  VEHINSPQ   s    0.000        3450.    
+     192  VEHINSCQ   s    0.000        2860.    
+     193  VRNTLOPQ   s    0.000       0.1165E+05
+     194  VRNTLOCQ   s    0.000        7422.    
+     195  PUBTRAPQ   s    0.000       0.1432E+05
+     196  PUBTRACQ   s    0.000       0.2264E+05
+     197  TRNTRPPQ   s    0.000       0.1432E+05
+     198  TRNTRPCQ   s    0.000       0.2240E+05
+     199  TRNOTHPQ   s    0.000        1500.    
+     200  TRNOTHCQ   s    0.000        800.0    
+     201  HEALTHPQ   s   -775.0       0.1641E+05
+     202  HEALTHCQ   s   -383.0       0.1882E+05
+     203  HLTHINPQ   s    0.000       0.1060E+05
+     204  HLTHINCQ   s    0.000        6626.    
+     205  MEDSRVPQ   s   -924.0       0.1376E+05
+     206  MEDSRVCQ   s   -680.0       0.1521E+05
+     207  PREDRGPQ   s   -480.0        2700.    
+     208  PREDRGCQ   s   -240.0        3539.    
+     209  MEDSUPPQ   s   -400.0        4824.    
+     210  MEDSUPCQ   s   -1800.        4798.    
+     211  ENTERTPQ   s    0.000       0.8355E+05
+     212  ENTERTCQ   s    0.000       0.1344E+06
+     213  FEEADMPQ   s    0.000       0.1393E+05
+     214  FEEADMCQ   s    0.000       0.1050E+05
+     215  TVRDIOPQ   s    0.000        5954.    
+     216  TVRDIOCQ   s    0.000        2775.    
+     217  OTHEQPPQ   s    0.000       0.8284E+05
+     218  OTHEQPCQ   s    0.000       0.1339E+06
+     219  PETTOYPQ   s    0.000       0.5661E+05
+     220  PETTOYCQ   s    0.000        7620.    
+     221  OTHENTPQ   s    0.000       0.8271E+05
+     222  OTHENTCQ   s    0.000       0.1330E+06
+     223  PERSCAPQ   s    0.000        2200.    
+     224  PERSCACQ   s    0.000        1800.    
+     225  READPQ     s    0.000        804.0    
+     226  READCQ     s    0.000        1000.    
+     227  EDUCAPQ    s    0.000       0.2500E+05
+     228  EDUCACQ    s    0.000       0.3373E+05
+     229  TOBACCPQ   s    0.000        5200.    
+     230  TOBACCCQ   s    0.000        1733.    
+     231  MISCPQ     s    0.000       0.2070E+05
+     232  MISCCQ     s    0.000       0.1434E+05
+     233  MISC1PQ    s    0.000       0.2070E+05
+     234  MISC1CQ    s    0.000       0.1434E+05
+     235  CASHCOPQ   s    0.000       0.1200E+06
+     236  CASHCOCQ   s    0.000       0.2000E+06
+     237  PERINSPQ   s    0.000       0.2581E+05
+     238  PERINSCQ   s    0.000       0.1985E+05
+     239  LIFINSPQ   s    0.000       0.1750E+05
+     240  LIFINSCQ   s    0.000       0.1290E+05
+     241  RETPENPQ   s    0.000       0.2383E+05
+     242  RETPENCQ   s    0.000       0.1535E+05
+     243  HH_CU_Q    s    1.000        5.000    
+     244  CHILDAGE   c                                  8
+     245  STATE      c                                 42      188
+     246  ERANKH     s   0.1924E-02    1.000                    57
+     247  ERANKH_    m                                  1
+     248  TOTEX4PQ   s    712.7       0.1526E+06
+     249  TOTEX4CQ   s    0.000       0.2138E+06
+     250  MISCX4PQ   s    0.000       0.2070E+05
+     251  MISCX4CQ   s    0.000       0.1434E+05
+     252  VEHQL      s    0.000        4.000    
+     253  NUM_TVAN   s    0.000        7.000    
+     254  TTOTALP    s    0.000       0.2369E+05
+     255  TTOTALC    s    0.000       0.2938E+05
+     256  TFOODTOP   s    0.000        3130.    
+     257  TFOODTOC   s    0.000        3950.    
+     258  TFOODAWP   s    0.000        3037.    
+     259  TFOODAWC   s    0.000        3500.    
+     260  TFOODHOP   s    0.000        870.0    
+     261  TFOODHOC   s    0.000        955.0    
+     262  TALCBEVP   s    0.000        1086.    
+     263  TALCBEVC   s    0.000        1183.    
+     264  TOTHRLOP   s    0.000       0.1228E+05
+     265  TOTHRLOC   s    0.000        6141.    
+     266  TTRANPRP   s    0.000       0.1472E+05
+     267  TTRANPRC   s    0.000       0.2240E+05
+     268  TGASMOTP   s    0.000        1125.    
+     269  TGASMOTC   s    0.000        1800.    
+     270  TVRENTLP   s    0.000        500.0    
+     271  TVRENTLC   s    0.000        250.0    
+     272  TOTHVHRP   s    0.000        0.000    
+     273  TOTHVHRC   s    0.000        0.000    
+     274  TOTHTREP   s    0.000        500.0    
+     275  TOTHTREC   s    0.000        250.0    
+     276  TTRNTRIP   s    0.000       0.1432E+05
+     277  TTRNTRIC   s    0.000       0.2240E+05
+     278  TFAREP     s    0.000       0.1382E+05
+     279  TFAREC     s    0.000       0.2140E+05
+     280  TAIRFARP   s    0.000       0.1242E+05
+     281  TAIRFARC   s    0.000       0.2140E+05
+     282  TOTHFARP   s    0.000        7574.    
+     283  TOTHFARC   s    0.000        3666.    
+     284  TLOCALTP   s    0.000        742.0    
+     285  TLOCALTC   s    0.000        1000.    
+     286  TENTRMNP   s    0.000        2500.    
+     287  TENTRMNC   s    0.000        2640.    
+     288  TFEESADP   s    0.000        2500.    
+     289  TFEESADC   s    0.000        2640.    
+     290  TOTHENTP   s    0.000        1380.    
+     291  TOTHENTC   s    0.000        1800.    
+     292  OWNVACP    s    0.000       0.2063E+05
+     293  OWNVACC    s    0.000       0.1657E+05
+     294  VOTHRLOP   s    0.000       0.2063E+05
+     295  VOTHRLOC   s    0.000       0.1657E+05
+     296  UTILOWNP   s    0.000        2973.    
+     297  UTILOWNC   s    0.000        1638.    
+     298  VFUELOIP   s    0.000        1983.    
+     299  VFUELOIC   s    0.000        944.0    
+     300  VOTHRFLP   s    0.000        500.0    
+     301  VOTHRFLC   s    0.000        1500.    
+     302  VELECTRP   s    0.000        834.0    
+     303  VELECTRC   s    0.000        694.0    
+     304  VNATLGAP   s    0.000        430.0    
+     305  VNATLGAC   s    0.000        232.0    
+     306  VWATERPP   s    0.000        945.0    
+     307  VWATERPC   s    0.000        854.0    
+     308  MRTPRNOP   s    0.000        6544.    
+     309  MRTPRNOC   s    0.000        4152.    
+     310  UTILRNTP   s    0.000        1396.    
+     311  UTILRNTC   s    0.000        690.0    
+     312  ROTHRFLC   s    0.000        0.000    
+     313  RELECTRP   s    0.000        1067.    
+     314  RELECTRC   s    0.000        241.0    
+     315  RNATLGAP   s    0.000        253.0    
+     316  RNATLGAC   s    0.000        506.0    
+     317  RWATERPP   s    0.000        329.0    
+     318  RWATERPC   s    0.000        232.0    
+     319  ETOTALP    s    828.2       0.1526E+06
+     320  ETOTALC    s    0.000       0.2182E+06
+     321  ETOTAPX4   s    828.2       0.1526E+06
+     322  ETOTACX4   s    0.000       0.2182E+06
+     323  EHOUSNGP   s    40.00       0.4638E+05
+     324  EHOUSNGC   s    0.000       0.5628E+05
+     325  ESHELTRP   s    0.000       0.4056E+05
+     326  ESHELTRC   s    0.000       0.4416E+05
+     327  EOWNDWLP   s    0.000       0.4056E+05
+     328  EOWNDWLC   s    0.000       0.3324E+05
+     329  EOTHLODP   s    0.000       0.2063E+05
+     330  EOTHLODC   s    0.000       0.2452E+05
+     331  EMRTPNOP   s    0.000       0.3488E+05
+     332  EMRTPNOC   s    0.000       0.2346E+05
+     333  EMRTPNVP   s    0.000        6544.    
+     334  EMRTPNVC   s    0.000        4152.    
+     335  ETRANPTP   s    0.000       0.5380E+05
+     336  ETRANPTC   s    0.000       0.5349E+05
+     337  EVEHPURP   s    0.000       0.5000E+05
+     338  EVEHPURC   s    0.000       0.5100E+05
+     339  ECARTKNP   s    0.000       0.5000E+05
+     340  ECARTKNC   s    0.000       0.5100E+05
+     341  ECARTKUP   s    0.000       0.4800E+05
+     342  ECARTKUC   s    0.000       0.3750E+05
+     343  EOTHVEHP   s    0.000       0.1945E+05
+     344  EOTHVEHC   s    0.000        6953.    
+     345  EENTRMTP   s    0.000       0.6298E+05
+     346  EENTRMTC   s    0.000       0.3022E+05
+     347  EOTHENTP   s    0.000       0.3140E+05
+     348  EOTHENTC   s    0.000       0.1730E+05
+     349  ENOMOTRP   s    0.000       0.3140E+05
+     350  ENOMOTRC   s    0.000        538.0    
+     351  EMOTRVHP   s    0.000       0.1070E+05
+     352  EMOTRVHC   s    0.000       0.1605E+05
+     353  EENTMSCP   s    0.000       0.1304E+05
+     354  EENTMSCC   s    0.000       0.1730E+05
+     355  EMISCELP   s    0.000       0.2070E+05
+     356  EMISCELC   s    0.000       0.1434E+05
+     357  EMISCMTP   s    0.000        4887.    
+     358  EMISCMTC   s    0.000        1614.    
+     359  UNISTRQ    c                                 10
+     360  WELFREBX   s   0.1096E+05   0.1096E+05              2485
+     361  WELF_EBX   c                                  2
+     362  LUMP_UMB   c                                  3
+     363  LMPS_MBX   c                                  3
+     364  OTHR_NCB   c                                  3
+     365  INCLASS2   s    1.000        7.000    
+     366  HORREF1    c                                  6     2384
+     367  HORREF1_   m                                  2
+     368  HORREF2    c                                  5     2419
+     369  HORREF2_   m                                  1
+     370  ERANKHM    s   0.1993E-02    1.000    
+     371  FGOVRETM   s    0.000       0.2064E+05
+     372  FGOV_ETM   m                                  0
+     373  FPRIPENM   s    0.000       0.4300E+05
+     374  FPRI_ENM   m                                  0
+     375  FRRDEDM    s    0.000        5770.    
+     376  FRRDEDM_   m                                  0
+     377  FRRETIRM   s    0.000       0.1116E+06
+     378  PSU        c                                 23     1274
+     379  HISP_REF   c                                  2
+     380  HISP2      c                                  2     1092
+     381  HIGH_EDU   s    10.00        16.00    
+     382  BUILT      s    1915.        2021.                   569
+     383  BUILT_     m                                  2
+     384  CREDFINX   s    0.000        5079.                  1994
+     385  CRED_INX   m                                  2
+     386  CREDITB    s    1.000        5.000                  2474
+     387  CREDITB_   m                                  2
+     388  CREDITBX   s    200.0       0.2250E+05              2474
+     389  CRED_TBX   m                                  2
+     390  CREDITX    s    0.000       0.4875E+05              1974
+     391  CREDITX_   m                                  2
+     392  CREDTYRX   s    0.000       0.5391E+05              2192
+     393  CRED_YRX   m                                  2
+     394  CREDYRB    s    1.000        5.000                  2466
+     395  CREDYRB_   m                                  2
+     396  CREDYRBX   s    200.0       0.2250E+05              2466
+     397  CRED_RBX   m                                  2
+     398  DEFBENRP   c                                  2     1894
+     399  DEFB_NRP   m                                  2
+     400  FMLPYYRX   s    6.000       0.2782E+05              2448
+     401  FMLP_YRX   m                                  2
+     402  FS_MTHI    s    1.000        12.00                  2428
+     403  FS_MTHI_   m                                  1
+     404  FSMPFRMX   s  -0.1160E+06   0.7703E+06
+     405  FSMP_RMX   m                                  0
+     406  INTRDVX    d    1.000       0.1413E+06
+     408  IRAB       s    2.000        6.000                  2422
+     409  IRAB_      m                                  2
+     410  IRABX      s    5000.       0.8000E+06              2422
+     411  IRABX_     m                                  2
+     412  IRAX       s    2.000       0.4271E+07              2099
+     413  IRAX_      m                                  2
+     414  IRAYRB     s    2.000        6.000                  2410
+     415  IRAYRB_    m                                  2
+     416  IRAYRBX    s    5000.       0.7900E+06              2410
+     417  IRAYRBX_   m                                  2
+     418  IRAYRX     s    0.000       0.3700E+07              2122
+     419  IRAYRX_    m                                  2
+     420  JFS_AMT    s    0.000        9600.    
+     421  LIQDYRBX   s    250.0       0.7500E+05              2424
+     422  LIQD_RBX   m                                  2
+     423  LIQUIDBX   s    100.0       0.7500E+05              2437
+     424  LIQU_DBX   m                                  2
+     425  LIQUDYRB   s    1.000        6.000                  2424
+     426  LIQU_YRB   m                                  2
+     427  LIQUDYRX   s    0.000       0.6852E+06              2018
+     428  LIQU_YRX   m                                  2
+     429  LIQUIDB    s    1.000        6.000                  2437
+     430  LIQUIDB_   m                                  2
+     431  LIQUIDX    s    9.000       0.6650E+06              1996
+     432  LIQUIDX_   m                                  2
+     433  MEALSPAY   c                                  2        1
+     434  MEAL_PAY   m                                  1
+     435  MLPAYWKX   s    2.000        535.0                  2448
+     436  MLPA_WKX   m                                  2
+     437  MLPYQWKS   s    1.000        52.00                  2446
+     438  MLPY_WKS   m                                  1
+     439  NETRENTB   s    0.000        12.00                  2477
+     440  NETR_NTB   m                                  2
+     441  NETRENTX   s  -0.1402E+05   0.1589E+06              2277
+     442  NETR_NTX   m                                  2
+     443  NETRNTBX   s   -2400.       0.7130E+05              2477
+     444  NETR_TBX   m                                  2
+     445  OTHASTBX   s    800.0       0.8350E+06              2477
+     446  OTHA_TBX   m                                  2
+     447  OTHASTB    s    1.000        6.000                  2477
+     448  OTHASTB_   m                                  2
+     449  OTHASTX    s    400.0       0.1300E+07              2449
+     450  OTHASTX_   m                                  2
+     451  OTHFINX    s    0.000        335.0                  2459
+     452  OTHFINX_   m                                  2
+     453  OTHL_NBX   c                                  3
+     454  OTHLYRBX   s    1500.        1500.                  2486
+     455  OTHL_RBX   m                                  1
+     456  OTHLNYRB   s    3.000        3.000                  2486
+     457  OTHL_YRB   m                                  1
+     458  OTHLNYRX   s    0.000       0.1564E+06              2450
+     459  OTHL_YRX   m                                  2
+     460  OTHLOAN    s    1.000        2.000                  1882
+     461  OTHLOAN_   m                                  1
+     462  OTHLONB_   c                                  3
+     463  OTHLONX    s    250.0       0.1622E+06              2449
+     464  OTHLONX_   m                                  2
+     465  OTHREGBX   s    488.0       0.4200E+05              2471
+     466  OTHR_GBX   m                                  2
+     467  OTHREGB    s    1.000        11.00                  2471
+     468  OTHREGB_   m                                  2
+     469  OTHREGX    s    100.0       0.8288E+05              2245
+     470  OTHREGX_   m                                  2
+     471  OTHSYRBX   s    770.0       0.9506E+06              2477
+     472  OTHS_RBX   m                                  2
+     473  OTHSTYRB   s    1.000        6.000                  2477
+     474  OTHS_YRB   m                                  2
+     475  OTHSTYRX   s    0.000       0.1225E+07              2451
+     476  OTHS_YRX   m                                  2
+     477  RETSURVX   s    134.0       0.1739E+06              1865
+     478  RETS_RVX   m                                  2
+     479  RETSRVBX   s    3500.       0.6200E+05              2474
+     480  RETS_VBX   m                                  2
+     481  RETSURV    c                                  2
+     482  ROYESTBX   s    200.0       0.6000E+05              2482
+     483  ROYE_TBX   m                                  2
+     484  ROYESTB    s    1.000        12.00                  2482
+     485  ROYESTB_   m                                  2
+     486  ROYESTX    s    5.000       0.2300E+06              2383
+     487  ROYESTX_   m                                  2
+     488  STCKYRBX   s    1000.       0.8550E+06              2456
+     489  STCK_RBX   m                                  2
+     490  STDNTYRB   s    5.000        6.000                  2485
+     491  STDN_YRB   m                                  2
+     492  STDNTYRX   s    0.000       0.5000E+06              2404
+     493  STDN_YRX   m                                  2
+     494  STDTYRBX   s   0.2000E+05   0.3500E+05              2485
+     495  STDT_RBX   m                                  2
+     496  STOCKYRB   s    1.000        6.000                  2456
+     497  STOC_YRB   m                                  2
+     498  STOCKYRX   s    0.000       0.5450E+07              2278
+     499  STOC_YRX   m                                  2
+     500  STOCKB     s    1.000        6.000                  2463
+     501  STOCKB_    m                                  2
+     502  STOCKBX    s    523.0       0.8000E+06              2463
+     503  STOCKBX_   m                                  2
+     504  STOCKX     s    10.00       0.6110E+07              2261
+     505  STOCKX_    m                                  2
+     506  STUDFINX   s    0.000        820.0                  2413
+     507  STUD_INX   m                                  2
+     508  STUDNTBX   s   0.2000E+05   0.6700E+05              2484
+     509  STUD_TBX   m                                  2
+     510  STUDNTB    s    5.000        6.000                  2484
+     511  STUDNTB_   m                                  2
+     512  STUDNTX    s    1000.       0.5000E+06              2404
+     513  STUDNTX_   m                                  2
+     514  WHLFYRBX   s    1500.       0.8000E+05              2460
+     515  WHLF_RBX   m                                  2
+     516  WHLFYRB    s    3.000        6.000                  2460
+     517  WHLFYRB_   m                                  2
+     518  WHLFYRX    s    100.0       0.1497E+07              2411
+     519  WHLFYRX_   m                                  2
+     520  WHOLIFBX   s    5000.       0.8500E+05              2464
+     521  WHOL_FBX   m                                  2
+     522  WHOLIFB    s    4.000        6.000                  2464
+     523  WHOLIFB_   m                                  2
+     524  WHOLIFX    s    100.0       0.1498E+07              2406
+     525  WHOLIFX_   m                                  2
+     526  TOTXEST    s  -0.2911E+05   0.3946E+06
+     527  BUSCREEN   c                                  2
+     528  BUSC_EEN   c                                  2
+     529  DIVISION   c                                  9      173
+     530  REFGEN     s    1.000        5.000    
+     531  VEHICTAX   s    19.00        2700.                  2395
+     532  CREDYR     s    1.000        2.000                  2453
+     533  CREDYR_    m                                  1
+     534  IRA        c                                  2     1890
+     535  IRA_       m                                  2
+     536  LIQUDYR    c                                  2     2483
+     537  LIQUDYR_   m                                  1
+     538  LIQUID     c                                  2     1887
+     539  LIQUID_    m                                  2
+     540  OTHLNYR    c                                  1     2477
+     541  OTHLNYR_   m                                  1
+     542  OTHSTYR_   c                                  2
+     543  STDNTYR    c                                  1     2485
+     544  STDNTYR_   m                                  1
+     545  STOCKYR    c                                  1     2468
+     546  STOCKYR_   m                                  1
+     547  WHLFYR     c                                  1     2487
+     548  WHLFYR_    m                                  1
+     549  FFTAXOWE   s  -0.3368E+05   0.3380E+06
+     550  FSTAXOWE   s   -3074.       0.5654E+05
+  
+      Total  #cases w/   #missing
+     #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
+       3965       1478       3965        1        0        0      384
+     #P-var   #M-var   #B-var   #C-var   #I-var
+          0      116        0       47        0
+ Weight variable FINLWT21 in column: 31
+ Number of cases used for training: 2487
+ Number of split variables: 431
+ Number of cases excluded due to 0 W or missing D variable: 1478
+  
+ Constant fitted to cases with missing values in regressor variables
+ Pruning by v-fold cross-validation, with v = 10
+ Selected tree is based on mean of CV estimates
+ Number of SE's for pruned tree: 0.2500
+  
+ Weighted error estimates used for pruning
+ Warning: No interaction tests; too many predictor variables
+ No nodewise interaction tests
+ Split values for N and S variables based on exhaustive search
+ Maximum number of split levels: 12
+ Minimum node sample size: 24
+ Top-ranked variables and 1-df chi-squared values at root node
+      1  0.8297E+02   REFGEN
+      2  0.8111E+02   AGE_REF
+      3  0.7066E+02   INCNONW1
+      4  0.6985E+02   STOCKX
+      5  0.6966E+02   CUTENURE
+      6  0.6541E+02   STOCKYRX
+      7  0.6416E+02   EARNCOMP
+      8  0.6378E+02   INCWEEK2
+      9  0.6304E+02   INCNONW2
+     10  0.6140E+02   AGE2
+     11  0.6122E+02   FSALARYX
+     12  0.5806E+02   PERSOT64
+     13  0.5672E+02   NO_EARNR
+     14  0.5519E+02   HLTHINPQ
+     15  0.5475E+02   INCOMEY1
+     16  0.5416E+02   INCWEEK1
+     17  0.5277E+02   RENTEQVX
+     18  0.5263E+02   FJSSDEDX
+     19  0.5197E+02   INC_HRS1
+     20  0.5131E+02   OCCUCOD1
+     21  0.4570E+02   RETPENPQ
+     22  0.4417E+02   IRAX
+     23  0.4406E+02   HEALTHPQ
+     24  0.4273E+02   IRAYRX
+     25  0.3798E+02   FRRETIRX
+     26  0.3650E+02   PROPTXPQ
+     27  0.3631E+02   FRRETIRM
+     28  0.3558E+02   INC_RANK
+     29  0.3387E+02   PERINSPQ
+     30  0.3355E+02   FINCBTAX
+     31  0.3232E+02   DMSXCCPQ
+     32  0.2838E+02   PERSLT18
+     33  0.2787E+02   STATE
+     34  0.2768E+02   LUMP_UMX
+     35  0.2691E+02   DOMSRVPQ
+     36  0.2617E+02   MARITAL1
+     37  0.2534E+02   EMRTPNOP
+     38  0.2532E+02   EDUC_REF
+     39  0.2529E+02   UTILPQ
+     40  0.2515E+02   INCLASS2
+     41  0.2417E+02   HLTHINCQ
+     42  0.2382E+02   MRTINTPQ
+     43  0.2322E+02   SEX2
+     44  0.2228E+02   RNTXRPPQ
+     45  0.2224E+02   READCQ
+     46  0.2209E+02   RETSURVX
+     47  0.2199E+02   BUILT
+     48  0.2189E+02   HOUSOPPQ
+     49  0.2175E+02   MRPINSPQ
+     50  0.2166E+02   READPQ
+     51  0.2130E+02   HEALTHCQ
+     52  0.2112E+02   EDUCA2
+     53  0.2098E+02   ECARTKUP
+     54  0.2071E+02   CASHCOPQ
+     55  0.1965E+02   HOUSPQ
+     56  0.1886E+02   DMSXCCCQ
+     57  0.1884E+02   ERANKHM
+     58  0.1847E+02   ROOMSQ
+     59  0.1827E+02   RENDWEPQ
+     60  0.1795E+02   MRPINSCQ
+     61  0.1750E+02   RETSURV
+     62  0.1685E+02   HLFBATHQ
+     63  0.1661E+02   FFTAXOWE
+     64  0.1652E+02   FAM_SIZE
+     65  0.1646E+02   EVEHPURP
+     66  0.1544E+02   CHILDAGE
+     67  0.1507E+02   PERSCAPQ
+     68  0.1486E+02   VEHFINPQ
+     69  0.1450E+02   DOMSRVCQ
+     70  0.1420E+02   PREDRGCQ
+     71  0.1387E+02   INC_HRS2
+     72  0.1385E+02   WATRPSPQ
+     73  0.1353E+02   PRINEARN
+     74  0.1332E+02   FINDRETX
+     75  0.1319E+02   FPRIPENM
+     76  0.1319E+02   FPRIPENX
+     77  0.1313E+02   BEDROOMQ
+     78  0.1305E+02   OTHSYRBX
+     79  0.1305E+02   OTHSTYRB
+     80  0.1292E+02   RACE2
+     81  0.1254E+02   UTILCQ
+     82  0.1253E+02   REF_RACE
+     83  0.1240E+02   PROPTXCQ
+     84  0.1202E+02   ENTERTCQ
+     85  0.1196E+02   AS_COMP3
+     86  0.1192E+02   FDAWAYPQ
+     87  0.1192E+02   EOWNDWLC
+     88  0.1184E+02   HIGH_EDU
+     89  0.1166E+02   MEDSRVCQ
+     90  0.1140E+02   TELEPHPQ
+     91  0.1138E+02   FDXMAPPQ
+     92  0.1133E+02   TOTEXPPQ
+     93  0.1133E+02   TOTEX4PQ
+     94  0.1126E+02   TOTXEST
+     95  0.1108E+02   RNTXRPCQ
+     96  0.1073E+02   NETRENTX
+     97  0.1064E+02   EHOUSNGP
+     98  0.1064E+02   TELEPHCQ
+     99  0.1051E+02   SEX_REF
+    100  0.1042E+02   ELCTRCPQ
+    101  0.1009E+02   RETPENCQ
+    102  0.9950E+01   SHELTPQ
+    103  0.9776E+01   UTILOWNC
+    104  0.9757E+01   ROYESTX
+    105  0.9750E+01   EMRTPNOC
+    106  0.9746E+01   ERANKH
+    107  0.9529E+01   EENTRMTC
+    108  0.9490E+01   ETOTAPX4
+    109  0.9490E+01   ETOTALP
+    110  0.9363E+01   OWNDWECQ
+    111  0.9088E+01   INCOMEY2
+    112  0.9083E+01   ESHELTRP
+    113  0.9050E+01   ENTERTPQ
+    114  0.9049E+01   ELCTRCCQ
+    115  0.8957E+01   MRTINTCQ
+    116  0.8798E+01   OWNDWEPQ
+    117  0.8693E+01   AS_COMP5
+    118  0.8519E+01   VNATLGAP
+    119  0.8260E+01   HOUSOPCQ
+    120  0.8259E+01   VELECTRC
+    121  0.8041E+01   VEHICTAX
+    122  0.8041E+01   BATHRMQ
+    123  0.7924E+01   ALCBEVCQ
+    124  0.7837E+01   VELECTRP
+    125  0.7826E+01   AS_COMP4
+    126  0.7643E+01   MEDSRVPQ
+    127  0.7618E+01   RENDWECQ
+    128  0.7508E+01   NTLGASPQ
+    129  0.7460E+01   LIFINSPQ
+    130  0.7405E+01   EENTRMTP
+    131  0.7169E+01   HISP2
+    132  0.7084E+01   PSU
+    133  0.6996E+01   EOWNDWLP
+    134  0.6987E+01   BBYDAYPQ
+    135  0.6948E+01   PERINSCQ
+    136  0.6910E+01   BUILDING
+    137  0.6804E+01   VEHQ
+    138  0.6592E+01   STOCKYRB
+    139  0.6324E+01   STCKYRBX
+    140  0.6199E+01   OCCUCOD2
+    141  0.6157E+01   FS_MTHI
+    142  0.6068E+01   FEEADMCQ
+    143  0.6051E+01   OTHHEXPQ
+    144  0.5997E+01   ALCBEVPQ
+    145  0.5978E+01   MISCCQ
+    146  0.5978E+01   EMISCELC
+    147  0.5978E+01   MISCX4CQ
+    148  0.5978E+01   MISC1CQ
+    149  0.5860E+01   IRAB
+    150  0.5860E+01   IRABX
+    151  0.5758E+01   CREDFINX
+    152  0.5680E+01   HOUSCQ
+    153  0.5630E+01   ALLFULCQ
+    154  0.5602E+01   CARTKUPQ
+    155  0.5542E+01   FGOVRETX
+    156  0.5542E+01   FGOVRETM
+    157  0.5541E+01   FSSIX
+    158  0.5506E+01   IRAYRB
+    159  0.5451E+01   IRAYRBX
+    160  0.5285E+01   VWATERPP
+    161  0.4913E+01   TVRDIOCQ
+    162  0.4837E+01   STOCKB
+    163  0.4571E+01   NONINCMX
+    164  0.4545E+01   ECARTKUC
+    165  0.4493E+01   UNISTRQ
+    166  0.4471E+01   VRNTLOCQ
+    167  0.4465E+01   NUM_TVAN
+    168  0.4435E+01   DIVISION
+    169  0.4368E+01   HH_CU_Q
+    170  0.4288E+01   MEDSUPCQ
+    171  0.4263E+01   EOTHLODP
+    172  0.4263E+01   OTHLODPQ
+    173  0.4259E+01   TEXTILPQ
+    174  0.4205E+01   BBYDAYCQ
+    175  0.4202E+01   OTHSTYRX
+    176  0.4094E+01   OTHREGX
+    177  0.3999E+01   NUM_AUTO
+    178  0.3925E+01   AS_COMP2
+    179  0.3851E+01   OWNVACC
+    180  0.3851E+01   VOTHRLOC
+    181  0.3851E+01   TOTEXPCQ
+    182  0.3851E+01   TOTEX4CQ
+    183  0.3819E+01   WATRPSCQ
+    184  0.3818E+01   FSTAXOWE
+    185  0.3747E+01   FULOILCQ
+    186  0.3730E+01   NTLGASCQ
+    187  0.3701E+01   HOUSEQCQ
+    188  0.3532E+01   OTHAPLCQ
+    189  0.3523E+01   CREDITX
+    190  0.3385E+01   OTHHEXCQ
+    191  0.3372E+01   MISCEQCQ
+    192  0.3322E+01   OTHEQPCQ
+    193  0.3267E+01   TGASMOTP
+    194  0.3246E+01   EOTHENTP
+    195  0.3187E+01   EHOUSNGC
+    196  0.3149E+01   LIFINSCQ
+    197  0.3076E+01   OTHEQPPQ
+    198  0.3027E+01   LIQUIDX
+    199  0.3027E+01   TOTHTREC
+    200  0.3027E+01   TVRENTLC
+    201  0.2921E+01   TOBACCPQ
+    202  0.2894E+01   TTRANPRP
+    203  0.2850E+01   OTHFLSCQ
+    204  0.2833E+01   FEEADMPQ
+    205  0.2826E+01   EMOTRVHP
+    206  0.2808E+01   APPARCQ
+    207  0.2799E+01   LIQUDYRX
+    208  0.2764E+01   TOTHENTC
+    209  0.2731E+01   BUSCREEN
+    210  0.2683E+01   TRNTRPPQ
+    211  0.2683E+01   TTRNTRIP
+    212  0.2640E+01   MEALSPAY
+    213  0.2640E+01   FDMAPPQ
+    214  0.2595E+01   STOCKBX
+    215  0.2501E+01   VEHQL
+    216  0.2475E+01   FDHOMEPQ
+    217  0.2463E+01   FLRCVRCQ
+    218  0.2448E+01   DEFBENRP
+    219  0.2378E+01   REGION
+    220  0.2377E+01   PERSCACQ
+    221  0.2365E+01   ETOTACX4
+    222  0.2365E+01   ETOTALC
+    223  0.2219E+01   PREDRGPQ
+    224  0.2216E+01   TALCBEVC
+    225  0.2127E+01   OTHENTPQ
+    226  0.2057E+01   HORREF2
+    227  0.2056E+01   OTHASTX
+    228  0.2009E+01   TVRDIOPQ
+    229  0.2007E+01   TALCBEVP
+    230  0.1990E+01   VEHFINCQ
+    231  0.1988E+01   EENTMSCP
+    232  0.1932E+01   EOTHLODC
+    233  0.1932E+01   OTHLODCQ
+    234  0.1864E+01   TFAREP
+    235  0.1848E+01   CASHCOCQ
+    236  0.1824E+01   GASMOCQ
+    237  0.1761E+01   UTILOWNP
+    238  0.1718E+01   FOODPQ
+    239  0.1685E+01   TFOODAWC
+    240  0.1679E+01   EVEHPURC
+    241  0.1658E+01   FDXMAPCQ
+    242  0.1645E+01   RETSRVBX
+    243  0.1638E+01   VOTHRLOP
+    244  0.1638E+01   OWNVACP
+    245  0.1589E+01   MISCX4PQ
+    246  0.1589E+01   MISCPQ
+    247  0.1589E+01   EMISCELP
+    248  0.1589E+01   MISC1PQ
+    249  0.1575E+01   FLRCVRPQ
+    250  0.1568E+01   VEHINSPQ
+    251  0.1553E+01   MEDSUPPQ
+    252  0.1522E+01   FDAWAYCQ
+    253  0.1521E+01   MLPYQWKS
+    254  0.1519E+01   TFAREC
+    255  0.1451E+01   VRNTLOPQ
+    256  0.1374E+01   GASMOPQ
+    257  0.1332E+01   OTHRINCX
+    258  0.1313E+01   STUDNTBX
+    259  0.1312E+01   VOTHRFLC
+    260  0.1205E+01   STUDNTB
+    261  0.1123E+01   ETRANPTC
+    262  0.1088E+01   FDMAPCQ
+    263  0.1036E+01   TAIRFARC
+    264  0.1024E+01   TFOODTOC
+    265  0.9915E+00   WHOLIFX
+    266  0.9460E+00   TOTHFARC
+    267  0.9231E+00   TOTHTREP
+    268  0.9231E+00   TVRENTLP
+    269  0.9126E+00   TAIRFARP
+    270  0.9023E+00   TTRNTRIC
+    271  0.9023E+00   TRNTRPCQ
+    272  0.8805E+00   CREDITB
+    273  0.8792E+00   TOTHRLOP
+    274  0.8718E+00   STUDFINX
+    275  0.8608E+00   MENBOYPQ
+    276  0.8608E+00   MENSIXPQ
+    277  0.8268E+00   TOTHFARP
+    278  0.8223E+00   FOODCQ
+    279  0.8189E+00   EDUCAPQ
+    280  0.8137E+00   TFOODHOC
+    281  0.8088E+00   POPSIZE
+    282  0.7722E+00   TRNOTHPQ
+    283  0.7687E+00   MISCEQPQ
+    284  0.7178E+00   HISP_REF
+    285  0.6925E+00   ROYESTBX
+    286  0.6925E+00   ROYESTB
+    287  0.6923E+00   WHOLIFBX
+    288  0.6923E+00   WHOLIFB
+    289  0.6636E+00   STDNTYRX
+    290  0.6568E+00   PUBTRAPQ
+    291  0.6498E+00   TTOTALP
+    292  0.6307E+00   ECARTKNC
+    293  0.6306E+00   TRANSPQ
+    294  0.6240E+00   FULOILPQ
+    295  0.6165E+00   AS_COMP1
+    296  0.6157E+00   ALLFULPQ
+    297  0.5876E+00   SMSASTAT
+    298  0.5822E+00   SMLAPPPQ
+    299  0.5597E+00   CREDYRBX
+    300  0.5505E+00   OTHREGBX
+    301  0.5505E+00   OTHREGB
+    302  0.5493E+00   TENTRMNP
+    303  0.5458E+00   TOTHRLOC
+    304  0.5396E+00   VOTHRFLP
+    305  0.5346E+00   TTOTALC
+    306  0.5217E+00   WHLFYRBX
+    307  0.5128E+00   PETTOYCQ
+    308  0.4986E+00   ESHELTRC
+    309  0.4882E+00   CREDITBX
+    310  0.4692E+00   TFOODTOP
+    311  0.4676E+00   STDNTYRB
+    312  0.4676E+00   STDTYRBX
+    313  0.4671E+00   TFOODAWP
+    314  0.4562E+00   APPARPQ
+    315  0.4415E+00   SHELTCQ
+    316  0.4382E+00   TRNOTHCQ
+    317  0.4179E+00   MLPAYWKX
+    318  0.4033E+00   ECARTKNP
+    319  0.3902E+00   FMLPYYRX
+    320  0.3806E+00   TTRANPRC
+    321  0.3745E+00   EMRTPNVP
+    322  0.3581E+00   MRTPRNOC
+    323  0.3581E+00   EMRTPNVC
+    324  0.3565E+00   CREDYRB
+    325  0.3559E+00   STUDNTX
+    326  0.3537E+00   LIQUIDB
+    327  0.3507E+00   SMLAPPCQ
+    328  0.3480E+00   FURNTRCQ
+    329  0.3049E+00   TENTRMNC
+    330  0.3022E+00   WHLFYRB
+    331  0.3015E+00   MISCTAXX
+    332  0.2962E+00   MRTPRNOP
+    333  0.2941E+00   FSMPFRMX
+    334  0.2909E+00   EENTMSCC
+    335  0.2891E+00   TRANSCQ
+    336  0.2846E+00   OTHFINX
+    337  0.2834E+00   WHLFYRX
+    338  0.2815E+00   TEXTILCQ
+    339  0.2778E+00   OTHENTCQ
+    340  0.2425E+00   FURNTRPQ
+    341  0.2366E+00   TFEESADP
+    342  0.2357E+00   FDHOMECQ
+    343  0.2166E+00   OTHAPLPQ
+    344  0.2146E+00   JFS_AMT
+    345  0.2143E+00   NETRENTB
+    346  0.2143E+00   NETRNTBX
+    347  0.2133E+00   OTHASTB
+    348  0.2133E+00   OTHASTBX
+    349  0.1782E+00   MAJAPPCQ
+    350  0.1699E+00   IRA
+    351  0.1602E+00   OTHLOAN
+    352  0.1349E+00   LIQUIDBX
+    353  0.1303E+00   LIQUDYRB
+    354  0.1292E+00   VWATERPC
+    355  0.1292E+00   TOTHENTP
+    356  0.1279E+00   CREDYR
+    357  0.1111E+00   OTHFLSPQ
+    358  0.1091E+00   WELFAREX
+    359  0.1021E+00   EDUCACQ
+    360  0.9952E-01   VEHINSCQ
+    361  0.9371E-01   BLS_URBN
+    362  0.8918E-01   TFEESADC
+    363  0.8263E-01   CARTKUCQ
+    364  0.8157E-01   MAJAPPPQ
+    365  0.8021E-01   TLOCALTP
+    366  0.6108E-01   TFOODHOP
+    367  0.4847E-01   ENOMOTRP
+    368  0.4261E-01   OTHLONX
+    369  0.3981E-01   LIQDYRBX
+    370  0.3906E-01   ETRANPTP
+    371  0.3592E-01   HOUSEQPQ
+    372  0.2507E-01   CREDTYRX
+    373  0.1960E-01   TOBACCCQ
+    374  0.1602E-01   OTHLNYRX
+    375  0.1591E-01   TLOCALTC
+    376  0.1571E-01   LIQUID
+    377  0.1226E-01   EOTHENTC
+    378  0.7187E-02   PUBTRACQ
+    379  0.6668E-02   PETTOYPQ
+    380  0.5222E-02   MAINRPCQ
+    381  0.3923E-02   HORREF1
+    382  0.3569E-02   TGASMOTC
+    383  0.1029E-03   MAINRPPQ
+
+ Size and CV MSE and SE of subtrees:
+  Tree   #Tnodes  Mean MSE   SE(Mean)    BSE(Mean)  Median MSE  BSE(Median)
+    1       79   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
+    2       78   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
+    3       76   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
+    4       75   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
+    5       73   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
+    6       72   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
+    7       71   5.889E+12   7.198E+11   4.740E+11   5.838E+12   7.711E+11
+    8       70   5.890E+12   7.198E+11   4.739E+11   5.838E+12   7.709E+11
+    9       68   5.890E+12   7.198E+11   4.739E+11   5.838E+12   7.709E+11
+   10       67   5.890E+12   7.197E+11   4.738E+11   5.838E+12   7.710E+11
+   11       66   5.889E+12   7.197E+11   4.738E+11   5.838E+12   7.711E+11
+   12       65   5.889E+12   7.197E+11   4.738E+11   5.838E+12   7.711E+11
+   13       64   5.889E+12   7.197E+11   4.738E+11   5.838E+12   7.712E+11
+   14       62   5.889E+12   7.194E+11   4.740E+11   5.840E+12   7.714E+11
+   15       60   5.889E+12   7.194E+11   4.739E+11   5.840E+12   7.709E+11
+   16       59   5.889E+12   7.194E+11   4.739E+11   5.840E+12   7.710E+11
+   17       57   5.891E+12   7.198E+11   4.739E+11   5.848E+12   7.711E+11
+   18       56   5.891E+12   7.198E+11   4.740E+11   5.848E+12   7.712E+11
+   19       54   5.892E+12   7.198E+11   4.744E+11   5.848E+12   7.724E+11
+   20       52   5.892E+12   7.198E+11   4.741E+11   5.849E+12   7.717E+11
+   21       51   5.896E+12   7.208E+11   4.753E+11   5.849E+12   7.794E+11
+   22       50   5.896E+12   7.208E+11   4.754E+11   5.849E+12   7.801E+11
+   23       49   5.895E+12   7.203E+11   4.754E+11   5.847E+12   7.790E+11
+   24       47   5.894E+12   7.203E+11   4.751E+11   5.847E+12   7.775E+11
+   25       46   5.895E+12   7.203E+11   4.750E+11   5.847E+12   7.771E+11
+   26       44   5.895E+12   7.203E+11   4.750E+11   5.847E+12   7.771E+11
+   27       43   5.895E+12   7.203E+11   4.750E+11   5.847E+12   7.771E+11
+   28       41   5.893E+12   7.198E+11   4.750E+11   5.839E+12   7.770E+11
+   29       40   5.893E+12   7.198E+11   4.750E+11   5.839E+12   7.770E+11
+   30       39   5.892E+12   7.198E+11   4.751E+11   5.836E+12   7.769E+11
+   31       38   5.894E+12   7.198E+11   4.750E+11   5.843E+12   7.762E+11
+   32       34   5.891E+12   7.192E+11   4.741E+11   5.844E+12   7.725E+11
+   33       31   5.887E+12   7.192E+11   4.765E+11   5.844E+12   7.752E+11
+   34       30   5.885E+12   7.192E+11   4.765E+11   5.837E+12   7.760E+11
+   35       26   5.881E+12   7.192E+11   4.753E+11   5.837E+12   7.720E+11
+   36       25   5.868E+12   7.186E+11   4.741E+11   5.830E+12   7.631E+11
+   37       24   5.872E+12   7.190E+11   4.749E+11   5.830E+12   7.667E+11
+   38       23   5.863E+12   7.167E+11   4.812E+11   5.830E+12   8.068E+11
+   39       21   5.860E+12   7.167E+11   4.808E+11   5.830E+12   8.050E+11
+   40+      14   5.859E+12   7.168E+11   4.806E+11   5.822E+12   8.039E+11
+   41        9   5.869E+12   7.194E+11   4.902E+11   5.849E+12   8.075E+11
+   42**      8   5.789E+12   7.184E+11   5.133E+11   5.860E+12   8.402E+11
+   43        5   6.554E+12   8.516E+11   7.323E+11   6.439E+12   1.068E+12
+   44        4   7.614E+12   9.359E+11   7.113E+11   8.502E+12   1.107E+12
+   45        1   8.287E+12   1.032E+12   6.955E+11   8.542E+12   7.418E+11
+  
+ 0-SE tree based on mean is marked with * and has 8 terminal nodes
+ 0-SE tree based on median is marked with + and has 14 terminal nodes
+ Selected-SE tree based on mean using naive SE is marked with **
+ Selected-SE tree based on mean using bootstrap SE is marked with --
+ Selected-SE tree based on median and bootstrap SE is marked with ++
+ ** tree same as ++ tree
+ ** tree same as -- tree
+ ++ tree same as -- tree
+ * tree same as ** tree
+ * tree same as ++ tree
+ * tree same as -- tree
+  
+ Following tree is based on mean CV with naive SE estimate (**)
+  
+ Structure of final tree. Each terminal node is marked with a T.
+  
+ D-mean is weighted mean of INTRDVX in the node
+ Cases fit give the number of cases used to fit node
+ MSE is residual sum of squares divided by number of cases in node
+        Node    Total    Cases Matrix    Node      Node          Split
+        label   cases      fit  rank    D-mean     MSE           variable
+           1     2487     2487     1  5.131E+03  8.287E+12   REFGEN 
+           2     1914     1914     1  6.476E+03  1.027E+13   INC_RANK 
+           4T    1345     1345     1  2.823E+03  1.657E+12   REF_RACE 
+           5      569      569     1  1.498E+04  2.828E+13   EARNCOMP 
+          10       75       75     1  5.278E+04  7.423E+13   RETSURV 
+          20T      46       46     1  2.764E+04  4.076E+13   - 
+          21T      29       29     1  8.586E+04  7.873E+13   - 
+          11      494      494     1  9.170E+03  1.560E+13   FFTAXOWE 
+          22T     247      247     1  2.647E+03  3.560E+12   UNISTRQ 
+          23      247      247     1  1.570E+04  2.573E+13   AGE2 
+          46T     156      156     1  8.036E+03  1.274E+13   FINCBTAX 
+          47       91       91     1  3.030E+04  4.131E+13   BATHRMQ 
+          94T      47       47     1  1.087E+04  1.582E+13   - 
+          95T      44       44     1  4.670E+04  5.504E+13   - 
+           3T     573      573     1  9.804E+02  1.105E+12   PSU 
+  
+ Number of terminal nodes of final tree: 8
+ Total number of nodes of final tree: 15
+ Second best split variable (based on curvature test) at root node is AGE_REF
+  
+ Regression tree:
+ For categorical variable splits, values not in training data go to the right
+  
+ Node 1: REFGEN <= 4.5000000
+   Node 2: INC_RANK <= 0.84018625
+     Node 4: INTRDVX-mean = 2822.6445
+   Node 2: INC_RANK > 0.84018625 or NA
+     Node 5: EARNCOMP = "8"
+       Node 10: RETSURV = "1"
+         Node 20: INTRDVX-mean = 27641.282
+       Node 10: RETSURV /= "1"
+         Node 21: INTRDVX-mean = 85859.276
+     Node 5: EARNCOMP /= "8"
+       Node 11: FFTAXOWE <= 27769.500
+         Node 22: INTRDVX-mean = 2646.5367
+       Node 11: FFTAXOWE > 27769.500 or NA
+         Node 23: AGE2 <= 56.500000 or NA
+           Node 46: INTRDVX-mean = 8036.3341
+         Node 23: AGE2 > 56.500000
+           Node 47: BATHRMQ <= 2.5000000
+             Node 94: INTRDVX-mean = 10866.520
+           Node 47: BATHRMQ > 2.5000000 or NA
+             Node 95: INTRDVX-mean = 46702.398
+ Node 1: REFGEN > 4.5000000 or NA
+   Node 3: INTRDVX-mean = 980.35292
+ 
+ ***************************************************************
+ Predictor means below are weighted means of cases with no missing values.
+  
+ WARNING: p-values below not adjusted for split search. For a bootstrap solution see:
+  
+ 1. Loh et al. (2016), "Identification of subgroups with differential treatment effects
+ for longitudinal and multiresponse variables", Statistics in Medicine, v.35, 4837-4855.
+  
+ 2. Loh et al. (2019), "Subgroups from regression trees with adjustment for prognostic
+ effects and post-selection inference", Statistics in Medicine, v.38, 545-557.
+  
+ 3. Loh and Zhou (2020), "The GUIDE approach to subgroup identification",
+ in "Design and Analysis of Subgroups with Biopharmaceutical Applications", Springer, pp.147-165.
+  
+Node 1: Intermediate node
+ A case goes into Node 2 if REFGEN <= 4.5000000
+ REFGEN mean = 3.4302980
+ Coefficients of least squares regression function:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      5131.        12.43       0.2220E-15
+ INTRDVX mean = 5130.60
+ ----------------------------
+Node 2: Intermediate node
+ A case goes into Node 4 if INC_RANK <= 0.84018625
+ INC_RANK mean = 0.64479638
+ ----------------------------
+Node 4: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      2823.        11.12       0.3331E-15
+ INTRDVX mean = 2822.64
+ ----------------------------
+Node 5: Intermediate node
+ A case goes into Node 10 if EARNCOMP = "8"
+ EARNCOMP mode = "2"
+ ----------------------------
+Node 10: Intermediate node
+ A case goes into Node 20 if RETSURV = "1"
+ RETSURV mode = "1"
+ ----------------------------
+Node 20: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant     0.2764E+05    4.116       0.1621E-03
+ INTRDVX mean = 27641.3
+ ----------------------------
+Node 21: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant     0.8586E+05    7.878       0.1397E-07
+ INTRDVX mean = 85859.3
+ ----------------------------
+Node 11: Intermediate node
+ A case goes into Node 22 if FFTAXOWE <= 27769.500
+ FFTAXOWE mean = 36491.278
+ ----------------------------
+Node 22: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      2647.        3.066       0.2411E-02
+ INTRDVX mean = 2646.54
+ ----------------------------
+Node 23: Intermediate node
+ A case goes into Node 46 if AGE2 <= 56.500000 or NA
+ AGE2 mean = 54.155118
+ ----------------------------
+Node 46: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      8036.        3.982       0.1047E-03
+ INTRDVX mean = 8036.33
+ ----------------------------
+Node 47: Intermediate node
+ A case goes into Node 94 if BATHRMQ <= 2.5000000
+ BATHRMQ mean = 2.8097992
+ ----------------------------
+Node 94: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant     0.1087E+05    2.340       0.2368E-01
+ INTRDVX mean = 10866.5
+ ----------------------------
+Node 95: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant     0.4670E+05    6.082       0.2775E-06
+ INTRDVX mean = 46702.4
+ ----------------------------
+Node 3: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      980.4        3.232       0.1300E-02
+ INTRDVX mean = 980.353
+ ----------------------------
+ Proportion of variance (R-squared) explained by tree model: 0.3766
+ 
+ Observed and fitted values are stored in cons.fit
+ LaTeX code for tree is in cons.tex
+ R code is stored in cons.r
+ Split and fit variable names are stored in cons.split
+ Elapsed time in seconds: 58.175

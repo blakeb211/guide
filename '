@@ -1,0 +1,64 @@
+""" First attempt at reproducing GUIDE output for 
+single tree regression test case 
+- parse description file 
+- parse data file
+- generate predictions that are not that good to build out framework
+"""
+import sys
+import os
+from enum import Enum
+import numpy as np
+import pandas as pd
+
+class PredictionType(Enum):
+    """ Classification or regression """
+    CLASS = 1
+    REG = 2
+
+class RegressionType(Enum):
+    """ Type of regression """
+    LINEAR   = 1
+    QUANTILE = 2
+    POISSON  = 3
+
+
+class NodeData:
+    """ Info for each node to hold """
+
+class Node:
+    """ Some version of a Regression tree """
+    def __init__(self, params):
+        """ Construct with hyperparameters  """
+        pass
+    def fit(self, train):
+        """ Build model from training data """
+        pass
+    def predict(self, test):
+        """ Generate model predictions """ 
+        pass
+
+
+def ParseDesc(fname):
+    """ Parse the descr file """
+    datafile_name = None
+    missing_vals = list() 
+    datafile_start_line_idx = None 
+    (num, name, var_type) 
+    with open(fname, "ro") as f:
+        lines = fname.readlines()
+    
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        print(f"Arguments given:", sys.argv)
+    data_dir = "./regression-lsr-CE-data/"
+    row_data_file = "ce2021.txt"
+    # Description file
+    dsc_file = "ce2021reg.dsc"
+    assert os.path.exists(data_dir + row_data_file), f"{row_data_file} not found"
+    assert os.path.exists(data_dir + dsc_file), f"{desc_file} not found"
+    print(data)
+
+
+
+

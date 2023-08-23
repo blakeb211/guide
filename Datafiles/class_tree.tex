@@ -1,0 +1,102 @@
+ \documentclass{article}
+ % LaTeX file created by GUIDE version 41.2 on 08/20/23 at 03:21
+ %%%% Usage: latex class_tree.tex, dvips class_tree.tex, ps2pdf class_tree.tex
+ %%%% or: xelatex class_tree.tex
+ \usepackage{pstricks}
+ %%%% If using pdflatex, replace above line with \usepackage[pdf]{pstricks}
+ %%%% and use: pdflatex -shell-escape class_tree.tex
+ \usepackage{pstricks,pst-node,pst-tree}
+ \usepackage[left=1in,right=1in,top=1in,bottom=1in]{geometry}
+ \usepackage{lscape}
+ \definecolor{wheat}{rgb}{0.96, 0.87, 0.7}
+ \definecolor{lightgray}{rgb}{0.9, 0.9, 0.9}
+ \definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+ \definecolor{mauve}{rgb}{0.88, 0.69, 1.0}
+ \definecolor{skyblue}{RGB}{86,180,233}
+ \definecolor{vermillion}{RGB}{213,94,0}
+ \definecolor{purple}{RGB}{204,121,167}
+ \definecolor{bluishgreen}{RGB}{0,158,115}
+ \pagestyle{empty}
+ \begin{document}
+ \begin{landscape}
+ \begin{center} \footnotesize
+\psset{linecolor=black,tnsep=1pt,tndepth=0cm,tnheight=0cm,treesep=.5cm,levelsep=59pt,radius=8pt,fillstyle=solid}
+  \pstree[treemode=D]{\Tcircle{ 1 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{cat1}}\\in $S_{1}$}}
+    ~[tnpos=r]{0.38}}{
+  \pstree[treemode=D]{\Tcircle{ 2 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{meanbp1}}\\$\leq_*$\texttt{68.50}}}
+ }{
+  \pstree[treemode=D]{\Tcircle{ 4 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{pafi1}}\\$\leq$\texttt{266.16}}}
+ }{
+ \Tcircle[fillcolor=orange]{ 8 }
+    ~[tnpos=l]{0.70}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{RHC}}}\\\emph{655}}}
+  \pstree[treemode=D]{\Tcircle{ 9 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{ninsclas}}\\in $S_{2}$}}
+ }{
+ \Tcircle[fillcolor=orange]{\small 18}
+    ~[tnpos=l]{0.63}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{RHC}}}\\\emph{244}}}
+ \Tcircle[fillcolor=yellow]{\small 19}
+    ~[tnpos=r]{0.39}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{NoRHC}}}\\\emph{218}}}
+   }
+   }
+ \Tcircle[fillcolor=yellow]{ 5 }
+    ~[tnpos=r]{0.38}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{NoRHC}}}\\\emph{566}}}
+   }
+  \pstree[treemode=D]{\Tcircle{ 3 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{pafi1}}\\$\leq$\texttt{142.36}}}
+ }{
+  \pstree[treemode=D]{\Tcircle{ 6 }~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{resp}}\\=\texttt{\detokenize{No}}}}
+ }{
+  \pstree[treemode=D]{\Tcircle{\small 12}~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{dnr1}}\\=\texttt{\detokenize{No}}}}
+ }{
+  \pstree[treemode=D]{\Tcircle{\small 24}~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{cat1}}\\in $S_{3}$}}
+ }{
+ \Tcircle[fillcolor=orange]{\small 48}
+    ~[tnpos=l]{0.66}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{RHC}}}\\\emph{438}}}
+ \Tcircle[fillcolor=yellow]{\small 49}
+    ~[tnpos=r]{0.35}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{NoRHC}}}\\\emph{77}}}
+   }
+ \Tcircle[fillcolor=yellow]{\small 25}
+    ~[tnpos=r]{0.35}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{NoRHC}}}\\\emph{66}}}
+   }
+  \pstree[treemode=D]{\Tcircle{\small 13}~[tnpos=l]{\shortstack[r]{\texttt{\detokenize{seps}}\\=\texttt{\detokenize{Yes}}}}
+ }{
+ \Tcircle[fillcolor=orange]{\small 26}
+    ~[tnpos=l]{0.64}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{RHC}}}\\\emph{110}}}
+ \Tcircle[fillcolor=yellow]{\small 27}
+    ~[tnpos=r]{0.36}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{NoRHC}}}\\\emph{601}}}
+   }
+   }
+ \Tcircle[fillcolor=yellow]{ 7 }
+    ~[tnpos=r]{0.24}
+    ~{\shortstack{\makebox[\width][c]{\texttt{\detokenize{NoRHC}}}\\\emph{2760}}}
+ }
+ }
+ \end{center}
+GUIDE v.41.2 0.250-SE
+classification tree for predicting \texttt{\detokenize{swang1}} using
+estimated priors
+and unit misclassification costs.
+ % Tree constructed from 5735 observations
+ % and pruned from a tree with 69 terminal nodes.
+ % Maximum number of split levels is 15 and minimum node sample size is 57.
+At each split, an observation goes to the left branch 
+ if and only if the condition is satisfied.
+ Symbol `$\leq_*$' stands for `$\leq$ or missing'.
+ $S_{1}$ = \{\texttt{\detokenize{CHF}}, \texttt{\detokenize{MOSF w/Sepsis}}\}.
+ $S_{2}$ = \{\texttt{\detokenize{No insurance}}, \texttt{\detokenize{Private}},
+ \texttt{\detokenize{Private & Medicare}}\}.
+ $S_{3}$ = \{\texttt{\detokenize{ARF}}, \texttt{\detokenize{Lung Cancer}},
+ \texttt{\detokenize{MOSF w/Malignancy}}\}.
+Predicted classes and sample sizes (in \emph{italics}) printed below terminal nodes;
+class sample proportion for \texttt{\detokenize{swang1}} =
+ \texttt{\detokenize{RHC}} beside nodes.
+ Second best split variable at root node is \texttt{\detokenize{aps1}}.
+ \end{landscape}
+ \end{document}
