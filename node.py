@@ -55,16 +55,25 @@ class Model:
         self.top_node = Node(
                 node_type=NodeType.Internal, 
                 depth=0, 
-                indices=self.settings.df.index.tolist())
+                indices=self.settings.df.index.values)
 
     def _get_best_split(self):
         sample_y_mean = self.settings.df.loc[self.top_node.idx, self.settings.dependent_var].mean()
         residuals = self.settings.df.loc[self.top_node.idx, self.settings.dependent_var] - sample_y_mean
-        plt.scatter(x=residuals.index.tolist(), y=residuals)
-        plt.ylim(residuals.min(),residuals.max())
-        print(f"residuals min = {residuals.min()}")
-        plt.show()
         print(f"sample y_mean {sample_y_mean}")
+        print(f"residuals min = {residuals.min()}")
+        negative_resid = residuals[residuals < 0].index.values
+        positive_resid = residuals[residuals >= 0].index.values
+        assert residuals.shape[0] == negative_resid.shape[0] + positive_resid.shape[0]
+
+        # numerical val          |  0   0.25% | 0.25 to 0.50 | 0.50 to 0.75 | 0.75 - 1.0 |
+        #                   pos 
+        #                   neg
+
+        # categorical val 
+        #                        |   cat1     |   cat2       |    cat3      |   NA       | ... etc
+        #                   pos
+        #                   neg
         
 
     def fit(self):
