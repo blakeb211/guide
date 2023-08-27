@@ -37,6 +37,9 @@ model = RegressionType.LINEAR_PIECEWISE_CONSTANT
 weight_var = None
 numeric_vars = None
 categorical_vars = None
+m_variables = None
+MAX_DEPTH = 12
+MIN_SAMPLES_NODE = 20
 
 def _variables_by_role(char: str) -> list():
     """ Return variables names that have particular GUIDE role in the analysis """
@@ -77,12 +80,14 @@ def parse_data(description_file: str):
     print(f"Variable types           : {role_counts}")
     # Count number of m columns following a,c,n, and s
     m_role_association = {} 
+    m_variables = []
     if role_counts.get('m', 0) > 0:
         # process m role associations
         prev_role = None 
         for (idx, row) in col_data.iterrows():
             curr_role = row.var_role
             if curr_role == 'm':
+                m_variables += [row.var_name] 
                 m_role_association[prev_role] = m_role_association.get(prev_role, 0) + 1
             prev_role = curr_role
         print(f"m variables associated   : {m_role_association}")
@@ -141,21 +146,30 @@ def parse_data(description_file: str):
    
    # If column type s, w, or d add min and max missing to the col_data table
     numeric_var_names = _variables_by_role('S') + _variables_by_role('w')
+
+    _missing_vals_in_noncategorical_flag = False
     for col in numeric_var_names:
         assert df[col].dtype == np.float64 or df[col].dtype == np.int64, "calculating min,max,missing of non-numeric column"
         idx = col_data[col_data.var_name == col].index[0]
         col_data.loc[idx, 'min'] = df[col].min()
         col_data.loc[idx, 'max'] = df[col].max()
         _missing_count = df[col].isnull().sum()
+        # Check for missing values among non-categorical
+        if _missing_count > 0:
+            _missing_vals_in_noncategorical_flag = True
         col_data.loc[idx, 'missing'] = _missing_count if _missing_count > 0 else ' '
+
+    if _missing_vals_in_noncategorical_flag == True:
+        print(f"Missing values found in non-categorical variables.")
     
-    categorical_vars = _variables_by_role('c')
+    categorical_vars = _variables_by_role('c') + _variables_by_role('m')
   
     # Tally levels for categoricals
-    # Check if missing values found among categoricals and
     # tell user that separate categories will be created
-    # @TODO:
-    # Check levels and missing for categoricals against cons.out 
+    # @TODO: Match levels output for 'm' and 's' variables with the reference.
+    # @NOTE: Levels match reference for 'c' roles but not other roles,
+    # but the 'm' columns do not appear in the split vars of the final tree,
+    # so at minimum we can skip for now.
 
     _missing_vals_in_categoricals_flag = False
     for col in categorical_vars:
@@ -172,16 +186,16 @@ def parse_data(description_file: str):
     if _missing_vals_in_categoricals_flag == True:
         print(f"Missing values found in categorical variables. Separate categories will be created.")
 
-    print(col_data)
-
-    # Check for missing values among non-categorical
-
     # Report min, max of weights, 
+    print(f"Weight variable range    : {df[weight_var].min():.4e}, {df[weight_var].max():.4e}")
+    print()
+    print(col_data)
+    print(f"Number of split variables: {len(_variables_by_role('c')) + len(_variables_by_role('S'))}")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         print(f"Arguments given:", sys.argv)
     # Description file
     dsc_file = "ce2021reg.dsc"
-    assert os.path.exists(data_dir + dsc_file), f"{desc_file} not found"
+    assert os.path.exists(data_dir + dsc_file), f"{dsc_file} not found"
     parse_data(data_dir + dsc_file)
