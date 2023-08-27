@@ -20,6 +20,7 @@ Table: Variable role meanings
 from enum import Enum
 from parse import Settings
 from typing import List
+import matplotlib.pyplot as plt
 
 class NodeType(Enum):
     Internal = 1,
@@ -58,7 +59,13 @@ class Model:
 
     def _get_best_split(self):
         sample_y_mean = self.settings.df.loc[self.top_node.idx, self.settings.dependent_var].mean()
+        residuals = self.settings.df.loc[self.top_node.idx, self.settings.dependent_var] - sample_y_mean
+        plt.scatter(x=residuals.index.tolist(), y=residuals)
+        plt.ylim(residuals.min(),residuals.max())
+        print(f"residuals min = {residuals.min()}")
+        plt.show()
         print(f"sample y_mean {sample_y_mean}")
+        
 
     def fit(self):
         """ Build model from training data """
@@ -66,7 +73,6 @@ class Model:
 
         """
         At each node, a constant (namely, the sample Y -mean) is ﬁtted and the residuals computed.
-        repeat for children
         To solve the ﬁrst problem,
         we use instead the Pearson chi-square test to detect associations between the
         signed residuals and groups of predictor values. If X is a c-category predictor,
