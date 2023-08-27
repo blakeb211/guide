@@ -2,19 +2,6 @@
 1. Unbiased variable selection with curvature test and interaction test
 1.
 
-Table: Variable role meanings
-| Abbreviation | Meaning                                                   |
-|--------------|-----------------------------------------------------------|
-| d            | Dependent variable                                       |
-| b            | Split and fit categorical variable using indicator variables |
-| c            | Split-only categorical variable                         |
-| i            | Fit-only categorical variable via indicators            |
-| s            | Split-only numerical variable                           |
-| n            | Split and fit numerical variable                        |
-| f            | Fit-only numerical variable                             |
-| m            | Missing-value flag variable                              |
-| p            | Periodic variable                                       |
-| w            | Weight                                                   |
 """
 
 from enum import Enum

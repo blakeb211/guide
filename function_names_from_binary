@@ -1,1 +1,1 @@
- objdump -t guide | grep ' F '
+ objdump -t guide | grep ' F ' | cut -c62-99
