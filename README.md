@@ -3,17 +3,20 @@
   - interactive prompt creates input file
   - ./guide < input.txt
 
-1. try to match ce2021reg output 
 1. write minimum version of algorithm
 1. write testing against reference output
 
 # QUESTIONS
 1. What does M column - missing value flag (codes for missing values)
+  - these are only present in some datasets and not present in the 
+  final tree for ce2021reg.dsc so we acn save it as a future feature.
 
 1. How are new categories created for missing categoricals
-- Create a separate category that they all belong to
-
-1. How are missing values in numerical columns handled
+- Create a separate category 'Missing' that they belong to
+1. How are missing values in numerical columns handled 
+    -  numeric-var <= 10          missing values to the right
+    -  numeric-var <= 10   or NA  missing values to the left
+    -  numeric-var <= -inf or NA  numeric var equals NA; NA goes left all else goes right
 
 1. How is cost complexity calculated for regression? (I have a note what 0-SE is)
   pruning on SSE of residuals
@@ -33,3 +36,6 @@ Table: Variable role meanings
 | p            | Periodic variable                                       |
 | w            | Weight                                                   |
 
+
+1. Parse creates a Settings object
+1. Model takes the settings object and builds the model
