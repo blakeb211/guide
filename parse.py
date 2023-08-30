@@ -236,3 +236,4 @@ def parse_data(settings : Settings):
     settings.categorical_vars = _variables_by_role(col_data, 'c') 
     settings.numeric_vars = numeric_var_names
     settings.dependent_var = dependent_var
+    settings.weight_var = weight_var

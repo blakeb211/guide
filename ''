@@ -7,11 +7,7 @@
 from enum import Enum
 from parse import Settings
 from typing import List
-import pdb
-import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import chi2_contingency
-from collections import defaultdict
 
 class NodeType(Enum):
     Internal = 1,
@@ -46,53 +42,25 @@ class Model:
         self.tgt = settings.dependent_var 
         self.weight_var = settings.weight_var
         self.split_vars = settings.split_vars
-        self.col_data = settings.col_data
+
         self.top_node = Node(
                 node_type=NodeType.Internal, 
                 depth=0, 
                 indices=self.df.index.values)
 
-    def _calc_chi2_stat(self, y_mean, col) -> np.float64:
-        """ Split numeric into 4 quartiles, split categoricals into c bins
-        Calculate chi2_contingency and return p-value """
-        residuals = self.df[self.tgt] - y_mean
-        pvalue = 999.99 
-        if self.col_data[self.col_data.var_name == col]['var_role'].iloc[0] == 'S':
-            # Specify the number of quartiles
-            num_quartiles = 4
-            # Convert the column to a NumPy array
-            column_array = self.df[col].values
-            indexes      = self.df[col].index.values
-            # Bin the quartiles
-            quartile_edges = np.percentile(column_array,[25,50,75,100],method='linear')
-            # Bin the data using np.digitize
-            quartile_bins = np.digitize(column_array, quartile_edges, right=True)
-            # Create a defaultdict to store grouped indexes
-            grouped_indexes = defaultdict(list)
-
-            # Iterate through the bins and indexes arrays
-            for bin_value, index in zip(quartile_bins, indexes):
-                grouped_indexes[bin_value].append(index)
-            
-            grouped_index_keys = list(grouped_indexes.keys())
-            num_groups = len(grouped_indexes.keys())
-            chi_squared = np.zeros(shape=(2,num_groups))
-            for _bin in range(0,num_groups):
-                chi_squared[0, _bin] = (residuals[grouped_indexes[grouped_index_keys[_bin]]] >= 0).sum()
-                chi_squared[1, _bin] = (residuals[grouped_indexes[grouped_index_keys[_bin]]]  < 0).sum() 
-            pvalue = chi2_contingency(chi_squared).pvalue 
-
-        if self.col_data[self.col_data.var_name == col]['var_role'].iloc[0] == 'c':
-            pass
-        return pvalue
+    def _calc_chi2_stat(self):
 
     def _get_best_split(self):
         sample_y_mean = (self.df.loc[self.top_node.idx, self.tgt] * 
                 self.df[self.weight_var]).sum() / self.df[self.weight_var].sum()
         residuals = self.df.loc[self.top_node.idx, self.tgt] - sample_y_mean
         print(f"sample y_mean {sample_y_mean}")
+        print(f"residuals min = {residuals.min()}")
+        negative_resid = residuals[residuals < 0].index.values
+        positive_resid = residuals[residuals >= 0].index.values
+        assert residuals.shape[0] == negative_resid.shape[0] + positive_resid.shape[0]
 
-        stat_pval = { col : self._calc_chi2_stat(y_mean=sample_y_mean, col=col) for col in self.split_vars }
+        stat_pval = { col : (111, 0.5) for col in self.split_vars }
         print(stat_pval) 
         # numerical val          |  0   0.25% | 0.25 to 0.50 | 0.50 to 0.75 | 0.75 - 1.0 |
         #                   pos 
