@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import chi2_contingency
 from collections import defaultdict
-
+from itertools import permutations, chain
 
 class NodeType(Enum):
     Internal = 1,
@@ -60,6 +60,11 @@ class Model:
     def _calc_chi2_stat(self, y_mean, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
         Calculate chi2_contingency and return p-value """
+        # @NOTE: can we use pvalues as is or do I need to use modified wilson-hilferty to 
+        # get the chi-squared degree 1 and rank the variables like that? The 2002 regression
+        # paper says to sort based on p-values but the tutorial video part 1 says to rank
+        # based on the chi-squared degree of freedom 1. Note the video is 20 years older
+        # than the paper.
         residuals = self.df[self.tgt] - y_mean
         pvalue = 999.99
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
@@ -124,7 +129,7 @@ class Model:
                 # numeric
                 x_uniq = _df[col].drop_duplicates().sort_values()
                 cutpoints = x_uniq[:-1] + np.diff(x_uniq)/2
-                smallest_tot_sse = None
+                smallest_tot_sse = None # total weighted sse of the node - left - right
                 cut_with_smallest_sse = None
                 for cut in cutpoints:
                     right_idx = _df[_df[col] < cut].index.values
@@ -152,7 +157,14 @@ class Model:
                 (binomial) variances in L and R is minimized. This solution is quickly found
                 with an algorithm in Breiman et al. (1984, p.101).
                 """
-                pass
+                x_uniq = _df[col].drop_duplicates().sort_values().values
+                max_r = round(x_uniq.shape[0] / 1.5)
+                # avoid combinatorial explosion
+                max_r = max([max_r, 8]) 
+                results = {'set','sum_binom_variance'}
+                for subset in chain(*(permutations(x_uniq, r) for r in range(1, max_r + 1))):
+                   left_idx = _df[_df[col].isin(subset)].index.values
+                   right_idx = _df[~_df[col].isin(subset)].index.values
 
     def _get_split_point_median(self, node, col):
         """ Get the optimal split value for a given split variable 
@@ -202,7 +214,9 @@ class Model:
         """ Build model from training data """
         if self.model_type == RegressionType.LINEAR_PIECEWISE_CONSTANT:
             best_split_var = self._get_best_split(node=self.top_node)
-
+            # @TODO: REMOVE
+            best_split_var = 'CUTENURE'
+    
         if self.split_point_method == SplitPointMethod.Greedy:
             split_point = self._get_split_point_greedy(node=self.top_node, col=best_split_var)
         elif self.split_point_method == SplitPointMethod.Median:
