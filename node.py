@@ -1,7 +1,5 @@
 """
-1. Unbiased variable selection with curvature test and interaction test
-1.
-
+Build a tree similar to the GUIDE algorithm
 """
 
 from enum import Enum
@@ -43,9 +41,6 @@ class Node:
         self.right = None
         self.depth = depth
         self.idx = indices
-
-    def residuals(self):
-        pass
 
 
 class Model:
@@ -98,12 +93,12 @@ class Model:
                 pvalue = chi2_contingency(chi_squared).pvalue
             case 'c':
                 # Specify the number of columns in the contingency table
-                unique_vals = self.df[col].unique() # includes NA
+                unique_vals = self.df[col].unique()  # includes NA
                 num_cat = len(unique_vals)
                 # Convert the column to a NumPy array
                 column_array = self.df[col].values
                 indexes_by_value = self.df.groupby(col, dropna=False).apply(lambda group: group.index.values)
-                
+
                 chi_squared = np.zeros(shape=(2, num_cat))
                 for _bin in range(0, num_cat):
                     chi_squared[0, _bin] = (
@@ -115,43 +110,77 @@ class Model:
                 raise f"split_var role not handled in {self.__name__}"
         return pvalue
 
-    def _get_split_point_greedy(self, col):
+    def _get_split_point_greedy(self, node, col):
         """ Get the optimal split value for a given split variable 
         G method is greedy exhaustive
         M method is median
         """
+        _df = self.df.loc[node.idx, [col, self.tgt]]
+        if _df[col].isnull().sum() > 0:
+            pdb.set_trace()
+
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
             case 'S':
-                # numeric  
-                for i in self.df[col].values:
-                    print(i)
+                # numeric
+                x_uniq = _df[col].drop_duplicates().sort_values()
+                cutpoints = x_uniq[:-1] + np.diff(x_uniq)/2
+                smallest_tot_sse = None
+                cut_with_smallest_sse = None
+                for cut in cutpoints:
+                    right_idx = _df[_df[col] < cut].index.values
+                    left_idx = _df[_df[col] >= cut].index.values
+                    tot_items = len(right_idx) + len(left_idx)
+                    weights = tot_items / tot_items, len(right_idx)/tot_items, len(left_idx)/tot_items
+                    left_resid = _df.loc[left_idx, self.tgt] - _df.loc[left_idx, self.tgt].mean()
+                    right_resid = _df.loc[right_idx, self.tgt] - _df.loc[right_idx, self.tgt].mean()
+                    node_resid = _df[self.tgt].values - node.y_mean
+                    tot_sse = weights[0]*_sse(node_resid) - weights[1] * \
+                        _sse(right_resid) - weights[2]*_sse(left_resid)
+                    if smallest_tot_sse == None or smallest_tot_sse > tot_sse:
+                        smallest_tot_sse = tot_sse
+                        cut_with_smallest_sse = cut
+                return cut_with_smallest_sse
             case 'c':
                 # categorical
-                pass
-    
-    def _get_split_point_median(self, col):
-        """ Get the optimal split value for a given split variable 
-        G method is greedy exhaustive
-        M method is median
-        """
-        match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
-            case 'S':
-                # numeric  
-                for i in self.df[col].values:
-                    print(i)
-            case 'c':
-                # categorical
+                """
+                If X is a categorical predictor, we need to ﬁnd a split of the form X ∈ A,
+                where A is a subset of the values taken by X. We accomplish this by viewing
+                it as a classiﬁcation problem. Label each observation in the node as class 1
+                if it is associated with a positive residual and as class 2 otherwise. Given a
+                split determined by A, let L and R denote the data subsets in the left and
+                right subnodes, respectively. We choose the set A for which the sum of the
+                (binomial) variances in L and R is minimized. This solution is quickly found
+                with an algorithm in Breiman et al. (1984, p.101).
+                """
                 pass
 
-    def _get_best_split(self):
+    def _get_split_point_median(self, node, col):
+        """ Get the optimal split value for a given split variable 
+        G method is greedy exhaustive
+        M method is median
+        """
+        if self.df[col].isnull().sum() > 0:
+            pdb.set_trace()
+
+        match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
+            case 'S':
+                # numeric
+                return self.df.loc[node.idx, col].median()
+            case 'c':
+                # categorical
+                # Based on 2002 paper it appears that categoricals are split the same
+                # whether we are in Median or Greedy split point mode.
+                return self._get_split_point_greedy(node, col)
+
+    def _get_best_split(self, node) -> str:
         """ Find best unbiased splitter among self.split_vars. """
         # @TODO: Add interaction tests
-        sample_y_mean = (self.df.loc[self.top_node.idx, self.tgt] *
-                         self.df[self.weight_var]).sum() / self.df[self.weight_var].sum()
-        residuals = self.df.loc[self.top_node.idx, self.tgt] - sample_y_mean
+        node.y_mean = (self.df.loc[node.idx, self.tgt] *
+                       self.df.loc[node.idx, self.weight_var]).sum() / self.df.loc[node.idx, self.weight_var].sum()
+        residuals = self.df.loc[node.idx, self.tgt] - node.y_mean
         stat_pval = {
             col: self._calc_chi2_stat(
-                y_mean=sample_y_mean,
+                y_mean=node.y_mean,
                 col=col) for col in self.split_vars}
         # numerical val          |  0   0.25% | 0.25 to 0.50 | 0.50 to 0.75 | 0.75 - 1.0 |
         #                   pos
@@ -161,26 +190,27 @@ class Model:
         #                        |   cat1     |   cat2       |    cat3      |   NA       | ... etc
         #                   pos
         #                   neg
-        top_3_keys = {key : value for key , value in stat_pval.items() if value in heapq.nsmallest(3, stat_pval.values())}
-        top_3_keys = sorted(top_3_keys, key=lambda x : x[1])
+        top_3_keys = {key: value for key, value in stat_pval.items(
+        ) if value in heapq.nsmallest(3, stat_pval.values())}
+        top_3_keys = sorted(top_3_keys, key=lambda x: x[1])
         # hopefully heapq is faster!
-        # sorted_items = sorted(stat_pval.items(), key=lambda item: item[1]) 
+        # sorted_items = sorted(stat_pval.items(), key=lambda item: item[1])
         col = top_3_keys[0]
-        if self.split_point_method == SplitPointMethod.Greedy:
-            split_point = self._get_split_point_greedy(col)
-        elif self.split_point_method == SplitPointMethod.Median:
-            split_point = self._get_split_point_median(col)
-        elif self.split_point_method == SplitPointMethod.Systematic:
-            raise "not implemented"
-        return top_3_keys[0], split_point 
+        return top_3_keys[0]
 
     def fit(self):
         """ Build model from training data """
         if self.model_type == RegressionType.LINEAR_PIECEWISE_CONSTANT:
-            best_split_var = self._get_best_split()
-            print(f"best_split_var = {best_split_var}")
-        else:
-            raise "Not implemented"
+            best_split_var = self._get_best_split(node=self.top_node)
+
+        if self.split_point_method == SplitPointMethod.Greedy:
+            split_point = self._get_split_point_greedy(node=self.top_node, col=best_split_var)
+        elif self.split_point_method == SplitPointMethod.Median:
+            split_point = self._get_split_point_median(node=self.top_node, col=best_split_var)
+        elif self.split_point_method == SplitPointMethod.Systematic:
+            raise "not implemented"
+
+        print(f"best split = {best_split_var, split_point}")
 
         """
         At each node, a constant (namely, the sample Y -mean) is ﬁtted and the residuals computed.
@@ -228,3 +258,8 @@ class Model:
     def predict(self, test):
         """ Generate model predictions """
         pass
+
+
+def _sse(vals: np.ndarray):
+    """ calc sum of squares """
+    return np.sum(vals**2)

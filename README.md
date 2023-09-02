@@ -1,7 +1,8 @@
 # Minimum Viable Product
-1. write split point method G
+1. write split point method G for categorical
 1. write split point method M
-1. write train and predict
+1. create input and output file for baseball player income 
+1. finish fit and predict
 1. write test against consumer expenditure
 1. write test against baseball player income 
 
