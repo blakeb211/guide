@@ -34,6 +34,10 @@ class RegressionType(Enum):
     QUANTILE = 2
     POISSON = 3
 
+class SplitPointMethod(Enum):
+    Greedy = 1
+    Median = 2
+    Systematic = 3
 
 # Globals
 class Settings():

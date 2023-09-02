@@ -1,10 +1,9 @@
-1. read manual
-1. TO RUN BINARY:
-  - interactive prompt creates input file
-  - ./guide < input.txt
-
-1. write minimum version of algorithm
-1. write testing against reference output
+# Minimum Viable Product
+1. write split point method G
+1. write split point method M
+1. write train and predict
+1. write test against consumer expenditure
+1. write test against baseball player income 
 
 # QUESTIONS
 1. What does M column - missing value flag (codes for missing values)

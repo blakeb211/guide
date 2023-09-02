@@ -5,9 +5,10 @@
 """
 
 from enum import Enum
-from parse import Settings
+from parse import Settings, RegressionType, SplitPointMethod
 from typing import List
 from pprint import pprint
+import heapq
 import pdb
 import numpy as np
 import matplotlib.pyplot as plt
@@ -58,6 +59,8 @@ class Model:
             node_type=NodeType.Internal,
             depth=0,
             indices=self.df.index.values)
+        self.split_point_method = SplitPointMethod.Greedy
+        self.model_type = RegressionType.LINEAR_PIECEWISE_CONSTANT
 
     def _calc_chi2_stat(self, y_mean, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
@@ -112,12 +115,40 @@ class Model:
                 raise f"split_var role not handled in {self.__name__}"
         return pvalue
 
+    def _get_split_point_greedy(self, col):
+        """ Get the optimal split value for a given split variable 
+        G method is greedy exhaustive
+        M method is median
+        """
+        match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
+            case 'S':
+                # numeric  
+                for i in self.df[col].values:
+                    print(i)
+            case 'c':
+                # categorical
+                pass
+    
+    def _get_split_point_median(self, col):
+        """ Get the optimal split value for a given split variable 
+        G method is greedy exhaustive
+        M method is median
+        """
+        match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
+            case 'S':
+                # numeric  
+                for i in self.df[col].values:
+                    print(i)
+            case 'c':
+                # categorical
+                pass
+
     def _get_best_split(self):
+        """ Find best unbiased splitter among self.split_vars. """
+        # @TODO: Add interaction tests
         sample_y_mean = (self.df.loc[self.top_node.idx, self.tgt] *
                          self.df[self.weight_var]).sum() / self.df[self.weight_var].sum()
         residuals = self.df.loc[self.top_node.idx, self.tgt] - sample_y_mean
-        print(f"sample y_mean {sample_y_mean}")
-
         stat_pval = {
             col: self._calc_chi2_stat(
                 y_mean=sample_y_mean,
@@ -130,12 +161,26 @@ class Model:
         #                        |   cat1     |   cat2       |    cat3      |   NA       | ... etc
         #                   pos
         #                   neg
-        sorted_items = sorted(stat_pval.items(), key=lambda item: item[1])
-        pprint(sorted_items[:10])
+        top_3_keys = {key : value for key , value in stat_pval.items() if value in heapq.nsmallest(3, stat_pval.values())}
+        top_3_keys = sorted(top_3_keys, key=lambda x : x[1])
+        # hopefully heapq is faster!
+        # sorted_items = sorted(stat_pval.items(), key=lambda item: item[1]) 
+        col = top_3_keys[0]
+        if self.split_point_method == SplitPointMethod.Greedy:
+            split_point = self._get_split_point_greedy(col)
+        elif self.split_point_method == SplitPointMethod.Median:
+            split_point = self._get_split_point_median(col)
+        elif self.split_point_method == SplitPointMethod.Systematic:
+            raise "not implemented"
+        return top_3_keys[0], split_point 
 
     def fit(self):
         """ Build model from training data """
-        best_split_var = self._get_best_split()
+        if self.model_type == RegressionType.LINEAR_PIECEWISE_CONSTANT:
+            best_split_var = self._get_best_split()
+            print(f"best_split_var = {best_split_var}")
+        else:
+            raise "Not implemented"
 
         """
         At each node, a constant (namely, the sample Y -mean) is ﬁtted and the residuals computed.
