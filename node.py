@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import chi2_contingency
 from collections import defaultdict
-from itertools import permutations, chain
+from itertools import combinations, chain
 
 class NodeType(Enum):
     Internal = 1,
@@ -136,6 +136,7 @@ class Model:
                     left_idx = _df[_df[col] >= cut].index.values
                     tot_items = len(right_idx) + len(left_idx)
                     weights = tot_items / tot_items, len(right_idx)/tot_items, len(left_idx)/tot_items
+                    # Is this correct calculation of sse using the child node means to get the sse on the left and right?
                     left_resid = _df.loc[left_idx, self.tgt] - _df.loc[left_idx, self.tgt].mean()
                     right_resid = _df.loc[right_idx, self.tgt] - _df.loc[right_idx, self.tgt].mean()
                     node_resid = _df[self.tgt].values - node.y_mean
@@ -160,11 +161,30 @@ class Model:
                 x_uniq = _df[col].drop_duplicates().sort_values().values
                 max_r = round(x_uniq.shape[0] / 1.5)
                 # avoid combinatorial explosion
-                max_r = max([max_r, 8]) 
-                results = {'set','sum_binom_variance'}
-                for subset in chain(*(permutations(x_uniq, r) for r in range(1, max_r + 1))):
+                max_r = max([max_r, 10]) 
+                results = {'set' : [],'sum_binom_variance' : []}
+                for subset in chain(*(combinations(x_uniq, r) for r in range(1, max_r + 1))):
+                   positive_resid_idx = _df[_df[self.tgt] - node.y_mean > 0].index.values
+                   negative_resid_idx = _df[_df[self.tgt] - node.y_mean < 0].index.values
                    left_idx = _df[_df[col].isin(subset)].index.values
                    right_idx = _df[~_df[col].isin(subset)].index.values
+                   
+                   class_1_left = np.intersect1d(left_idx, positive_resid_idx)
+                   class_2_left = np.intersect1d(left_idx, negative_resid_idx)
+                   
+                   class_1_right = np.intersect1d(right_idx, positive_resid_idx)
+                   class_2_right = np.intersect1d(right_idx, negative_resid_idx)
+                   
+                   probs_left = np.asarray([class_1_left.shape[0], class_2_left.shape[0]])   
+                   probs_right = np.asarray([class_1_right.shape[0], class_2_right.shape[0]])
+                   residual_impurity_left = probs_left[0]*probs_left[1]
+                   residual_impurity_right = probs_right[0]*probs_right[1]
+
+                   results['set'].append(subset)
+                   results['sum_binom_variance'].append(residual_impurity_left + residual_impurity_left)
+                    
+                idx_min = np.argmin(results['sum_binom_variance'])
+                return results['set'][idx_min]
 
     def _get_split_point_median(self, node, col):
         """ Get the optimal split value for a given split variable 
