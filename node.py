@@ -126,9 +126,8 @@ class Model:
         G method is greedy exhaustive
         M method is median
         """
+
         _df = self.df.loc[node.idx, [col, self.tgt]]
-        if _df[col].isnull().sum() > 0:
-            pdb.set_trace()
 
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
             case 'S':
@@ -151,7 +150,8 @@ class Model:
                     if smallest_tot_sse == None or smallest_tot_sse > tot_sse:
                         smallest_tot_sse = tot_sse
                         cut_with_smallest_sse = cut
-            
+          
+                # returns None for cut_with_smallest_sse if all values are same for the column
                 return cut_with_smallest_sse, True
             case 'c':
                 # categorical
@@ -167,8 +167,9 @@ class Model:
                 """
                 x_uniq = _df[col].drop_duplicates().sort_values().values
                 max_r = round(x_uniq.shape[0] / 1.5)
+                max_r = min([max_r, 5]) 
+                print(f"finding best combination of categoricals with max_r = {max_r}")
                 # avoid combinatorial explosion
-                max_r = max([max_r, 10]) 
                 results = {'set' : [],'sum_binom_variance' : []}
                 for subset in chain(*(combinations(x_uniq, r) for r in range(1, max_r + 1))):
                    positive_resid_idx = _df[_df[self.tgt] - node.y_mean > 0].index.values
@@ -198,8 +199,6 @@ class Model:
         G method is greedy exhaustive
         M method is median
         """
-        if self.df[col].isnull().sum() > 0:
-            pdb.set_trace()
 
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
             case 'S':
@@ -262,6 +261,13 @@ class Model:
             elif self.split_point_method == SplitPointMethod.Systematic:
                 raise "not implemented"
 
+
+            if split_point == None:
+                curr.type = TerminalData(value = curr.y_mean)
+                node_list.append(curr) 
+                continue
+
+
             assert isinstance(curr.idx, np.ndarray)
             _df = self.df.loc[curr.idx]
             predicate = None
@@ -269,33 +275,38 @@ class Model:
             # create predicate (lambda) for splitting dataframe
             # can be printed with:
             #   from dill.source import getsource
-            if isinstance(split_point, list):
-                predicate = lambda x : x.isin(split_point)
+            if isinstance(split_point, tuple):
+                predicate = lambda x : x in split_point
             else:
                 if na_left == True:
                     predicate = lambda x : x < split_point or np.isnan(x)
                 else:
                     predicate = lambda x : x < split_point
-           
+          
             # Split dataframe
             # @NOTE can index a dataframe by a boolean but need to call .loc to index it with an index
             left = _df[_df[split_var].map(predicate)].index.values
             right = _df[~_df[split_var].map(predicate)].index.values
             assert left.shape[0] + right.shape[0] == curr.idx.shape[0]
 
+
             # Terminate tree based on early stopping 
             if left.shape[0] < self.MIN_SAMPLES_LEAF or right.shape[0] < self.MIN_SAMPLES_LEAF \
                     or curr.depth == self.MAX_DEPTH:
                         curr.type = TerminalData(value = curr.y_mean)
-                        nodelist.append(curr) 
+                        node_list.append(curr) 
                         continue
-            
+           
+            # Terminate left or right node if they are homogonous
+
             curr.node_type=InternalData(split_var=split_var, split_point=split_point, \
                     predicate=predicate, na_goes_left=na_left)
 
             # Split node
+            print(f"splitting node. curr node depth = {curr.depth}. left size = {len(left)}  right size = {len(right)}")
             stack.append(Node(node_type=None, depth = curr.depth + 1, parent=curr, indices=left))
             stack.append(Node(node_type=None, depth = curr.depth + 1, parent=curr, indices=right))
+            node_list.append(curr)
 
         # Tree finished building
         print(f"nodelist = {node_list} \n stack = {stack}")
