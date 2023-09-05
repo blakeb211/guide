@@ -14,29 +14,24 @@ from scipy.stats import chi2_contingency
 from collections import defaultdict
 from itertools import combinations, chain
 
-class NodeType(Enum):
-    Internal = 1,
-    Terminal = 2
-
-
 class TerminalData:
-    def __init__(self, value, samples: List[int]):
+    def __init__(self, value):
+        assert isinstance(value, float)
         self.value = value
-        self.samples = []
-
 
 class InternalData:
-    def __init__(self, split_var, cutpoint):
-        self.cutpoint = cutpoint
+    def __init__(self, split_var, split_point, predicate, na_goes_left):
+        self.split_point = split_point
         self.split_var = split_var
-        self.NA_goes_right = True
+        self.predicate = predicate
+        self.na_goes_left = na_goes_left
 
 
 class Node:
     """ Regression tree """
 
-    def __init__(self, node_type: NodeType, depth: int, parent, indices):
-        assert isinstance(node_type, NodeType)
+    def __init__(self, node_type, depth: int, parent, indices):
+        assert isinstance(node_type, TerminalData) or isinstance(node_type, InternalData) or node_type is None
         assert isinstance(depth, int)
         assert isinstance(parent, Node) or parent is None 
         assert isinstance(indices, np.ndarray)
@@ -45,6 +40,7 @@ class Node:
         self.right = None
         self.depth = depth
         self.idx = indices
+        
 
 class Model:
     def __init__(self, settings: Settings):
@@ -54,7 +50,7 @@ class Model:
         self.split_vars = settings.split_vars
         self.col_data = settings.col_data
         self.top_node = Node(
-            node_type=NodeType.Internal,
+            node_type=InternalData(None, None, None, True),
             depth=0,
             parent=None,
             indices=self.df.index.values)
@@ -258,11 +254,11 @@ class Model:
             curr = stack.pop(0)     
             # get split variable and split point
             na_left = None
-            split_var = self._get_best_split(node=self.top_node)
+            split_var = self._get_best_split(node=curr)
             if self.split_point_method == SplitPointMethod.Greedy:
-                split_point, na_left = self._get_split_point_greedy(node=self.top_node, col=split_var)
+                split_point, na_left = self._get_split_point_greedy(node=curr, col=split_var)
             elif self.split_point_method == SplitPointMethod.Median:
-                split_point, na_left = self._get_split_point_median(node=self.top_node, col=split_var)
+                split_point, na_left = self._get_split_point_median(node=curr, col=split_var)
             elif self.split_point_method == SplitPointMethod.Systematic:
                 raise "not implemented"
 
@@ -287,10 +283,22 @@ class Model:
             right = _df[~_df[split_var].map(predicate)].index.values
             assert left.shape[0] + right.shape[0] == curr.idx.shape[0]
 
-            # Terminate tree based on criteria
+            # Terminate tree based on early stopping 
             if left.shape[0] < self.MIN_SAMPLES_LEAF or right.shape[0] < self.MIN_SAMPLES_LEAF \
                     or curr.depth == self.MAX_DEPTH:
-                        break
+                        curr.type = TerminalData(value = curr.y_mean)
+                        nodelist.append(curr) 
+                        continue
+            
+            curr.node_type=InternalData(split_var=split_var, split_point=split_point, \
+                    predicate=predicate, na_goes_left=na_left)
+
+            # Split node
+            stack.append(Node(node_type=None, depth = curr.depth + 1, parent=curr, indices=left))
+            stack.append(Node(node_type=None, depth = curr.depth + 1, parent=curr, indices=right))
+
+        # Tree finished building
+        print(f"nodelist = {node_list} \n stack = {stack}")
         """
         At each node, a constant (namely, the sample Y -mean) is ﬁtted and the residuals computed.
         To solve the ﬁrst problem,
