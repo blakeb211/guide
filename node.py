@@ -35,13 +35,16 @@ class InternalData:
 class Node:
     """ Regression tree """
 
-    def __init__(self, node_type: NodeType, depth: int, indices):
+    def __init__(self, node_type: NodeType, depth: int, parent, indices):
+        assert isinstance(node_type, NodeType)
+        assert isinstance(depth, int)
+        assert isinstance(parent, Node) or parent is None 
+        assert isinstance(indices, np.ndarray)
         self.type = node_type
         self.left = None
         self.right = None
         self.depth = depth
         self.idx = indices
-
 
 class Model:
     def __init__(self, settings: Settings):
@@ -53,9 +56,12 @@ class Model:
         self.top_node = Node(
             node_type=NodeType.Internal,
             depth=0,
+            parent=None,
             indices=self.df.index.values)
         self.split_point_method = SplitPointMethod.Greedy
         self.model_type = RegressionType.LINEAR_PIECEWISE_CONSTANT
+        self.MIN_SAMPLES_LEAF = settings.MIN_SAMPLES_LEAF
+        self.MAX_DEPTH = settings.MAX_DEPTH
 
     def _calc_chi2_stat(self, y_mean, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
@@ -117,6 +123,10 @@ class Model:
 
     def _get_split_point_greedy(self, node, col):
         """ Get the optimal split value for a given split variable 
+        Returns split_point, boolean for whether NA goes left
+        split_point is numeric for a numeric column followed by a boolean
+        split_point is a tuple of categories for categorical column followed by None
+
         G method is greedy exhaustive
         M method is median
         """
@@ -145,7 +155,8 @@ class Model:
                     if smallest_tot_sse == None or smallest_tot_sse > tot_sse:
                         smallest_tot_sse = tot_sse
                         cut_with_smallest_sse = cut
-                return cut_with_smallest_sse
+            
+                return cut_with_smallest_sse, True
             case 'c':
                 # categorical
                 """
@@ -184,7 +195,7 @@ class Model:
                    results['sum_binom_variance'].append(residual_impurity_left + residual_impurity_left)
                     
                 idx_min = np.argmin(results['sum_binom_variance'])
-                return results['set'][idx_min]
+                return results['set'][idx_min], None
 
     def _get_split_point_median(self, node, col):
         """ Get the optimal split value for a given split variable 
@@ -232,20 +243,54 @@ class Model:
 
     def fit(self):
         """ Build model from training data """
-        if self.model_type == RegressionType.LINEAR_PIECEWISE_CONSTANT:
-            best_split_var = self._get_best_split(node=self.top_node)
-            # @TODO: REMOVE
-            best_split_var = 'CUTENURE'
-    
-        if self.split_point_method == SplitPointMethod.Greedy:
-            split_point = self._get_split_point_greedy(node=self.top_node, col=best_split_var)
-        elif self.split_point_method == SplitPointMethod.Median:
-            split_point = self._get_split_point_median(node=self.top_node, col=best_split_var)
-        elif self.split_point_method == SplitPointMethod.Systematic:
-            raise "not implemented"
+        node_list = [None]*200 # all nodes of tree
+        stack = [None]*200     # nodes that need processed
+        stack.clear()
+        node_list.clear()
+        stack.append(self.top_node)
+        
+        assert self.model_type == RegressionType.LINEAR_PIECEWISE_CONSTANT
+      
+        
+        # process nodes, adding new nodes as they are created
+        
+        while len(stack) > 0:
+            curr = stack.pop(0)     
+            # get split variable and split point
+            na_left = None
+            split_var = self._get_best_split(node=self.top_node)
+            if self.split_point_method == SplitPointMethod.Greedy:
+                split_point, na_left = self._get_split_point_greedy(node=self.top_node, col=split_var)
+            elif self.split_point_method == SplitPointMethod.Median:
+                split_point, na_left = self._get_split_point_median(node=self.top_node, col=split_var)
+            elif self.split_point_method == SplitPointMethod.Systematic:
+                raise "not implemented"
 
-        print(f"best split = {best_split_var, split_point}")
+            assert isinstance(curr.idx, np.ndarray)
+            _df = self.df.loc[curr.idx]
+            predicate = None
+           
+            # create predicate (lambda) for splitting dataframe
+            # can be printed with:
+            #   from dill.source import getsource
+            if isinstance(split_point, list):
+                predicate = lambda x : x.isin(split_point)
+            else:
+                if na_left == True:
+                    predicate = lambda x : x < split_point or np.isnan(x)
+                else:
+                    predicate = lambda x : x < split_point
+           
+            # Split dataframe
+            # @NOTE can index a dataframe by a boolean but need to call .loc to index it with an index
+            left = _df[_df[split_var].map(predicate)].index.values
+            right = _df[~_df[split_var].map(predicate)].index.values
+            assert left.shape[0] + right.shape[0] == curr.idx.shape[0]
 
+            # Terminate tree based on criteria
+            if left.shape[0] < self.MIN_SAMPLES_LEAF or right.shape[0] < self.MIN_SAMPLES_LEAF \
+                    or curr.depth == self.MAX_DEPTH:
+                        break
         """
         At each node, a constant (namely, the sample Y -mean) is ﬁtted and the residuals computed.
         To solve the ﬁrst problem,

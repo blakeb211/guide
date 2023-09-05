@@ -1,15 +1,18 @@
 # Minimum Viable Product
-1. write split point method G for categorical
-1. write split point method M
-1. create input and output file for baseball player income 
 1. finish fit and predict
+1. Verify missing values being handled correctly
+1. create input and output file for baseball player income 
 1. write test against consumer expenditure
 1. write test against baseball player income 
 
-# QUESTIONS
+# Done
+1. write split point method G for categorical
+1. write split point method M
 1. What does M column - missing value flag (codes for missing values)
   - these are only present in some datasets and not present in the 
   final tree for ce2021reg.dsc so we acn save it as a future feature.
+
+# QUESTIONS
 
 1. How are new categories created for missing categoricals
 - Create a separate category 'Missing' that they belong to

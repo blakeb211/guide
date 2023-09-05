@@ -60,7 +60,7 @@ class Settings():
     fit_vars = None
     m_variables = None
     MAX_DEPTH = 12
-    MIN_SAMPLES_NODE = 20
+    MIN_SAMPLES_LEAF = 20
 
     def __init__(self, data_dir, dsc_file, model):
         self.data_dir = data_dir
