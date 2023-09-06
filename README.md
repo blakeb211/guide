@@ -1,11 +1,13 @@
 # Minimum Viable Product
-1. finish fit and predict
-1. Verify missing values being handled correctly
-1. create input and output file for baseball player income 
-1. write test against consumer expenditure
-1. write test against baseball player income 
+1. change parsing file to not change the dataframe but just pass the indexes, split_var etc to node
+1. port over tree plotter
+1. write predict
+1. write test cases for output 
+1. baseball dataset
+1. consumer expenditure
 
 # Done
+1. write fit
 1. write split point method G for categorical
 1. write split point method M
 1. What does M column - missing value flag (codes for missing values)

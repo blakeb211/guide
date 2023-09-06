@@ -43,6 +43,31 @@ class Node:
         
 
 class Model:
+    """
+    At each node, a constant (namely, the sample Y -mean) is ﬁtted and the residuals computed.
+    To solve the ﬁrst problem,
+    we use instead the Pearson chi-square test to detect associations between the
+    signed residuals and groups of predictor values. If X is a c-category predictor,
+    the test is applied to the 2 × c table formed by the two groups of residuals as
+    rows and the categories of X as columns. If X is a numerical-valued variable, its
+    values can be grouped to form the columns of the table. We divide the range of
+    X into four groups at the sample quartiles to yield a 2 × 4 table. There are other
+    ways to deﬁne the groups for ordered variables, but there is probably none that
+    is optimal for all situations. Our experience indicates that this choice provides
+    suﬃcient detection power while keeping the chance of empty cells low.
+
+    @TODO: Skip the interaction tests for the first draft
+    Although the chi-square test is sensitive to curvature along the direct, it does
+    not work as well with with simple interaction models such as
+    I(X1*X2 > 0) - I(X1*X2) <= 0) + noise
+
+
+    So far we have concentrated on the problem of variable selection. To complete
+    the tree construction algorithm, we need to select the split points as well as
+    determine the size of the tree. For the latter, we adopt the CART method of
+    cost-complexity pruning with an independent test set or, in its absence, by cross-
+    validation.
+    """
     def __init__(self, settings: Settings):
         self.df = settings.df
         self.tgt = settings.dependent_var
@@ -58,6 +83,7 @@ class Model:
         self.model_type = RegressionType.LINEAR_PIECEWISE_CONSTANT
         self.MIN_SAMPLES_LEAF = settings.MIN_SAMPLES_LEAF
         self.MAX_DEPTH = settings.MAX_DEPTH
+        self.node_list = []
 
     def _calc_chi2_stat(self, y_mean, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
@@ -237,6 +263,7 @@ class Model:
         return top_3_keys[0]
 
     def fit(self):
+
         """ Build model from training data """
         node_list = [None]*200 # all nodes of tree
         stack = [None]*200     # nodes that need processed
@@ -308,35 +335,10 @@ class Model:
             stack.append(Node(node_type=None, depth = curr.depth + 1, parent=curr, indices=right))
             node_list.append(curr)
 
+
         # Tree finished building
         print(f"nodelist = {node_list} \n stack = {stack}")
-        """
-        At each node, a constant (namely, the sample Y -mean) is ﬁtted and the residuals computed.
-        To solve the ﬁrst problem,
-        we use instead the Pearson chi-square test to detect associations between the
-        signed residuals and groups of predictor values. If X is a c-category predictor,
-        the test is applied to the 2 × c table formed by the two groups of residuals as
-        rows and the categories of X as columns. If X is a numerical-valued variable, its
-        values can be grouped to form the columns of the table. We divide the range of
-        X into four groups at the sample quartiles to yield a 2 × 4 table. There are other
-        ways to deﬁne the groups for ordered variables, but there is probably none that
-        is optimal for all situations. Our experience indicates that this choice provides
-        suﬃcient detection power while keeping the chance of empty cells low.
-
-        @TODO: Skip the interaction tests for the first draft
-        Although the chi-square test is sensitive to curvature along the direct, it does
-        not work as well with with simple interaction models such as
-        I(X1*X2 > 0) - I(X1*X2) <= 0) + noise
-
-
-        So far we have concentrated on the problem of variable selection. To complete
-        the tree construction algorithm, we need to select the split points as well as
-        determine the size of the tree. For the latter, we adopt the CART method of
-        cost-complexity pruning with an independent test set or, in its absence, by cross-
-        validation.
-        """
-
-        pass
+        self.node_list = node_list
 
     def _prune(node):
         """
@@ -358,6 +360,9 @@ class Model:
         pass
 
 
+#####################################################
+# Helper functions
+#####################################################
 def _sse(vals: np.ndarray):
     """ calc sum of squares """
     return np.sum(vals**2)
