@@ -31,22 +31,22 @@ class InternalData:
 class Node:
     """ Regression tree """
 
-    def __init__(self, node_type, depth: int, parent, indices):
-        assert isinstance(node_type, TerminalData) or isinstance(node_type, InternalData) or node_type is None
+    def __init__(self, type_specific_data, depth: int, parent, indices):
+        assert isinstance(type_specific_data, TerminalData) or isinstance(type_specific_data, InternalData) or type_specific_data is None
         assert isinstance(depth, int)
         assert isinstance(parent, Node) or parent is None 
         assert isinstance(indices, np.ndarray)
-        self.type = node_type
+        self.type_specific_data = type_specific_data
         self.left = None
         self.right = None
         self.depth = depth
         self.idx = indices
 
     def __str__(self):
-        name = "Internal Node" if isinstance(self.type, InternalData) else "Terminal Node"
+        name = "Internal Node" if isinstance(self.type_specific_data, InternalData) else "Terminal Node"
         depth = "   "*self.depth
-        desc = f"value = {self.type.value}" if isinstance(self.type, TerminalData) else \
-                  f"pred = {getsource(self.type.predicate)}"
+        desc = f"value = {self.type_specific_data.value}" if isinstance(self.type_specific_data, TerminalData) else \
+                  f"pred = {getsource(self.type_specific_data.predicate)}"
         return f"{depth} {name} {desc}"
         
 
@@ -83,7 +83,7 @@ class Model:
         self.split_vars = settings.split_vars
         self.col_data = settings.col_data
         self.top_node = Node(
-            node_type=InternalData(None, None, None, True),
+            type_specific_data=InternalData(None, None, None, True),
             depth=0,
             parent=None,
             indices=self.df.index.values)
@@ -298,7 +298,7 @@ class Model:
 
 
             if split_point == None:
-                curr.type = TerminalData(value = curr.y_mean)
+                curr.type_specific_data = TerminalData(value = curr.y_mean)
                 node_list.append(curr) 
                 continue
 
@@ -328,19 +328,19 @@ class Model:
             if left.shape[0] < self.MIN_SAMPLES_LEAF or right.shape[0] < self.MIN_SAMPLES_LEAF \
                     or curr.depth == self.MAX_DEPTH:
                         # Based on early stopping, make curr node a leaf 
-                        curr.type = TerminalData(value = curr.y_mean)
+                        curr.type_specific_data = TerminalData(value = curr.y_mean)
                         node_list.append(curr) 
                         continue
            
             # Terminate left or right node if they are homogonous
             assert predicate is not None
-            curr.type=InternalData(split_var=split_var, split_point=split_point, \
+            curr.type_specific_data=InternalData(split_var=split_var, split_point=split_point, \
                     predicate=predicate, na_goes_left=na_left)
 
             # Split node
             print(f"splitting node. curr node depth = {curr.depth}. left size = {len(left)}  right size = {len(right)}")
-            stack.append(Node(node_type=None, depth = curr.depth + 1, parent=curr, indices=left))
-            stack.append(Node(node_type=None, depth = curr.depth + 1, parent=curr, indices=right))
+            stack.append(Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=left))
+            stack.append(Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=right))
             node_list.append(curr)
 
 
