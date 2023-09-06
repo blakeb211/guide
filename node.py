@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import chi2_contingency
 from collections import defaultdict
 from itertools import combinations, chain
+from dill.source import getsource
 
 class TerminalData:
     def __init__(self, value):
@@ -40,6 +41,13 @@ class Node:
         self.right = None
         self.depth = depth
         self.idx = indices
+
+    def __str__(self):
+        name = "Internal Node" if isinstance(self.type, InternalData) else "Terminal Node"
+        depth = "   "*self.depth
+        desc = f"value = {self.type.value}" if isinstance(self.type, TerminalData) else \
+                  f"pred = {getsource(self.type.predicate)}"
+        return f"{depth} {name} {desc}"
         
 
 class Model:
@@ -317,16 +325,16 @@ class Model:
             assert left.shape[0] + right.shape[0] == curr.idx.shape[0]
 
 
-            # Terminate tree based on early stopping 
             if left.shape[0] < self.MIN_SAMPLES_LEAF or right.shape[0] < self.MIN_SAMPLES_LEAF \
                     or curr.depth == self.MAX_DEPTH:
+                        # Based on early stopping, make curr node a leaf 
                         curr.type = TerminalData(value = curr.y_mean)
                         node_list.append(curr) 
                         continue
            
             # Terminate left or right node if they are homogonous
-
-            curr.node_type=InternalData(split_var=split_var, split_point=split_point, \
+            assert predicate is not None
+            curr.type=InternalData(split_var=split_var, split_point=split_point, \
                     predicate=predicate, na_goes_left=na_left)
 
             # Split node
@@ -337,8 +345,11 @@ class Model:
 
 
         # Tree finished building
-        print(f"nodelist = {node_list} \n stack = {stack}")
         self.node_list = node_list
+        print(f"nodelist = {node_list} \n stack = {stack}")
+        
+        for i in node_list:
+            print(str(i))
 
     def _prune(node):
         """
