@@ -45,8 +45,8 @@ class Node:
     def __str__(self):
         name = "Internal Node" if isinstance(self.type_specific_data, InternalData) else "Terminal Node"
         depth = "   "*self.depth
-        desc = f"value = {self.type_specific_data.value}" if isinstance(self.type_specific_data, TerminalData) else \
-                  f"pred = {getsource(self.type_specific_data.predicate)}"
+        desc = f"value = {self.type_specific_data.value} cnt = {self.idx.shape[0]}" if isinstance(self.type_specific_data, TerminalData) else \
+                  f"pred = {self.type_specific_data.split_var} {self.type_specific_data.split_point}"
         return f"{depth} {name} {desc}"
         
 
@@ -82,16 +82,17 @@ class Model:
         self.weight_var = settings.weight_var
         self.split_vars = settings.split_vars
         self.col_data = settings.col_data
-        self.top_node = Node(
-            type_specific_data=InternalData(None, None, None, True),
-            depth=0,
-            parent=None,
-            indices=self.df.index.values)
         self.split_point_method = SplitPointMethod.Greedy
         self.model_type = RegressionType.LINEAR_PIECEWISE_CONSTANT
         self.MIN_SAMPLES_LEAF = settings.MIN_SAMPLES_LEAF
         self.MAX_DEPTH = settings.MAX_DEPTH
         self.node_list = []
+        self.idx_active = settings.idx_active
+        self.top_node = Node(
+            type_specific_data=InternalData(None, None, None, True),
+            depth=0,
+            parent=None,
+            indices=self.idx_active)
 
     def _calc_chi2_stat(self, y_mean, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
@@ -101,15 +102,15 @@ class Model:
         # paper says to sort based on p-values but the tutorial video part 1 says to rank
         # based on the chi-squared degree of freedom 1. Note the video is 20 years older
         # than the paper.
-        residuals = self.df[self.tgt] - y_mean
+        residuals = self.df.loc[self.idx_active, self.tgt] - y_mean
         pvalue = 999.99
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
             case 'S':
                 # Specify the number of quartiles
                 num_quartiles = 4
                 # Convert the column to a NumPy array
-                column_array = self.df[col].values
-                indexes = self.df[col].index.values
+                column_array = self.df.loc[self.idx_active, col].values
+                indexes = self.df.loc[self.idx_active, col].index.values
                 # Bin the quartiles
                 quartile_edges = np.percentile(
                     column_array, [25, 50, 75, 100], method='linear')
@@ -134,11 +135,11 @@ class Model:
                 pvalue = chi2_contingency(chi_squared).pvalue
             case 'c':
                 # Specify the number of columns in the contingency table
-                unique_vals = self.df[col].unique()  # includes NA
+                unique_vals = self.df.loc[self.idx_active, col].unique()  # includes NA
                 num_cat = len(unique_vals)
                 # Convert the column to a NumPy array
-                column_array = self.df[col].values
-                indexes_by_value = self.df.groupby(col, dropna=False).apply(lambda group: group.index.values)
+                column_array = self.df.loc[self.idx_active, col].values
+                indexes_by_value = self.df.loc[self.idx_active].groupby(col, dropna=False).apply(lambda group: group.index.values)
 
                 chi_squared = np.zeros(shape=(2, num_cat))
                 for _bin in range(0, num_cat):
@@ -247,6 +248,7 @@ class Model:
     def _get_best_split(self, node) -> str:
         """ Find best unbiased splitter among self.split_vars. """
         # @TODO: Add interaction tests
+        print(f"_get_best_split() running with {node.idx.shape[0]} instances")
         node.y_mean = (self.df.loc[node.idx, self.tgt] *
                        self.df.loc[node.idx, self.weight_var]).sum() / self.df.loc[node.idx, self.weight_var].sum()
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean

@@ -1,5 +1,4 @@
 # Minimum Viable Product
-1. change parsing file to not change the dataframe but just pass the indexes, split_var etc to node
 1. port over tree plotter
 1. write predict
 1. write test cases for output 

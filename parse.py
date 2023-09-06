@@ -61,6 +61,7 @@ class Settings():
     m_variables = None
     MAX_DEPTH = 12
     MIN_SAMPLES_LEAF = 20
+    idx_active = None
 
     def __init__(self, data_dir, dsc_file, model):
         self.data_dir = data_dir
@@ -155,7 +156,6 @@ def parse_data(settings : Settings):
     # Remove rows of dataframe with non-positive weight or missing values in d, e, t, r or z variables)
     # @NOTE incomplete. Cases handled so far: missing value in d, nonpositive weight
     idx_missing_d = df[df[dependent_var].isnull() == True].index
-    df.drop(idx_missing_d, inplace=True)
     print(f"Dropped missing d rows   : {len(idx_missing_d)}")
 
     weight_var = _variables_by_role(col_data, 'w')
@@ -164,7 +164,6 @@ def parse_data(settings : Settings):
         print(f"Weight variable found    : {weight_var}")
     idx_zero_or_negative_weight = df[df[_variables_by_role(col_data, 'w')[
         0]] <= 0.0].index
-    df.drop(idx_zero_or_negative_weight, inplace=True)
     if len(idx_zero_or_negative_weight) > 0:
         print(
             f"Dropped rows w/ weight < 0   : {len(idx_zero_or_negative_weight)}")
@@ -201,18 +200,23 @@ def parse_data(settings : Settings):
 
     categorical_vars = _variables_by_role(col_data, 'c') + _variables_by_role(col_data, 'm')
 
+    # active indexes used for model fitting
+    idx_active = set(df.index.values.flatten()) - set(idx_missing_d.values.flatten()) - set(idx_zero_or_negative_weight.values.flatten())
+    idx_active = list(idx_active)
+    idx_active = np.asarray(idx_active)
     # Tally levels for categoricals
     # tell user that separate categories will be created
     # @TODO: Match levels output for 'm' and 's' variables with the reference.
     # @NOTE: Levels match reference for 'c' roles but not other roles,
     # but the 'm' columns do not appear in the split vars of the final tree,
     # so at minimum we can skip for now.
+    
 
     _missing_vals_in_categoricals_flag = False
     for col in categorical_vars:
         idx = col_data[col_data.var_name == col].index[0]
-        _level_count = df[col].value_counts(dropna=True).index.shape[0]
-        _missing_count = df[col].isnull().sum()
+        _level_count = df.loc[idx_active, col].value_counts(dropna=True).index.shape[0]
+        _missing_count = df.loc[idx_active, col].isnull().sum()
         col_data.loc[idx, 'levels'] = _level_count
         if _missing_count > 0:
             col_data.loc[idx, 'missing'] = _missing_count
@@ -231,10 +235,9 @@ def parse_data(settings : Settings):
     print(
         f"Number of split variables: {len(_variables_by_role(col_data, 'c')) + len(_variables_by_role(col_data, 'S'))}")
     x_vars = _variables_by_role(col_data, 'x')
-    for excluded_column in x_vars:
-        del df[excluded_column]
     settings.col_data = col_data
     settings.df = df
+    settings.idx_active = idx_active
     settings.split_vars = _variables_by_role(col_data, 'S') + _variables_by_role(col_data, 'c')
     settings.fit_vars = _variables_by_role(col_data, 'n')
     settings.categorical_vars = _variables_by_role(col_data, 'c') 
