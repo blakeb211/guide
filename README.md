@@ -1,11 +1,11 @@
 # Minimum Viable Product
-1. port over tree plotter
-1. write predict
 1. write test cases for output 
 1. baseball dataset
 1. consumer expenditure
+1. port over tree plotter
 
 # Done
+1. write predict
 1. write fit
 1. write split point method G for categorical
 1. write split point method M

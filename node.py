@@ -14,6 +14,7 @@ from scipy.stats import chi2_contingency
 from collections import defaultdict
 from itertools import combinations, chain
 from dill.source import getsource
+import pandas as pd
 
 class TerminalData:
     def __init__(self, value):
@@ -202,7 +203,7 @@ class Model:
                 """
                 x_uniq = _df[col].drop_duplicates().sort_values().values
                 max_r = round(x_uniq.shape[0] / 1.5)
-                max_r = min([max_r, 5]) 
+                max_r = min([max_r, 10]) 
                 print(f"finding best combination of categoricals with max_r = {max_r}")
                 # avoid combinatorial explosion
                 results = {'set' : [],'sum_binom_variance' : []}
@@ -313,12 +314,12 @@ class Model:
             # can be printed with:
             #   from dill.source import getsource
             if isinstance(split_point, tuple):
-                predicate = lambda x : x in split_point
+                predicate = lambda x,split_point=split_point : x in split_point
             else:
                 if na_left == True:
-                    predicate = lambda x : x < split_point or np.isnan(x)
+                    predicate = lambda x,split_point=split_point : x < split_point or np.isnan(x)
                 else:
-                    predicate = lambda x : x < split_point
+                    predicate = lambda x,split_point=split_point : x < split_point
           
             # Split dataframe
             # @NOTE can index a dataframe by a boolean but need to call .loc to index it with an index
@@ -341,8 +342,12 @@ class Model:
 
             # Split node
             print(f"splitting node. curr node depth = {curr.depth}. left size = {len(left)}  right size = {len(right)}")
-            stack.append(Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=left))
-            stack.append(Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=right))
+            left_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=left)
+            right_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=right)
+            curr.left = left_node
+            curr.right = right_node
+            stack.append(left_node)
+            stack.append(right_node)
             node_list.append(curr)
 
 
@@ -369,8 +374,53 @@ class Model:
         pass
 
     def predict(self, test):
+        predictions = [] 
+        idxs = []
         """ Generate model predictions """
-        pass
+        for idx, row in test.iterrows():
+            curr = self.top_node    
+            # Get to leaf node
+            while isinstance(curr.type_specific_data, InternalData):
+                feat = curr.type_specific_data.split_var
+                predicate = curr.type_specific_data.predicate
+                goes_left = predicate(row[feat]) 
+                if type(goes_left) != np.bool_ and type(goes_left) != bool:
+                    pdb.set_trace()
+                if goes_left == True:
+                    curr = curr.left
+                else:
+                    curr = curr.right
+
+            # add leaf value to predictions
+            assert isinstance(curr.type_specific_data, TerminalData)
+            predictions.append(curr.type_specific_data.value)
+            idxs.append(idx)
+        
+        assert test.shape[0] == len(predictions) and test.shape[0] == len(idxs)
+
+        return pd.DataFrame(index=idxs, columns=['pred'],data=predictions)
+    
+        """ Predict the model results for a test dataframe. 
+        self is the top node of the tree.  
+        predictions = []
+        row_idx = -1 
+        while len(predictions) < df.shape[0]:
+            row_idx += 1
+            curr_node = self
+            curr_row = df.iloc[row_idx]
+            while curr_node.type == 'node':
+                curr_feat = curr_node.feature
+                curr_cutpoint = curr_node.cutpoint
+                if curr_row[curr_feat] >= curr_cutpoint:
+                    curr_node = curr_node.left
+                else:
+                    curr_node = curr_node.right
+            # once made it here, we should be at a leaf
+            assert curr_node.type == 'leaf'
+            predictions.append(curr_node.value)
+        return np.asarray(predictions)
+        """
+        return predictions
 
 
 #####################################################

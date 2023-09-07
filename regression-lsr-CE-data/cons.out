@@ -14,15 +14,14 @@
  National Science Foundation, National Institutes of Health,
  Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
   
- This job was started on 08/20/23 at 15:51
+ This job was started on 09/06/23 at 16:04
   
  Least squares regression tree
- Pruning by cross-validation
+ No pruning
  Data description file: ce2021reg.dsc
  Training sample file: ce2021.txt
  Missing value code: NA
  Records in data file start on line 2
- Number of M variables associated with C variables: 19
  384 N variables changed to S
  D variable is INTRDVX
  Piecewise constant model
@@ -47,104 +46,70 @@
  c=split-only categorical, i=fit-only categorical (via indicators),
  s=split-only numerical, n=split and fit numerical, f=fit-only numerical,
  m=missing-value flag variable, p=periodic variable, w=weight
- Levels of M variables are for missing values in associated variables
                                                   #Codes/           
                                                   Levels/           
   Column  Name            Minimum      Maximum    Periods   #Missing
        1  DIRACC     s    1.000        1.000                   125
-       2  DIRACC_    m                                  2
        3  AGE_REF    s    19.00        87.00    
-       4  AGE_REF_   m                                  0
        5  AGE2       s    21.00        87.00                  1092
-       6  AGE2_      m                                  1
        7  AS_COMP1   s    0.000        5.000    
        8  AS_COMP2   s    0.000        4.000    
        9  AS_COMP3   s    0.000        4.000    
       10  AS_COMP4   s    0.000        4.000    
       11  AS_COMP5   s    0.000        2.000    
       12  BATHRMQ    s    1.000        5.000                     4
-      13  BATHRMQ_   m                                  2
       14  BEDROOMQ   s    0.000        9.000                     4
-      15  BEDR_OMQ   m                                  2
       16  BLS_URBN   s    1.000        2.000    
       17  BUILDING   c                                 11
       18  CUTENURE   c                                  5
       19  EARNCOMP   c                                  8
       20  EDUC_REF   s    10.00        16.00    
       21  EDUCA2     s    0.000        16.00                  1092
-      22  EDUCA2_    m                                  1
       23  FAM_SIZE   s    1.000        11.00    
-      24  FAM_TYPE   m                                  0
       25  FGOVRETX   s    0.000       0.2064E+05
-      26  FGOV_ETX   m                                  0
       27  FINCBTAX   s  -0.1050E+06   0.1039E+07
-      28  FINCBT_X   m                                  0
       29  FINDRETX   s    0.000       0.6354E+05
-      30  FIND_ETX   m                                  0
       31  FINLWT21   w    1072.       0.9390E+05
       32  FJSSDEDX   s    0.000       0.4366E+05
-      33  FJSS_EDX   m                                  0
       34  FPRIPENX   s    0.000       0.4300E+05
-      35  FPRI_ENX   m                                  0
       36  FRRDEDX    s    0.000        5770.    
-      37  FRRDEDX_   m                                  0
       38  FRRETIRX   s    0.000       0.1116E+06
       39  FSALARYX   s    0.000       0.7645E+06
-      40  FSAL_RYX   m                                  0
       41  FSSIX      s    0.000       0.3600E+05
       42  HLFBATHQ   s    0.000        3.000                     4
-      43  HLFB_THQ   m                                  2
       44  INC_HRS1   s    1.000        90.00                   903
-      45  INC__RS1   m                                  1
       46  INC_HRS2   s    1.000        99.00                  1620
-      47  INC__RS2   m                                  1
       48  INC_RANK   s   0.4980E-04    1.000    
-      49  INC__ANK   m                                  0
       50  INCNONW1   c                                  6     1584
-      51  INCN_NW1   m                                  1
       52  INCNONW2   c                                  6     1959
-      53  INCN_NW2   m                                  1
       54  INCOMEY1   c                                  6      903
-      55  INCO_EY1   m                                  1
       56  INCOMEY2   c                                  6     1620
-      57  INCO_EY2   m                                  1
       58  INCWEEK1   s    0.000        52.00    
       59  INCWEEK2   s    0.000        52.00                  1092
-      60  INCW_EK2   m                                  1
       61  MISCTAXX   s    1400.       0.2217E+06              2481
-      62  MISC_AXX   m                                  2
       63  LUMP_UMX   c                                  4
       64  MARITAL1   c                                  5
       65  NO_EARNR   s    0.000        5.000    
       66  NONINCMX   s    0.000       0.9000E+06
-      67  NONI_CMX   m                                  0
       68  NUM_AUTO   s    0.000        6.000    
       69  OCCUCOD1   c                                 15      903
-      70  OCCU_OD1   m                                  1
       71  OCCUCOD2   c                                 15     1620
-      72  OCCU_OD2   m                                  1
       73  OTHRINCX   s    150.0       0.1041E+06              2394
-      74  OTHR_NCX   m                                  1
       75  PERSLT18   s    0.000        7.000    
       76  PERSOT64   s    0.000        3.000    
       77  POPSIZE    s    1.000        5.000    
       78  PRINEARN   c                                  5
       79  RACE2      c                                  6     1092
-      80  RACE2_     m                                  1
       81  REF_RACE   c                                  6
       82  REGION     c                                  4       25
       83  RENTEQVX   s    65.00        6302.                   548
-      84  RENT_QVX   m                                  1
       85  ROOMSQ     s    1.000        16.00                     4
-      86  ROOMSQ_    m                                  2
       87  SEX_REF    c                                  2
       88  SEX2       c                                  2     1092
-      89  SEX2_      m                                  1
       90  SMSASTAT   c                                  2
       91  ST_HOUS    c                                  2
       92  VEHQ       s    0.000        24.00    
       93  WELFAREX   s    480.0        1200.                  2481
-      94  WELF_REX   m                                  2
       95  TOTEXPPQ   s    712.7       0.1526E+06
       96  TOTEXPCQ   s    0.000       0.2138E+06
       97  FOODPQ     s    8.667       0.2913E+05
@@ -297,7 +262,6 @@
      244  CHILDAGE   c                                  8
      245  STATE      c                                 42      188
      246  ERANKH     s   0.1924E-02    1.000                    57
-     247  ERANKH_    m                                  1
      248  TOTEX4PQ   s    712.7       0.1526E+06
      249  TOTEX4CQ   s    0.000       0.2138E+06
      250  MISCX4PQ   s    0.000       0.2070E+05
@@ -417,164 +381,90 @@
      364  OTHR_NCB   c                                  3
      365  INCLASS2   s    1.000        7.000    
      366  HORREF1    c                                  6     2384
-     367  HORREF1_   m                                  2
      368  HORREF2    c                                  5     2419
-     369  HORREF2_   m                                  1
      370  ERANKHM    s   0.1993E-02    1.000    
      371  FGOVRETM   s    0.000       0.2064E+05
-     372  FGOV_ETM   m                                  0
      373  FPRIPENM   s    0.000       0.4300E+05
-     374  FPRI_ENM   m                                  0
      375  FRRDEDM    s    0.000        5770.    
-     376  FRRDEDM_   m                                  0
      377  FRRETIRM   s    0.000       0.1116E+06
      378  PSU        c                                 23     1274
      379  HISP_REF   c                                  2
      380  HISP2      c                                  2     1092
      381  HIGH_EDU   s    10.00        16.00    
      382  BUILT      s    1915.        2021.                   569
-     383  BUILT_     m                                  2
      384  CREDFINX   s    0.000        5079.                  1994
-     385  CRED_INX   m                                  2
      386  CREDITB    s    1.000        5.000                  2474
-     387  CREDITB_   m                                  2
      388  CREDITBX   s    200.0       0.2250E+05              2474
-     389  CRED_TBX   m                                  2
      390  CREDITX    s    0.000       0.4875E+05              1974
-     391  CREDITX_   m                                  2
      392  CREDTYRX   s    0.000       0.5391E+05              2192
-     393  CRED_YRX   m                                  2
      394  CREDYRB    s    1.000        5.000                  2466
-     395  CREDYRB_   m                                  2
      396  CREDYRBX   s    200.0       0.2250E+05              2466
-     397  CRED_RBX   m                                  2
      398  DEFBENRP   c                                  2     1894
-     399  DEFB_NRP   m                                  2
      400  FMLPYYRX   s    6.000       0.2782E+05              2448
-     401  FMLP_YRX   m                                  2
      402  FS_MTHI    s    1.000        12.00                  2428
-     403  FS_MTHI_   m                                  1
      404  FSMPFRMX   s  -0.1160E+06   0.7703E+06
-     405  FSMP_RMX   m                                  0
      406  INTRDVX    d    1.000       0.1413E+06
      408  IRAB       s    2.000        6.000                  2422
-     409  IRAB_      m                                  2
      410  IRABX      s    5000.       0.8000E+06              2422
-     411  IRABX_     m                                  2
      412  IRAX       s    2.000       0.4271E+07              2099
-     413  IRAX_      m                                  2
      414  IRAYRB     s    2.000        6.000                  2410
-     415  IRAYRB_    m                                  2
      416  IRAYRBX    s    5000.       0.7900E+06              2410
-     417  IRAYRBX_   m                                  2
      418  IRAYRX     s    0.000       0.3700E+07              2122
-     419  IRAYRX_    m                                  2
      420  JFS_AMT    s    0.000        9600.    
      421  LIQDYRBX   s    250.0       0.7500E+05              2424
-     422  LIQD_RBX   m                                  2
      423  LIQUIDBX   s    100.0       0.7500E+05              2437
-     424  LIQU_DBX   m                                  2
      425  LIQUDYRB   s    1.000        6.000                  2424
-     426  LIQU_YRB   m                                  2
      427  LIQUDYRX   s    0.000       0.6852E+06              2018
-     428  LIQU_YRX   m                                  2
      429  LIQUIDB    s    1.000        6.000                  2437
-     430  LIQUIDB_   m                                  2
      431  LIQUIDX    s    9.000       0.6650E+06              1996
-     432  LIQUIDX_   m                                  2
      433  MEALSPAY   c                                  2        1
-     434  MEAL_PAY   m                                  1
      435  MLPAYWKX   s    2.000        535.0                  2448
-     436  MLPA_WKX   m                                  2
      437  MLPYQWKS   s    1.000        52.00                  2446
-     438  MLPY_WKS   m                                  1
      439  NETRENTB   s    0.000        12.00                  2477
-     440  NETR_NTB   m                                  2
      441  NETRENTX   s  -0.1402E+05   0.1589E+06              2277
-     442  NETR_NTX   m                                  2
      443  NETRNTBX   s   -2400.       0.7130E+05              2477
-     444  NETR_TBX   m                                  2
      445  OTHASTBX   s    800.0       0.8350E+06              2477
-     446  OTHA_TBX   m                                  2
      447  OTHASTB    s    1.000        6.000                  2477
-     448  OTHASTB_   m                                  2
      449  OTHASTX    s    400.0       0.1300E+07              2449
-     450  OTHASTX_   m                                  2
      451  OTHFINX    s    0.000        335.0                  2459
-     452  OTHFINX_   m                                  2
      453  OTHL_NBX   c                                  3
      454  OTHLYRBX   s    1500.        1500.                  2486
-     455  OTHL_RBX   m                                  1
      456  OTHLNYRB   s    3.000        3.000                  2486
-     457  OTHL_YRB   m                                  1
      458  OTHLNYRX   s    0.000       0.1564E+06              2450
-     459  OTHL_YRX   m                                  2
      460  OTHLOAN    s    1.000        2.000                  1882
-     461  OTHLOAN_   m                                  1
      462  OTHLONB_   c                                  3
      463  OTHLONX    s    250.0       0.1622E+06              2449
-     464  OTHLONX_   m                                  2
      465  OTHREGBX   s    488.0       0.4200E+05              2471
-     466  OTHR_GBX   m                                  2
      467  OTHREGB    s    1.000        11.00                  2471
-     468  OTHREGB_   m                                  2
      469  OTHREGX    s    100.0       0.8288E+05              2245
-     470  OTHREGX_   m                                  2
      471  OTHSYRBX   s    770.0       0.9506E+06              2477
-     472  OTHS_RBX   m                                  2
      473  OTHSTYRB   s    1.000        6.000                  2477
-     474  OTHS_YRB   m                                  2
      475  OTHSTYRX   s    0.000       0.1225E+07              2451
-     476  OTHS_YRX   m                                  2
      477  RETSURVX   s    134.0       0.1739E+06              1865
-     478  RETS_RVX   m                                  2
      479  RETSRVBX   s    3500.       0.6200E+05              2474
-     480  RETS_VBX   m                                  2
      481  RETSURV    c                                  2
      482  ROYESTBX   s    200.0       0.6000E+05              2482
-     483  ROYE_TBX   m                                  2
      484  ROYESTB    s    1.000        12.00                  2482
-     485  ROYESTB_   m                                  2
      486  ROYESTX    s    5.000       0.2300E+06              2383
-     487  ROYESTX_   m                                  2
      488  STCKYRBX   s    1000.       0.8550E+06              2456
-     489  STCK_RBX   m                                  2
      490  STDNTYRB   s    5.000        6.000                  2485
-     491  STDN_YRB   m                                  2
      492  STDNTYRX   s    0.000       0.5000E+06              2404
-     493  STDN_YRX   m                                  2
      494  STDTYRBX   s   0.2000E+05   0.3500E+05              2485
-     495  STDT_RBX   m                                  2
      496  STOCKYRB   s    1.000        6.000                  2456
-     497  STOC_YRB   m                                  2
      498  STOCKYRX   s    0.000       0.5450E+07              2278
-     499  STOC_YRX   m                                  2
      500  STOCKB     s    1.000        6.000                  2463
-     501  STOCKB_    m                                  2
      502  STOCKBX    s    523.0       0.8000E+06              2463
-     503  STOCKBX_   m                                  2
      504  STOCKX     s    10.00       0.6110E+07              2261
-     505  STOCKX_    m                                  2
      506  STUDFINX   s    0.000        820.0                  2413
-     507  STUD_INX   m                                  2
      508  STUDNTBX   s   0.2000E+05   0.6700E+05              2484
-     509  STUD_TBX   m                                  2
      510  STUDNTB    s    5.000        6.000                  2484
-     511  STUDNTB_   m                                  2
      512  STUDNTX    s    1000.       0.5000E+06              2404
-     513  STUDNTX_   m                                  2
      514  WHLFYRBX   s    1500.       0.8000E+05              2460
-     515  WHLF_RBX   m                                  2
      516  WHLFYRB    s    3.000        6.000                  2460
-     517  WHLFYRB_   m                                  2
      518  WHLFYRX    s    100.0       0.1497E+07              2411
-     519  WHLFYRX_   m                                  2
      520  WHOLIFBX   s    5000.       0.8500E+05              2464
-     521  WHOL_FBX   m                                  2
      522  WHOLIFB    s    4.000        6.000                  2464
-     523  WHOLIFB_   m                                  2
      524  WHOLIFX    s    100.0       0.1498E+07              2406
-     525  WHOLIFX_   m                                  2
      526  TOTXEST    s  -0.2911E+05   0.3946E+06
      527  BUSCREEN   c                                  2
      528  BUSC_EEN   c                                  2
@@ -582,42 +472,28 @@
      530  REFGEN     s    1.000        5.000    
      531  VEHICTAX   s    19.00        2700.                  2395
      532  CREDYR     s    1.000        2.000                  2453
-     533  CREDYR_    m                                  1
      534  IRA        c                                  2     1890
-     535  IRA_       m                                  2
      536  LIQUDYR    c                                  2     2483
-     537  LIQUDYR_   m                                  1
      538  LIQUID     c                                  2     1887
-     539  LIQUID_    m                                  2
      540  OTHLNYR    c                                  1     2477
-     541  OTHLNYR_   m                                  1
      542  OTHSTYR_   c                                  2
      543  STDNTYR    c                                  1     2485
-     544  STDNTYR_   m                                  1
      545  STOCKYR    c                                  1     2468
-     546  STOCKYR_   m                                  1
      547  WHLFYR     c                                  1     2487
-     548  WHLFYR_    m                                  1
      549  FFTAXOWE   s  -0.3368E+05   0.3380E+06
      550  FSTAXOWE   s   -3074.       0.5654E+05
   
       Total  #cases w/   #missing
      #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
-       3965       1478       3965        1        0        0      384
+       3965       1478       3965      117        0        0      384
      #P-var   #M-var   #B-var   #C-var   #I-var
-          0      116        0       47        0
+          0        0        0       47        0
  Weight variable FINLWT21 in column: 31
  Number of cases used for training: 2487
  Number of split variables: 431
  Number of cases excluded due to 0 W or missing D variable: 1478
   
  Constant fitted to cases with missing values in regressor variables
- Pruning by v-fold cross-validation, with v = 10
- Selected tree is based on mean of CV estimates
- Number of SE's for pruned tree: 0.2500
-  
- Weighted error estimates used for pruning
- Warning: No interaction tests; too many predictor variables
  No nodewise interaction tests
  Split values for N and S variables based on exhaustive search
  Maximum number of split levels: 12
@@ -626,10 +502,10 @@
       1  0.8297E+02   REFGEN
       2  0.8111E+02   AGE_REF
       3  0.7066E+02   INCNONW1
-      4  0.6985E+02   STOCKX
-      5  0.6966E+02   CUTENURE
-      6  0.6541E+02   STOCKYRX
-      7  0.6416E+02   EARNCOMP
+      4  0.6966E+02   CUTENURE
+      5  0.6800E+02   STOCKX
+      6  0.6416E+02   EARNCOMP
+      7  0.6394E+02   STOCKYRX
       8  0.6378E+02   INCWEEK2
       9  0.6304E+02   INCNONW2
      10  0.6140E+02   AGE2
@@ -643,10 +519,10 @@
      18  0.5263E+02   FJSSDEDX
      19  0.5197E+02   INC_HRS1
      20  0.5131E+02   OCCUCOD1
-     21  0.4570E+02   RETPENPQ
-     22  0.4417E+02   IRAX
-     23  0.4406E+02   HEALTHPQ
-     24  0.4273E+02   IRAYRX
+     21  0.4727E+02   IRAX
+     22  0.4580E+02   IRAYRX
+     23  0.4570E+02   RETPENPQ
+     24  0.4406E+02   HEALTHPQ
      25  0.3798E+02   FRRETIRX
      26  0.3650E+02   PROPTXPQ
      27  0.3631E+02   FRRETIRM
@@ -664,12 +540,12 @@
      39  0.2529E+02   UTILPQ
      40  0.2515E+02   INCLASS2
      41  0.2417E+02   HLTHINCQ
-     42  0.2382E+02   MRTINTPQ
-     43  0.2322E+02   SEX2
-     44  0.2228E+02   RNTXRPPQ
-     45  0.2224E+02   READCQ
-     46  0.2209E+02   RETSURVX
-     47  0.2199E+02   BUILT
+     42  0.2405E+02   RETSURVX
+     43  0.2382E+02   MRTINTPQ
+     44  0.2323E+02   BUILT
+     45  0.2322E+02   SEX2
+     46  0.2228E+02   RNTXRPPQ
+     47  0.2224E+02   READCQ
      48  0.2189E+02   HOUSOPPQ
      49  0.2175E+02   MRPINSPQ
      50  0.2166E+02   READPQ
@@ -680,11 +556,11 @@
      55  0.1965E+02   HOUSPQ
      56  0.1886E+02   DMSXCCCQ
      57  0.1884E+02   ERANKHM
-     58  0.1847E+02   ROOMSQ
+     58  0.1856E+02   ROOMSQ
      59  0.1827E+02   RENDWEPQ
      60  0.1795E+02   MRPINSCQ
      61  0.1750E+02   RETSURV
-     62  0.1685E+02   HLFBATHQ
+     62  0.1695E+02   HLFBATHQ
      63  0.1661E+02   FFTAXOWE
      64  0.1652E+02   FAM_SIZE
      65  0.1646E+02   EVEHPURP
@@ -697,377 +573,293 @@
      72  0.1385E+02   WATRPSPQ
      73  0.1353E+02   PRINEARN
      74  0.1332E+02   FINDRETX
-     75  0.1319E+02   FPRIPENM
-     76  0.1319E+02   FPRIPENX
-     77  0.1313E+02   BEDROOMQ
-     78  0.1305E+02   OTHSYRBX
-     79  0.1305E+02   OTHSTYRB
-     80  0.1292E+02   RACE2
-     81  0.1254E+02   UTILCQ
-     82  0.1253E+02   REF_RACE
-     83  0.1240E+02   PROPTXCQ
-     84  0.1202E+02   ENTERTCQ
-     85  0.1196E+02   AS_COMP3
-     86  0.1192E+02   FDAWAYPQ
-     87  0.1192E+02   EOWNDWLC
-     88  0.1184E+02   HIGH_EDU
-     89  0.1166E+02   MEDSRVCQ
-     90  0.1140E+02   TELEPHPQ
-     91  0.1138E+02   FDXMAPPQ
-     92  0.1133E+02   TOTEXPPQ
-     93  0.1133E+02   TOTEX4PQ
-     94  0.1126E+02   TOTXEST
-     95  0.1108E+02   RNTXRPCQ
-     96  0.1073E+02   NETRENTX
-     97  0.1064E+02   EHOUSNGP
-     98  0.1064E+02   TELEPHCQ
-     99  0.1051E+02   SEX_REF
-    100  0.1042E+02   ELCTRCPQ
-    101  0.1009E+02   RETPENCQ
-    102  0.9950E+01   SHELTPQ
-    103  0.9776E+01   UTILOWNC
-    104  0.9757E+01   ROYESTX
-    105  0.9750E+01   EMRTPNOC
-    106  0.9746E+01   ERANKH
-    107  0.9529E+01   EENTRMTC
-    108  0.9490E+01   ETOTAPX4
-    109  0.9490E+01   ETOTALP
-    110  0.9363E+01   OWNDWECQ
-    111  0.9088E+01   INCOMEY2
-    112  0.9083E+01   ESHELTRP
-    113  0.9050E+01   ENTERTPQ
-    114  0.9049E+01   ELCTRCCQ
-    115  0.8957E+01   MRTINTCQ
-    116  0.8798E+01   OWNDWEPQ
-    117  0.8693E+01   AS_COMP5
-    118  0.8519E+01   VNATLGAP
-    119  0.8260E+01   HOUSOPCQ
-    120  0.8259E+01   VELECTRC
-    121  0.8041E+01   VEHICTAX
-    122  0.8041E+01   BATHRMQ
-    123  0.7924E+01   ALCBEVCQ
-    124  0.7837E+01   VELECTRP
-    125  0.7826E+01   AS_COMP4
-    126  0.7643E+01   MEDSRVPQ
-    127  0.7618E+01   RENDWECQ
+     75  0.1324E+02   BEDROOMQ
+     76  0.1319E+02   FPRIPENM
+     77  0.1319E+02   FPRIPENX
+     78  0.1292E+02   RACE2
+     79  0.1254E+02   UTILCQ
+     80  0.1253E+02   REF_RACE
+     81  0.1240E+02   PROPTXCQ
+     82  0.1202E+02   ENTERTCQ
+     83  0.1196E+02   AS_COMP3
+     84  0.1192E+02   FDAWAYPQ
+     85  0.1192E+02   EOWNDWLC
+     86  0.1184E+02   HIGH_EDU
+     87  0.1166E+02   MEDSRVCQ
+     88  0.1162E+02   ROYESTX
+     89  0.1140E+02   TELEPHPQ
+     90  0.1138E+02   FDXMAPPQ
+     91  0.1133E+02   TOTEXPPQ
+     92  0.1133E+02   TOTEX4PQ
+     93  0.1126E+02   TOTXEST
+     94  0.1108E+02   RNTXRPCQ
+     95  0.1068E+02   NETRENTX
+     96  0.1064E+02   EHOUSNGP
+     97  0.1064E+02   TELEPHCQ
+     98  0.1051E+02   SEX_REF
+     99  0.1042E+02   ELCTRCPQ
+    100  0.1009E+02   RETPENCQ
+    101  0.9950E+01   SHELTPQ
+    102  0.9776E+01   UTILOWNC
+    103  0.9750E+01   EMRTPNOC
+    104  0.9746E+01   ERANKH
+    105  0.9529E+01   EENTRMTC
+    106  0.9490E+01   ETOTAPX4
+    107  0.9490E+01   ETOTALP
+    108  0.9363E+01   OWNDWECQ
+    109  0.9088E+01   INCOMEY2
+    110  0.9083E+01   ESHELTRP
+    111  0.9050E+01   ENTERTPQ
+    112  0.9049E+01   ELCTRCCQ
+    113  0.8957E+01   MRTINTCQ
+    114  0.8798E+01   OWNDWEPQ
+    115  0.8693E+01   AS_COMP5
+    116  0.8519E+01   VNATLGAP
+    117  0.8260E+01   HOUSOPCQ
+    118  0.8259E+01   VELECTRC
+    119  0.8161E+01   BATHRMQ
+    120  0.8041E+01   VEHICTAX
+    121  0.7924E+01   ALCBEVCQ
+    122  0.7874E+01   STOCKYRB
+    123  0.7837E+01   VELECTRP
+    124  0.7826E+01   AS_COMP4
+    125  0.7643E+01   MEDSRVPQ
+    126  0.7618E+01   RENDWECQ
+    127  0.7581E+01   STCKYRBX
     128  0.7508E+01   NTLGASPQ
     129  0.7460E+01   LIFINSPQ
     130  0.7405E+01   EENTRMTP
-    131  0.7169E+01   HISP2
-    132  0.7084E+01   PSU
-    133  0.6996E+01   EOWNDWLP
-    134  0.6987E+01   BBYDAYPQ
-    135  0.6948E+01   PERINSCQ
-    136  0.6910E+01   BUILDING
-    137  0.6804E+01   VEHQ
-    138  0.6592E+01   STOCKYRB
-    139  0.6324E+01   STCKYRBX
+    131  0.7332E+01   IRAB
+    132  0.7332E+01   IRABX
+    133  0.7169E+01   HISP2
+    134  0.7084E+01   PSU
+    135  0.6996E+01   EOWNDWLP
+    136  0.6987E+01   BBYDAYPQ
+    137  0.6948E+01   PERINSCQ
+    138  0.6910E+01   BUILDING
+    139  0.6804E+01   VEHQ
     140  0.6199E+01   OCCUCOD2
     141  0.6157E+01   FS_MTHI
     142  0.6068E+01   FEEADMCQ
     143  0.6051E+01   OTHHEXPQ
     144  0.5997E+01   ALCBEVPQ
-    145  0.5978E+01   MISCCQ
-    146  0.5978E+01   EMISCELC
-    147  0.5978E+01   MISCX4CQ
-    148  0.5978E+01   MISC1CQ
-    149  0.5860E+01   IRAB
-    150  0.5860E+01   IRABX
-    151  0.5758E+01   CREDFINX
-    152  0.5680E+01   HOUSCQ
-    153  0.5630E+01   ALLFULCQ
-    154  0.5602E+01   CARTKUPQ
-    155  0.5542E+01   FGOVRETX
-    156  0.5542E+01   FGOVRETM
-    157  0.5541E+01   FSSIX
-    158  0.5506E+01   IRAYRB
-    159  0.5451E+01   IRAYRBX
-    160  0.5285E+01   VWATERPP
-    161  0.4913E+01   TVRDIOCQ
-    162  0.4837E+01   STOCKB
-    163  0.4571E+01   NONINCMX
-    164  0.4545E+01   ECARTKUC
-    165  0.4493E+01   UNISTRQ
-    166  0.4471E+01   VRNTLOCQ
-    167  0.4465E+01   NUM_TVAN
-    168  0.4435E+01   DIVISION
-    169  0.4368E+01   HH_CU_Q
-    170  0.4288E+01   MEDSUPCQ
-    171  0.4263E+01   EOTHLODP
-    172  0.4263E+01   OTHLODPQ
-    173  0.4259E+01   TEXTILPQ
-    174  0.4205E+01   BBYDAYCQ
-    175  0.4202E+01   OTHSTYRX
-    176  0.4094E+01   OTHREGX
-    177  0.3999E+01   NUM_AUTO
-    178  0.3925E+01   AS_COMP2
-    179  0.3851E+01   OWNVACC
-    180  0.3851E+01   VOTHRLOC
-    181  0.3851E+01   TOTEXPCQ
-    182  0.3851E+01   TOTEX4CQ
-    183  0.3819E+01   WATRPSCQ
-    184  0.3818E+01   FSTAXOWE
-    185  0.3747E+01   FULOILCQ
-    186  0.3730E+01   NTLGASCQ
-    187  0.3701E+01   HOUSEQCQ
-    188  0.3532E+01   OTHAPLCQ
-    189  0.3523E+01   CREDITX
-    190  0.3385E+01   OTHHEXCQ
-    191  0.3372E+01   MISCEQCQ
-    192  0.3322E+01   OTHEQPCQ
-    193  0.3267E+01   TGASMOTP
-    194  0.3246E+01   EOTHENTP
-    195  0.3187E+01   EHOUSNGC
-    196  0.3149E+01   LIFINSCQ
-    197  0.3076E+01   OTHEQPPQ
-    198  0.3027E+01   LIQUIDX
-    199  0.3027E+01   TOTHTREC
-    200  0.3027E+01   TVRENTLC
-    201  0.2921E+01   TOBACCPQ
-    202  0.2894E+01   TTRANPRP
-    203  0.2850E+01   OTHFLSCQ
-    204  0.2833E+01   FEEADMPQ
-    205  0.2826E+01   EMOTRVHP
-    206  0.2808E+01   APPARCQ
-    207  0.2799E+01   LIQUDYRX
-    208  0.2764E+01   TOTHENTC
-    209  0.2731E+01   BUSCREEN
-    210  0.2683E+01   TRNTRPPQ
-    211  0.2683E+01   TTRNTRIP
-    212  0.2640E+01   MEALSPAY
-    213  0.2640E+01   FDMAPPQ
-    214  0.2595E+01   STOCKBX
-    215  0.2501E+01   VEHQL
-    216  0.2475E+01   FDHOMEPQ
-    217  0.2463E+01   FLRCVRCQ
-    218  0.2448E+01   DEFBENRP
-    219  0.2378E+01   REGION
-    220  0.2377E+01   PERSCACQ
-    221  0.2365E+01   ETOTACX4
-    222  0.2365E+01   ETOTALC
-    223  0.2219E+01   PREDRGPQ
-    224  0.2216E+01   TALCBEVC
-    225  0.2127E+01   OTHENTPQ
-    226  0.2057E+01   HORREF2
-    227  0.2056E+01   OTHASTX
-    228  0.2009E+01   TVRDIOPQ
-    229  0.2007E+01   TALCBEVP
-    230  0.1990E+01   VEHFINCQ
-    231  0.1988E+01   EENTMSCP
-    232  0.1932E+01   EOTHLODC
-    233  0.1932E+01   OTHLODCQ
-    234  0.1864E+01   TFAREP
-    235  0.1848E+01   CASHCOCQ
-    236  0.1824E+01   GASMOCQ
-    237  0.1761E+01   UTILOWNP
-    238  0.1718E+01   FOODPQ
-    239  0.1685E+01   TFOODAWC
-    240  0.1679E+01   EVEHPURC
-    241  0.1658E+01   FDXMAPCQ
-    242  0.1645E+01   RETSRVBX
-    243  0.1638E+01   VOTHRLOP
-    244  0.1638E+01   OWNVACP
-    245  0.1589E+01   MISCX4PQ
-    246  0.1589E+01   MISCPQ
-    247  0.1589E+01   EMISCELP
-    248  0.1589E+01   MISC1PQ
-    249  0.1575E+01   FLRCVRPQ
-    250  0.1568E+01   VEHINSPQ
-    251  0.1553E+01   MEDSUPPQ
-    252  0.1522E+01   FDAWAYCQ
-    253  0.1521E+01   MLPYQWKS
-    254  0.1519E+01   TFAREC
-    255  0.1451E+01   VRNTLOPQ
-    256  0.1374E+01   GASMOPQ
-    257  0.1332E+01   OTHRINCX
-    258  0.1313E+01   STUDNTBX
-    259  0.1312E+01   VOTHRFLC
-    260  0.1205E+01   STUDNTB
-    261  0.1123E+01   ETRANPTC
-    262  0.1088E+01   FDMAPCQ
-    263  0.1036E+01   TAIRFARC
-    264  0.1024E+01   TFOODTOC
-    265  0.9915E+00   WHOLIFX
-    266  0.9460E+00   TOTHFARC
-    267  0.9231E+00   TOTHTREP
-    268  0.9231E+00   TVRENTLP
-    269  0.9126E+00   TAIRFARP
-    270  0.9023E+00   TTRNTRIC
-    271  0.9023E+00   TRNTRPCQ
-    272  0.8805E+00   CREDITB
-    273  0.8792E+00   TOTHRLOP
-    274  0.8718E+00   STUDFINX
-    275  0.8608E+00   MENBOYPQ
-    276  0.8608E+00   MENSIXPQ
-    277  0.8268E+00   TOTHFARP
-    278  0.8223E+00   FOODCQ
-    279  0.8189E+00   EDUCAPQ
-    280  0.8137E+00   TFOODHOC
-    281  0.8088E+00   POPSIZE
-    282  0.7722E+00   TRNOTHPQ
-    283  0.7687E+00   MISCEQPQ
-    284  0.7178E+00   HISP_REF
-    285  0.6925E+00   ROYESTBX
-    286  0.6925E+00   ROYESTB
-    287  0.6923E+00   WHOLIFBX
-    288  0.6923E+00   WHOLIFB
-    289  0.6636E+00   STDNTYRX
-    290  0.6568E+00   PUBTRAPQ
-    291  0.6498E+00   TTOTALP
-    292  0.6307E+00   ECARTKNC
-    293  0.6306E+00   TRANSPQ
-    294  0.6240E+00   FULOILPQ
-    295  0.6165E+00   AS_COMP1
-    296  0.6157E+00   ALLFULPQ
-    297  0.5876E+00   SMSASTAT
-    298  0.5822E+00   SMLAPPPQ
-    299  0.5597E+00   CREDYRBX
-    300  0.5505E+00   OTHREGBX
-    301  0.5505E+00   OTHREGB
-    302  0.5493E+00   TENTRMNP
-    303  0.5458E+00   TOTHRLOC
-    304  0.5396E+00   VOTHRFLP
-    305  0.5346E+00   TTOTALC
-    306  0.5217E+00   WHLFYRBX
-    307  0.5128E+00   PETTOYCQ
-    308  0.4986E+00   ESHELTRC
-    309  0.4882E+00   CREDITBX
-    310  0.4692E+00   TFOODTOP
-    311  0.4676E+00   STDNTYRB
-    312  0.4676E+00   STDTYRBX
-    313  0.4671E+00   TFOODAWP
-    314  0.4562E+00   APPARPQ
-    315  0.4415E+00   SHELTCQ
-    316  0.4382E+00   TRNOTHCQ
-    317  0.4179E+00   MLPAYWKX
-    318  0.4033E+00   ECARTKNP
-    319  0.3902E+00   FMLPYYRX
-    320  0.3806E+00   TTRANPRC
-    321  0.3745E+00   EMRTPNVP
-    322  0.3581E+00   MRTPRNOC
-    323  0.3581E+00   EMRTPNVC
-    324  0.3565E+00   CREDYRB
-    325  0.3559E+00   STUDNTX
-    326  0.3537E+00   LIQUIDB
-    327  0.3507E+00   SMLAPPCQ
-    328  0.3480E+00   FURNTRCQ
-    329  0.3049E+00   TENTRMNC
-    330  0.3022E+00   WHLFYRB
-    331  0.3015E+00   MISCTAXX
-    332  0.2962E+00   MRTPRNOP
-    333  0.2941E+00   FSMPFRMX
-    334  0.2909E+00   EENTMSCC
-    335  0.2891E+00   TRANSCQ
-    336  0.2846E+00   OTHFINX
-    337  0.2834E+00   WHLFYRX
-    338  0.2815E+00   TEXTILCQ
-    339  0.2778E+00   OTHENTCQ
-    340  0.2425E+00   FURNTRPQ
-    341  0.2366E+00   TFEESADP
-    342  0.2357E+00   FDHOMECQ
-    343  0.2166E+00   OTHAPLPQ
-    344  0.2146E+00   JFS_AMT
-    345  0.2143E+00   NETRENTB
-    346  0.2143E+00   NETRNTBX
-    347  0.2133E+00   OTHASTB
-    348  0.2133E+00   OTHASTBX
-    349  0.1782E+00   MAJAPPCQ
-    350  0.1699E+00   IRA
-    351  0.1602E+00   OTHLOAN
-    352  0.1349E+00   LIQUIDBX
-    353  0.1303E+00   LIQUDYRB
-    354  0.1292E+00   VWATERPC
-    355  0.1292E+00   TOTHENTP
-    356  0.1279E+00   CREDYR
-    357  0.1111E+00   OTHFLSPQ
-    358  0.1091E+00   WELFAREX
-    359  0.1021E+00   EDUCACQ
-    360  0.9952E-01   VEHINSCQ
-    361  0.9371E-01   BLS_URBN
-    362  0.8918E-01   TFEESADC
-    363  0.8263E-01   CARTKUCQ
-    364  0.8157E-01   MAJAPPPQ
-    365  0.8021E-01   TLOCALTP
-    366  0.6108E-01   TFOODHOP
-    367  0.4847E-01   ENOMOTRP
-    368  0.4261E-01   OTHLONX
-    369  0.3981E-01   LIQDYRBX
-    370  0.3906E-01   ETRANPTP
-    371  0.3592E-01   HOUSEQPQ
-    372  0.2507E-01   CREDTYRX
-    373  0.1960E-01   TOBACCCQ
-    374  0.1602E-01   OTHLNYRX
-    375  0.1591E-01   TLOCALTC
-    376  0.1571E-01   LIQUID
-    377  0.1226E-01   EOTHENTC
-    378  0.7187E-02   PUBTRACQ
-    379  0.6668E-02   PETTOYPQ
-    380  0.5222E-02   MAINRPCQ
-    381  0.3923E-02   HORREF1
-    382  0.3569E-02   TGASMOTC
-    383  0.1029E-03   MAINRPPQ
+    145  0.5978E+01   MISCX4CQ
+    146  0.5978E+01   MISCCQ
+    147  0.5978E+01   MISC1CQ
+    148  0.5978E+01   EMISCELC
+    149  0.5740E+01   IRAYRB
+    150  0.5681E+01   IRAYRBX
+    151  0.5680E+01   HOUSCQ
+    152  0.5630E+01   ALLFULCQ
+    153  0.5602E+01   CARTKUPQ
+    154  0.5542E+01   FGOVRETX
+    155  0.5542E+01   FGOVRETM
+    156  0.5541E+01   FSSIX
+    157  0.5285E+01   VWATERPP
+    158  0.4913E+01   TVRDIOCQ
+    159  0.4892E+01   STOCKB
+    160  0.4571E+01   NONINCMX
+    161  0.4545E+01   ECARTKUC
+    162  0.4493E+01   UNISTRQ
+    163  0.4471E+01   VRNTLOCQ
+    164  0.4465E+01   NUM_TVAN
+    165  0.4435E+01   DIVISION
+    166  0.4368E+01   HH_CU_Q
+    167  0.4288E+01   MEDSUPCQ
+    168  0.4263E+01   OTHLODPQ
+    169  0.4263E+01   EOTHLODP
+    170  0.4259E+01   TEXTILPQ
+    171  0.4205E+01   BBYDAYCQ
+    172  0.3999E+01   NUM_AUTO
+    173  0.3988E+01   CREDFINX
+    174  0.3925E+01   AS_COMP2
+    175  0.3851E+01   OWNVACC
+    176  0.3851E+01   VOTHRLOC
+    177  0.3851E+01   TOTEXPCQ
+    178  0.3851E+01   TOTEX4CQ
+    179  0.3819E+01   WATRPSCQ
+    180  0.3818E+01   FSTAXOWE
+    181  0.3747E+01   FULOILCQ
+    182  0.3730E+01   NTLGASCQ
+    183  0.3701E+01   HOUSEQCQ
+    184  0.3532E+01   OTHAPLCQ
+    185  0.3479E+01   OTHREGX
+    186  0.3477E+01   LIQUIDX
+    187  0.3425E+01   LIQUDYRX
+    188  0.3385E+01   OTHHEXCQ
+    189  0.3372E+01   MISCEQCQ
+    190  0.3322E+01   OTHEQPCQ
+    191  0.3267E+01   TGASMOTP
+    192  0.3246E+01   EOTHENTP
+    193  0.3187E+01   EHOUSNGC
+    194  0.3149E+01   LIFINSCQ
+    195  0.3076E+01   OTHEQPPQ
+    196  0.3027E+01   TOTHTREC
+    197  0.3027E+01   TVRENTLC
+    198  0.2921E+01   TOBACCPQ
+    199  0.2894E+01   TTRANPRP
+    200  0.2850E+01   OTHFLSCQ
+    201  0.2833E+01   FEEADMPQ
+    202  0.2826E+01   EMOTRVHP
+    203  0.2808E+01   APPARCQ
+    204  0.2764E+01   TOTHENTC
+    205  0.2731E+01   BUSCREEN
+    206  0.2683E+01   TTRNTRIP
+    207  0.2683E+01   TRNTRPPQ
+    208  0.2640E+01   MEALSPAY
+    209  0.2640E+01   FDMAPPQ
+    210  0.2601E+01   DEFBENRP
+    211  0.2501E+01   VEHQL
+    212  0.2475E+01   FDHOMEPQ
+    213  0.2463E+01   FLRCVRCQ
+    214  0.2387E+01   CREDITX
+    215  0.2378E+01   REGION
+    216  0.2377E+01   PERSCACQ
+    217  0.2365E+01   ETOTACX4
+    218  0.2365E+01   ETOTALC
+    219  0.2339E+01   STOCKBX
+    220  0.2219E+01   PREDRGPQ
+    221  0.2216E+01   TALCBEVC
+    222  0.2188E+01   OTHASTX
+    223  0.2127E+01   OTHENTPQ
+    224  0.2057E+01   HORREF2
+    225  0.2009E+01   TVRDIOPQ
+    226  0.2007E+01   TALCBEVP
+    227  0.1990E+01   VEHFINCQ
+    228  0.1988E+01   EENTMSCP
+    229  0.1932E+01   OTHLODCQ
+    230  0.1932E+01   EOTHLODC
+    231  0.1864E+01   TFAREP
+    232  0.1848E+01   CASHCOCQ
+    233  0.1824E+01   GASMOCQ
+    234  0.1761E+01   UTILOWNP
+    235  0.1718E+01   FOODPQ
+    236  0.1685E+01   TFOODAWC
+    237  0.1679E+01   EVEHPURC
+    238  0.1658E+01   FDXMAPCQ
+    239  0.1638E+01   OWNVACP
+    240  0.1638E+01   VOTHRLOP
+    241  0.1589E+01   MISC1PQ
+    242  0.1589E+01   MISCPQ
+    243  0.1589E+01   MISCX4PQ
+    244  0.1589E+01   EMISCELP
+    245  0.1575E+01   FLRCVRPQ
+    246  0.1568E+01   VEHINSPQ
+    247  0.1553E+01   MEDSUPPQ
+    248  0.1522E+01   FDAWAYCQ
+    249  0.1521E+01   MLPYQWKS
+    250  0.1519E+01   TFAREC
+    251  0.1451E+01   VRNTLOPQ
+    252  0.1374E+01   GASMOPQ
+    253  0.1332E+01   OTHRINCX
+    254  0.1322E+01   STUDFINX
+    255  0.1312E+01   VOTHRFLC
+    256  0.1123E+01   ETRANPTC
+    257  0.1088E+01   FDMAPCQ
+    258  0.1036E+01   TAIRFARC
+    259  0.1024E+01   TFOODTOC
+    260  0.9592E+00   STDNTYRX
+    261  0.9460E+00   TOTHFARC
+    262  0.9231E+00   TVRENTLP
+    263  0.9231E+00   TOTHTREP
+    264  0.9126E+00   TAIRFARP
+    265  0.9023E+00   TTRNTRIC
+    266  0.9023E+00   TRNTRPCQ
+    267  0.8792E+00   TOTHRLOP
+    268  0.8608E+00   MENBOYPQ
+    269  0.8608E+00   MENSIXPQ
+    270  0.8268E+00   TOTHFARP
+    271  0.8223E+00   FOODCQ
+    272  0.8189E+00   EDUCAPQ
+    273  0.8137E+00   TFOODHOC
+    274  0.8088E+00   POPSIZE
+    275  0.8085E+00   LIQUIDB
+    276  0.7722E+00   TRNOTHPQ
+    277  0.7687E+00   MISCEQPQ
+    278  0.7178E+00   HISP_REF
+    279  0.6986E+00   MLPAYWKX
+    280  0.6730E+00   STUDNTX
+    281  0.6577E+00   FMLPYYRX
+    282  0.6568E+00   PUBTRAPQ
+    283  0.6498E+00   TTOTALP
+    284  0.6307E+00   ECARTKNC
+    285  0.6306E+00   TRANSPQ
+    286  0.6240E+00   FULOILPQ
+    287  0.6165E+00   AS_COMP1
+    288  0.6157E+00   ALLFULPQ
+    289  0.5876E+00   SMSASTAT
+    290  0.5822E+00   SMLAPPPQ
+    291  0.5493E+00   TENTRMNP
+    292  0.5458E+00   TOTHRLOC
+    293  0.5396E+00   VOTHRFLP
+    294  0.5346E+00   TTOTALC
+    295  0.5255E+00   WHLFYRB
+    296  0.5217E+00   WHLFYRBX
+    297  0.5191E+00   IRA
+    298  0.5128E+00   PETTOYCQ
+    299  0.4986E+00   ESHELTRC
+    300  0.4692E+00   TFOODTOP
+    301  0.4671E+00   TFOODAWP
+    302  0.4562E+00   APPARPQ
+    303  0.4415E+00   SHELTCQ
+    304  0.4382E+00   TRNOTHCQ
+    305  0.4135E+00   LIQUDYRB
+    306  0.4033E+00   ECARTKNP
+    307  0.3806E+00   TTRANPRC
+    308  0.3745E+00   EMRTPNVP
+    309  0.3581E+00   EMRTPNVC
+    310  0.3581E+00   MRTPRNOC
+    311  0.3507E+00   SMLAPPCQ
+    312  0.3480E+00   FURNTRCQ
+    313  0.3251E+00   LIQUIDBX
+    314  0.3049E+00   TENTRMNC
+    315  0.2962E+00   MRTPRNOP
+    316  0.2941E+00   FSMPFRMX
+    317  0.2909E+00   EENTMSCC
+    318  0.2891E+00   TRANSCQ
+    319  0.2815E+00   TEXTILCQ
+    320  0.2778E+00   OTHENTCQ
+    321  0.2425E+00   FURNTRPQ
+    322  0.2377E+00   OTHSTYRX
+    323  0.2366E+00   TFEESADP
+    324  0.2357E+00   FDHOMECQ
+    325  0.2166E+00   OTHAPLPQ
+    326  0.2146E+00   JFS_AMT
+    327  0.1782E+00   MAJAPPCQ
+    328  0.1602E+00   OTHLOAN
+    329  0.1367E+00   LIQDYRBX
+    330  0.1292E+00   VWATERPC
+    331  0.1292E+00   TOTHENTP
+    332  0.1279E+00   CREDYR
+    333  0.1111E+00   OTHFLSPQ
+    334  0.1021E+00   EDUCACQ
+    335  0.9952E-01   VEHINSCQ
+    336  0.9399E-01   WHOLIFX
+    337  0.9371E-01   BLS_URBN
+    338  0.8918E-01   TFEESADC
+    339  0.8263E-01   CARTKUCQ
+    340  0.8157E-01   MAJAPPPQ
+    341  0.8021E-01   TLOCALTP
+    342  0.7518E-01   OTHFINX
+    343  0.6108E-01   TFOODHOP
+    344  0.5018E-01   LIQUID
+    345  0.4847E-01   ENOMOTRP
+    346  0.4681E-01   CREDTYRX
+    347  0.4261E-01   OTHLONX
+    348  0.3906E-01   ETRANPTP
+    349  0.3592E-01   HOUSEQPQ
+    350  0.1960E-01   TOBACCCQ
+    351  0.1602E-01   OTHLNYRX
+    352  0.1591E-01   TLOCALTC
+    353  0.1226E-01   EOTHENTC
+    354  0.7226E-02   WHLFYRX
+    355  0.7187E-02   PUBTRACQ
+    356  0.6668E-02   PETTOYPQ
+    357  0.5222E-02   MAINRPCQ
+    358  0.3923E-02   HORREF1
+    359  0.3569E-02   TGASMOTC
+    360  0.1029E-03   MAINRPPQ
 
- Size and CV MSE and SE of subtrees:
-  Tree   #Tnodes  Mean MSE   SE(Mean)    BSE(Mean)  Median MSE  BSE(Median)
-    1       79   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
-    2       78   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
-    3       76   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
-    4       75   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
-    5       73   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
-    6       72   5.890E+12   7.198E+11   4.740E+11   5.838E+12   7.710E+11
-    7       71   5.889E+12   7.198E+11   4.740E+11   5.838E+12   7.711E+11
-    8       70   5.890E+12   7.198E+11   4.739E+11   5.838E+12   7.709E+11
-    9       68   5.890E+12   7.198E+11   4.739E+11   5.838E+12   7.709E+11
-   10       67   5.890E+12   7.197E+11   4.738E+11   5.838E+12   7.710E+11
-   11       66   5.889E+12   7.197E+11   4.738E+11   5.838E+12   7.711E+11
-   12       65   5.889E+12   7.197E+11   4.738E+11   5.838E+12   7.711E+11
-   13       64   5.889E+12   7.197E+11   4.738E+11   5.838E+12   7.712E+11
-   14       62   5.889E+12   7.194E+11   4.740E+11   5.840E+12   7.714E+11
-   15       60   5.889E+12   7.194E+11   4.739E+11   5.840E+12   7.709E+11
-   16       59   5.889E+12   7.194E+11   4.739E+11   5.840E+12   7.710E+11
-   17       57   5.891E+12   7.198E+11   4.739E+11   5.848E+12   7.711E+11
-   18       56   5.891E+12   7.198E+11   4.740E+11   5.848E+12   7.712E+11
-   19       54   5.892E+12   7.198E+11   4.744E+11   5.848E+12   7.724E+11
-   20       52   5.892E+12   7.198E+11   4.741E+11   5.849E+12   7.717E+11
-   21       51   5.896E+12   7.208E+11   4.753E+11   5.849E+12   7.794E+11
-   22       50   5.896E+12   7.208E+11   4.754E+11   5.849E+12   7.801E+11
-   23       49   5.895E+12   7.203E+11   4.754E+11   5.847E+12   7.790E+11
-   24       47   5.894E+12   7.203E+11   4.751E+11   5.847E+12   7.775E+11
-   25       46   5.895E+12   7.203E+11   4.750E+11   5.847E+12   7.771E+11
-   26       44   5.895E+12   7.203E+11   4.750E+11   5.847E+12   7.771E+11
-   27       43   5.895E+12   7.203E+11   4.750E+11   5.847E+12   7.771E+11
-   28       41   5.893E+12   7.198E+11   4.750E+11   5.839E+12   7.770E+11
-   29       40   5.893E+12   7.198E+11   4.750E+11   5.839E+12   7.770E+11
-   30       39   5.892E+12   7.198E+11   4.751E+11   5.836E+12   7.769E+11
-   31       38   5.894E+12   7.198E+11   4.750E+11   5.843E+12   7.762E+11
-   32       34   5.891E+12   7.192E+11   4.741E+11   5.844E+12   7.725E+11
-   33       31   5.887E+12   7.192E+11   4.765E+11   5.844E+12   7.752E+11
-   34       30   5.885E+12   7.192E+11   4.765E+11   5.837E+12   7.760E+11
-   35       26   5.881E+12   7.192E+11   4.753E+11   5.837E+12   7.720E+11
-   36       25   5.868E+12   7.186E+11   4.741E+11   5.830E+12   7.631E+11
-   37       24   5.872E+12   7.190E+11   4.749E+11   5.830E+12   7.667E+11
-   38       23   5.863E+12   7.167E+11   4.812E+11   5.830E+12   8.068E+11
-   39       21   5.860E+12   7.167E+11   4.808E+11   5.830E+12   8.050E+11
-   40+      14   5.859E+12   7.168E+11   4.806E+11   5.822E+12   8.039E+11
-   41        9   5.869E+12   7.194E+11   4.902E+11   5.849E+12   8.075E+11
-   42**      8   5.789E+12   7.184E+11   5.133E+11   5.860E+12   8.402E+11
-   43        5   6.554E+12   8.516E+11   7.323E+11   6.439E+12   1.068E+12
-   44        4   7.614E+12   9.359E+11   7.113E+11   8.502E+12   1.107E+12
-   45        1   8.287E+12   1.032E+12   6.955E+11   8.542E+12   7.418E+11
-  
- 0-SE tree based on mean is marked with * and has 8 terminal nodes
- 0-SE tree based on median is marked with + and has 14 terminal nodes
- Selected-SE tree based on mean using naive SE is marked with **
- Selected-SE tree based on mean using bootstrap SE is marked with --
- Selected-SE tree based on median and bootstrap SE is marked with ++
- ** tree same as ++ tree
- ** tree same as -- tree
- ++ tree same as -- tree
- * tree same as ** tree
- * tree same as ++ tree
- * tree same as -- tree
-  
- Following tree is based on mean CV with naive SE estimate (**)
   
  Structure of final tree. Each terminal node is marked with a T.
   
@@ -1078,22 +870,164 @@
         label   cases      fit  rank    D-mean     MSE           variable
            1     2487     2487     1  5.131E+03  8.287E+12   REFGEN 
            2     1914     1914     1  6.476E+03  1.027E+13   INC_RANK 
-           4T    1345     1345     1  2.823E+03  1.657E+12   REF_RACE 
+           4     1345     1345     1  2.823E+03  1.657E+12   REF_RACE 
+           8      133      133     1  6.462E+02  1.513E+11   PSU 
+          16T      37       37     1  1.018E+03  2.172E+11   - 
+          17       96       96     1  5.115E+02  1.262E+11   HLFBATHQ 
+          34       54       54     1  9.929E+01  2.149E+10   ESHELTRC 
+          68T      29       29     1  1.640E+02  4.039E+10   - 
+          69T      25       25     1  2.666E+01  6.172E+07   - 
+          35T      42       42     1  1.097E+03  2.507E+11   - 
+           9     1212     1212     1  3.082E+03  1.808E+12   REF_RACE 
+          18     1154     1154     1  2.949E+03  1.746E+12   STOCKX 
+          36     1111     1111     1  2.722E+03  1.648E+12   MRTINTPQ 
+          72      681      681     1  3.563E+03  2.329E+12   FINCBTAX 
+         144      629      629     1  2.699E+03  8.580E+11   FINCBTAX 
+         288      362      362     1  1.488E+03  2.595E+11   STATE 
+         576       53       53     1  1.542E+02  2.388E+09   HIGH_EDU 
+        1152T      27       27     1  6.066E+01  6.213E+08   - 
+        1153T      26       26     1  2.502E+02  3.848E+09   - 
+         577      309      309     1  1.740E+03  2.947E+11   STATE 
+        1154      105      105     1  2.430E+03  5.491E+11   HIGH_EDU 
+        2308T      46       46     1  8.762E+02  1.212E+11   - 
+        2309       59       59     1  3.483E+03  8.177E+11   RACE2 
+        4618T      24       24     1  5.884E+02  2.064E+10   - 
+        4619T      35       35     1  5.469E+03  1.121E+12   - 
+        1155      204      204     1  1.336E+03  1.562E+11   EDUCA2 
+        2310T      41       41     1  3.585E+02  9.486E+09   - 
+        2311      163      163     1  1.608E+03  1.862E+11   FRRETIRM 
+        4622T     124      124     1  1.164E+03  1.509E+11   PSU 
+        4623T      39       39     1  3.011E+03  2.491E+11   - 
+         289      267      267     1  4.370E+03  1.564E+12   AGE2 
+         578      219      219     1  3.075E+03  1.041E+12   VEHQ 
+        1156      146      146     1  2.268E+03  6.808E+11   FSALARYX 
+        2312       50       50     1  4.442E+03  1.243E+12   FFTAXOWE 
+        4624T      24       24     1  3.053E+03  7.331E+11   - 
+        4625T      26       26     1  5.648E+03  1.684E+12   - 
+        2313       96       96     1  1.156E+03  3.106E+11   WATRPSPQ 
+        4626T      42       42     1  1.164E+02  2.700E+09   - 
+        4627T      54       54     1  1.975E+03  5.181E+11   VEHQ 
+        1157       73       73     1  4.907E+03  1.680E+12   INC_RANK 
+        2314T      25       25     1  1.792E+03  9.708E+10   - 
+        2315       48       48     1  6.247E+03  2.390E+12   SHELTCQ 
+        4630T      24       24     1  4.425E+03  2.313E+12   - 
+        4631T      24       24     1  8.066E+03  2.418E+12   - 
+         579       48       48     1  1.036E+04  3.030E+12   ETOTALC 
+        1158T      24       24     1  1.352E+04  4.678E+12   - 
+        1159T      24       24     1  7.175E+03  1.046E+12   - 
+         145       52       52     1  1.394E+04  1.776E+13   PERINSPQ 
+         290T      24       24     1  2.430E+04  3.112E+13   - 
+         291T      28       28     1  5.740E+03  3.290E+12   - 
+          73      430      430     1  1.423E+03  5.062E+11   RETSURVX 
+         146       56       56     1  2.507E+03  4.175E+11   BUILT 
+         292T      32       32     1  2.049E+03  5.025E+11   - 
+         293T      24       24     1  3.208E+03  3.023E+11   - 
+         147      374      374     1  1.254E+03  5.157E+11   PERSOT64 
+         294      165      165     1  4.623E+02  1.169E+11   UNISTRQ 
+         588      140      140     1  2.734E+02  2.514E+10   STATE 
+        1176T      34       34     1  5.884E+01  1.338E+08   - 
+        1177      106      106     1  3.429E+02  3.275E+10   DIVISION 
+        2354       55       55     1  4.780E+02  6.083E+10   PROPTXPQ 
+        4708T      30       30     1  9.203E+01  4.864E+08   - 
+        4709T      25       25     1  9.654E+02  1.252E+11   - 
+        2355       51       51     1  1.809E+02  1.947E+09   ALCBEVPQ 
+        4710T      24       24     1  4.915E+01  2.037E+08   - 
+        4711T      27       27     1  3.260E+02  2.700E+09   - 
+         589T      25       25     1  1.416E+03  6.221E+11   - 
+         295      209      209     1  1.961E+03  8.093E+11   STATE 
+         590       63       63     1  1.756E+03  2.420E+11   NUM_AUTO 
+        1180T      25       25     1  3.009E+02  2.217E+09   - 
+        1181T      38       38     1  2.997E+03  3.417E+11   - 
+         591      146      146     1  2.039E+03  1.057E+12   FRRETIRM 
+        1182T      27       27     1  7.282E+03  4.450E+12   - 
+        1183      119      119     1  7.331E+02  1.255E+11   NUM_AUTO 
+        2366       50       50     1  3.869E+02  3.839E+10   ELCTRCPQ 
+        4732T      26       26     1  3.985E+02  1.731E+10   - 
+        4733T      24       24     1  3.742E+02  6.297E+10   - 
+        2367       69       69     1  1.011E+03  1.863E+11   FOODCQ 
+        4734T      32       32     1  4.856E+02  6.594E+10   - 
+        4735T      37       37     1  1.452E+03  2.857E+11   - 
+          37T      43       43     1  9.803E+03  3.394E+12   - 
+          19       58       58     1  7.134E+03  2.844E+12   STATE 
+          38T      28       28     1  3.377E+03  1.756E+11   - 
+          39T      30       30     1  8.154E+03  5.312E+12   - 
            5      569      569     1  1.498E+04  2.828E+13   EARNCOMP 
           10       75       75     1  5.278E+04  7.423E+13   RETSURV 
           20T      46       46     1  2.764E+04  4.076E+13   - 
           21T      29       29     1  8.586E+04  7.873E+13   - 
           11      494      494     1  9.170E+03  1.560E+13   FFTAXOWE 
-          22T     247      247     1  2.647E+03  3.560E+12   UNISTRQ 
+          22      247      247     1  2.647E+03  3.560E+12   UNISTRQ 
+          44T      26       26     1  6.613E+03  1.007E+13   - 
+          45      221      221     1  2.325E+03  2.803E+12   PSU 
+          90T      30       30     1  1.207E+03  1.841E+11   - 
+          91      191      191     1  2.457E+03  3.214E+12   FJSSDEDX 
+         182      167      167     1  1.848E+03  6.465E+11   STATE 
+         364       76       76     1  2.569E+03  1.230E+12   REGION 
+         728T      26       26     1  5.495E+03  3.091E+12   - 
+         729       50       50     1  2.715E+02  2.963E+10   OCCUCOD2 
+        1458T      25       25     1  4.294E+02  5.828E+10   - 
+        1459T      25       25     1  1.203E+02  1.085E+09   - 
+         365       91       91     1  1.154E+03  1.445E+11   DIVISION 
+         730       59       59     1  8.119E+02  9.613E+10   OCCUCOD2 
+        1460T      28       28     1  1.600E+03  1.746E+11   - 
+        1461T      31       31     1  6.019E+01  1.014E+08   - 
+         731T      32       32     1  1.923E+03  2.221E+11   - 
+         183T      24       24     1  6.628E+03  2.136E+13   - 
           23      247      247     1  1.570E+04  2.573E+13   AGE2 
-          46T     156      156     1  8.036E+03  1.274E+13   FINCBTAX 
+          46      156      156     1  8.036E+03  1.274E+13   FINCBTAX 
+          92      131      131     1  5.939E+03  7.276E+12   POPSIZE 
+         184T      34       34     1  9.872E+03  1.214E+13   - 
+         185       97       97     1  4.436E+03  5.484E+12   RACE2 
+         370T      33       33     1  7.289E+03  1.449E+13   - 
+         371       64       64     1  3.219E+03  8.687E+11   EOWNDWLC 
+         742T      29       29     1  4.620E+03  1.743E+12   - 
+         743T      35       35     1  1.767E+03  7.819E+10   - 
+          93T      25       25     1  1.997E+04  3.898E+13   - 
           47       91       91     1  3.030E+04  4.131E+13   BATHRMQ 
           94T      47       47     1  1.087E+04  1.582E+13   - 
           95T      44       44     1  4.670E+04  5.504E+13   - 
-           3T     573      573     1  9.804E+02  1.105E+12   PSU 
+           3      573      573     1  9.804E+02  1.105E+12   PSU 
+           6      148      148     1  1.265E+03  1.368E+11   INC_RANK 
+          12       76       76     1  4.350E+02  1.554E+10   POPSIZE 
+          24T      25       25     1  4.816E+02  3.122E+10   - 
+          25       51       51     1  3.850E+02  8.255E+09   PSU 
+          50T      26       26     1  4.680E+02  1.291E+10   - 
+          51T      25       25     1  2.464E+02  3.439E+09   - 
+          13       72       72     1  2.195E+03  2.386E+11   LIFINSPQ 
+          26       48       48     1  2.006E+03  2.641E+11   RETPENCQ 
+          52T      24       24     1  1.280E+03  1.014E+11   - 
+          53T      24       24     1  2.819E+03  4.163E+11   - 
+          27T      24       24     1  2.638E+03  1.926E+11   - 
+           7      425      425     1  9.168E+02  1.443E+12   CUTENURE 
+          14      188      188     1  3.899E+02  7.173E+10   LIQUIDX 
+          28      149      149     1  4.210E+02  8.852E+10   UNISTRQ 
+          56T      25       25     1  1.577E+03  3.836E+11   - 
+          57      124      124     1  1.898E+02  2.276E+10   INCLASS2 
+         114       71       71     1  6.318E+01  1.679E+09   OCCUCOD1 
+         228T      33       33     1  2.638E+01  9.770E+07   - 
+         229T      38       38     1  9.749E+01  3.021E+09   - 
+         115       53       53     1  3.846E+02  4.996E+10   UNISTRQ 
+         230T      25       25     1  7.858E+01  3.793E+08   - 
+         231T      28       28     1  6.114E+02  9.243E+10   - 
+          29T      39       39     1  2.668E+02  7.717E+09   - 
+          15      237      237     1  1.337E+03  2.524E+12   CUTENURE 
+          30      203      203     1  1.240E+03  2.904E+12   DIVISION 
+          60T      25       25     1  6.973E+03  2.299E+13   - 
+          61      178      178     1  3.885E+02  4.553E+10   PSU 
+         122      112      112     1  5.418E+02  7.039E+10   ALCBEVPQ 
+         244       86       86     1  2.487E+02  1.255E+10   EDUC_REF 
+         488T      26       26     1  7.484E+01  2.355E+09   - 
+         489       60       60     1  3.245E+02  1.653E+10   HOUSOPCQ 
+         978T      34       34     1  1.777E+02  3.353E+09   - 
+         979T      26       26     1  5.174E+02  3.266E+10   - 
+         245T      26       26     1  1.516E+03  2.334E+11   - 
+         123       66       66     1  8.093E+01  3.060E+08   PROPTXCQ 
+         246T      40       40     1  5.947E+01  1.883E+08   - 
+         247T      26       26     1  1.097E+02  4.626E+08   - 
+          31T      34       34     1  1.897E+03  2.683E+11   - 
   
- Number of terminal nodes of final tree: 8
- Total number of nodes of final tree: 15
+ Number of terminal nodes of final tree: 79
+ Total number of nodes of final tree: 157
  Second best split variable (based on curvature test) at root node is AGE_REF
   
  Regression tree:
@@ -1101,7 +1035,131 @@
   
  Node 1: REFGEN <= 4.5000000
    Node 2: INC_RANK <= 0.84018625
-     Node 4: INTRDVX-mean = 2822.6445
+     Node 4: REF_RACE = "2", "4"
+       Node 8: PSU = "S12A", "S12B", "S23A", "S24B", "S35C", "S37B", "S48A", "S49D"
+         Node 16: INTRDVX-mean = 1018.3058
+       Node 8: PSU /= "S12A", "S12B", "S23A", "S24B", "S35C", "S37B", "S48A", "S49D"
+         Node 17: HLFBATHQ <= 0.50000000
+           Node 34: ESHELTRC <= 1047.3335
+             Node 68: INTRDVX-mean = 163.99527
+           Node 34: ESHELTRC > 1047.3335 or NA
+             Node 69: INTRDVX-mean = 26.658585
+         Node 17: HLFBATHQ > 0.50000000 or NA
+           Node 35: INTRDVX-mean = 1097.2082
+     Node 4: REF_RACE /= "2", "4"
+       Node 9: REF_RACE = "1"
+         Node 18: STOCKX <= 59950.000 or NA
+           Node 36: MRTINTPQ <= 1.8333500
+             Node 72: FINCBTAX <= 106565.50
+               Node 144: FINCBTAX <= 49134.500
+                 Node 288: STATE = "13", "18", "19", "27", "31", "33", "40", "41",
+                          "47", "54"
+                   Node 576: HIGH_EDU <= 13.500000
+                     Node 1152: INTRDVX-mean = 60.655313
+                   Node 576: HIGH_EDU > 13.500000 or NA
+                     Node 1153: INTRDVX-mean = 250.20422
+                 Node 288: STATE /= "13", "18", "19", "27", "31", "33", "40", "41",
+                          "47", "54"
+                   Node 577: STATE = "4", "6", "9", "20", "36", "48", "49", "55"
+                     Node 1154: HIGH_EDU <= 13.500000
+                       Node 2308: INTRDVX-mean = 876.20138
+                     Node 1154: HIGH_EDU > 13.500000 or NA
+                       Node 2309: RACE2 = "1"
+                         Node 4618: INTRDVX-mean = 588.43118
+                       Node 2309: RACE2 /= "1"
+                         Node 4619: INTRDVX-mean = 5468.6388
+                   Node 577: STATE /= "4", "6", "9", "20", "36", "48", "49", "55"
+                     Node 1155: EDUCA2 <= 13.500000
+                       Node 2310: INTRDVX-mean = 358.51558
+                     Node 1155: EDUCA2 > 13.500000 or NA
+                       Node 2311: FRRETIRM <= 24439.000
+                         Node 4622: INTRDVX-mean = 1164.0913
+                       Node 2311: FRRETIRM > 24439.000 or NA
+                         Node 4623: INTRDVX-mean = 3011.3411
+               Node 144: FINCBTAX > 49134.500 or NA
+                 Node 289: AGE2 <= 76.500000 or NA
+                   Node 578: VEHQ <= 2.5000000
+                     Node 1156: FSALARYX <= 1750.0000
+                       Node 2312: FFTAXOWE <= 2058.0000
+                         Node 4624: INTRDVX-mean = 3053.0058
+                       Node 2312: FFTAXOWE > 2058.0000 or NA
+                         Node 4625: INTRDVX-mean = 5648.2247
+                     Node 1156: FSALARYX > 1750.0000 or NA
+                       Node 2313: WATRPSPQ <= 49.500000
+                         Node 4626: INTRDVX-mean = 116.41287
+                       Node 2313: WATRPSPQ > 49.500000 or NA
+                         Node 4627: INTRDVX-mean = 1974.8317
+                   Node 578: VEHQ > 2.5000000 or NA
+                     Node 1157: INC_RANK <= 0.58000360
+                       Node 2314: INTRDVX-mean = 1791.7211
+                     Node 1157: INC_RANK > 0.58000360 or NA
+                       Node 2315: SHELTCQ <= 407.50000
+                         Node 4630: INTRDVX-mean = 4424.9029
+                       Node 2315: SHELTCQ > 407.50000 or NA
+                         Node 4631: INTRDVX-mean = 8065.5633
+                 Node 289: AGE2 > 76.500000
+                   Node 579: ETOTALC <= 4565.6665
+                     Node 1158: INTRDVX-mean = 13515.512
+                   Node 579: ETOTALC > 4565.6665 or NA
+                     Node 1159: INTRDVX-mean = 7175.3097
+             Node 72: FINCBTAX > 106565.50 or NA
+               Node 145: PERINSPQ <= 848.19170
+                 Node 290: INTRDVX-mean = 24297.985
+               Node 145: PERINSPQ > 848.19170 or NA
+                 Node 291: INTRDVX-mean = 5740.3305
+           Node 36: MRTINTPQ > 1.8333500 or NA
+             Node 73: RETSURVX <= 3650.0000
+               Node 146: BUILT <= 1988.0000
+                 Node 292: INTRDVX-mean = 2048.6612
+               Node 146: BUILT > 1988.0000 or NA
+                 Node 293: INTRDVX-mean = 3207.5477
+             Node 73: RETSURVX > 3650.0000 or NA
+               Node 147: PERSOT64 <= 0.50000000
+                 Node 294: UNISTRQ = "3", "8", "9"
+                   Node 588: STATE = "9", "12", "17", "24", "25", "26", "32",
+                            "34", "41", "53"
+                     Node 1176: INTRDVX-mean = 58.837443
+                   Node 588: STATE /= "9", "12", "17", "24", "25", "26", "32",
+                            "34", "41", "53"
+                     Node 1177: DIVISION = "3", "4", "5", "6"
+                       Node 2354: PROPTXPQ <= 487.50000
+                         Node 4708: INTRDVX-mean = 92.033255
+                       Node 2354: PROPTXPQ > 487.50000 or NA
+                         Node 4709: INTRDVX-mean = 965.42602
+                     Node 1177: DIVISION /= "3", "4", "5", "6"
+                       Node 2355: ALCBEVPQ <= 22.500000
+                         Node 4710: INTRDVX-mean = 49.151642
+                       Node 2355: ALCBEVPQ > 22.500000 or NA
+                         Node 4711: INTRDVX-mean = 326.00746
+                 Node 294: UNISTRQ /= "3", "8", "9"
+                   Node 589: INTRDVX-mean = 1416.4753
+               Node 147: PERSOT64 > 0.50000000 or NA
+                 Node 295: STATE = "6", "8", "28", "53", "NA"
+                   Node 590: NUM_AUTO <= 0.50000000
+                     Node 1180: INTRDVX-mean = 300.94925
+                   Node 590: NUM_AUTO > 0.50000000 or NA
+                     Node 1181: INTRDVX-mean = 2996.6634
+                 Node 295: STATE /= "6", "8", "28", "53", "NA"
+                   Node 591: FRRETIRM <= 1392.0000
+                     Node 1182: INTRDVX-mean = 7282.3716
+                   Node 591: FRRETIRM > 1392.0000 or NA
+                     Node 1183: NUM_AUTO <= 0.50000000
+                       Node 2366: ELCTRCPQ <= 201.50000
+                         Node 4732: INTRDVX-mean = 398.51676
+                       Node 2366: ELCTRCPQ > 201.50000 or NA
+                         Node 4733: INTRDVX-mean = 374.21787
+                     Node 1183: NUM_AUTO > 0.50000000 or NA
+                       Node 2367: FOODCQ <= 630.50000
+                         Node 4734: INTRDVX-mean = 485.60993
+                       Node 2367: FOODCQ > 630.50000 or NA
+                         Node 4735: INTRDVX-mean = 1452.1229
+         Node 18: STOCKX > 59950.000
+           Node 37: INTRDVX-mean = 9803.0222
+       Node 9: REF_RACE /= "1"
+         Node 19: STATE = "2", "6"
+           Node 38: INTRDVX-mean = 3377.3784
+         Node 19: STATE /= "2", "6"
+           Node 39: INTRDVX-mean = 8154.1585
    Node 2: INC_RANK > 0.84018625 or NA
      Node 5: EARNCOMP = "8"
        Node 10: RETSURV = "1"
@@ -1110,17 +1168,114 @@
          Node 21: INTRDVX-mean = 85859.276
      Node 5: EARNCOMP /= "8"
        Node 11: FFTAXOWE <= 27769.500
-         Node 22: INTRDVX-mean = 2646.5367
+         Node 22: UNISTRQ = "4", "5", "6"
+           Node 44: INTRDVX-mean = 6613.2134
+         Node 22: UNISTRQ /= "4", "5", "6"
+           Node 45: PSU = "S49A", "S49B", "S49D", "S49E", "S49G"
+             Node 90: INTRDVX-mean = 1207.3851
+           Node 45: PSU /= "S49A", "S49B", "S49D", "S49E", "S49G"
+             Node 91: FJSSDEDX <= 15951.000
+               Node 182: STATE = "1", "4", "9", "12", "25", "31", "40", "42",
+                        "48", "49", "51", "53", "NA"
+                 Node 364: REGION = "3", "NA"
+                   Node 728: INTRDVX-mean = 5495.0153
+                 Node 364: REGION /= "3", "NA"
+                   Node 729: OCCUCOD2 = "3", "6", "NA"
+                     Node 1458: INTRDVX-mean = 429.36325
+                   Node 729: OCCUCOD2 /= "3", "6", "NA"
+                     Node 1459: INTRDVX-mean = 120.28592
+               Node 182: STATE /= "1", "4", "9", "12", "25", "31", "40", "42",
+                        "48", "49", "51", "53", "NA"
+                 Node 365: DIVISION = "2", "3", "5", "8"
+                   Node 730: OCCUCOD2 = "1", "3", "12"
+                     Node 1460: INTRDVX-mean = 1600.3798
+                   Node 730: OCCUCOD2 /= "1", "3", "12"
+                     Node 1461: INTRDVX-mean = 60.185060
+                 Node 365: DIVISION /= "2", "3", "5", "8"
+                   Node 731: INTRDVX-mean = 1923.0361
+             Node 91: FJSSDEDX > 15951.000 or NA
+               Node 183: INTRDVX-mean = 6627.8642
        Node 11: FFTAXOWE > 27769.500 or NA
          Node 23: AGE2 <= 56.500000 or NA
-           Node 46: INTRDVX-mean = 8036.3341
+           Node 46: FINCBTAX <= 444350.00
+             Node 92: POPSIZE <= 1.5000000
+               Node 184: INTRDVX-mean = 9871.5759
+             Node 92: POPSIZE > 1.5000000 or NA
+               Node 185: RACE2 = "4", "NA"
+                 Node 370: INTRDVX-mean = 7288.5689
+               Node 185: RACE2 /= "4", "NA"
+                 Node 371: EOWNDWLC <= 1190.6670
+                   Node 742: INTRDVX-mean = 4619.9170
+                 Node 371: EOWNDWLC > 1190.6670 or NA
+                   Node 743: INTRDVX-mean = 1766.8460
+           Node 46: FINCBTAX > 444350.00 or NA
+             Node 93: INTRDVX-mean = 19967.903
          Node 23: AGE2 > 56.500000
            Node 47: BATHRMQ <= 2.5000000
              Node 94: INTRDVX-mean = 10866.520
            Node 47: BATHRMQ > 2.5000000 or NA
              Node 95: INTRDVX-mean = 46702.398
  Node 1: REFGEN > 4.5000000 or NA
-   Node 3: INTRDVX-mean = 980.35292
+   Node 3: PSU = "S11A", "S12A", "S12B", "S35C", "S35D", "S35E", "S37B", "S48A",
+            "S49B", "S49F", "S49G"
+     Node 6: INC_RANK <= 0.79216550
+       Node 12: POPSIZE <= 1.5000000
+         Node 24: INTRDVX-mean = 481.59440
+       Node 12: POPSIZE > 1.5000000 or NA
+         Node 25: PSU = "S11A", "S35D", "S35E"
+           Node 50: INTRDVX-mean = 468.00969
+         Node 25: PSU /= "S11A", "S35D", "S35E"
+           Node 51: INTRDVX-mean = 246.35048
+     Node 6: INC_RANK > 0.79216550 or NA
+       Node 13: LIFINSPQ <= 86.000000
+         Node 26: RETPENCQ <= 1287.4250
+           Node 52: INTRDVX-mean = 1279.5691
+         Node 26: RETPENCQ > 1287.4250 or NA
+           Node 53: INTRDVX-mean = 2818.8578
+       Node 13: LIFINSPQ > 86.000000 or NA
+         Node 27: INTRDVX-mean = 2638.2887
+   Node 3: PSU /= "S11A", "S12A", "S12B", "S35C", "S35D", "S35E", "S37B", "S48A",
+            "S49B", "S49F", "S49G"
+     Node 7: CUTENURE = "4", "6"
+       Node 14: LIQUIDX = NA
+         Node 28: UNISTRQ = "6", "7"
+           Node 56: INTRDVX-mean = 1577.2799
+         Node 28: UNISTRQ /= "6", "7"
+           Node 57: INCLASS2 <= 4.5000000
+             Node 114: OCCUCOD1 = "3", "6", "7", "9", "10"
+               Node 228: INTRDVX-mean = 26.384065
+             Node 114: OCCUCOD1 /= "3", "6", "7", "9", "10"
+               Node 229: INTRDVX-mean = 97.485617
+           Node 57: INCLASS2 > 4.5000000 or NA
+             Node 115: UNISTRQ = "4", "10"
+               Node 230: INTRDVX-mean = 78.582912
+             Node 115: UNISTRQ /= "4", "10"
+               Node 231: INTRDVX-mean = 611.35151
+       Node 14: LIQUIDX /= NA
+         Node 29: INTRDVX-mean = 266.79860
+     Node 7: CUTENURE /= "4", "6"
+       Node 15: CUTENURE = "1"
+         Node 30: DIVISION = "1", "7", "NA"
+           Node 60: INTRDVX-mean = 6973.4810
+         Node 30: DIVISION /= "1", "7", "NA"
+           Node 61: PSU = "NA", "S23A", "S48B", "S49D"
+             Node 122: ALCBEVPQ <= 255.00000
+               Node 244: EDUC_REF <= 14.500000
+                 Node 488: INTRDVX-mean = 74.842767
+               Node 244: EDUC_REF > 14.500000 or NA
+                 Node 489: HOUSOPCQ <= 91.500000
+                   Node 978: INTRDVX-mean = 177.65354
+                 Node 489: HOUSOPCQ > 91.500000 or NA
+                   Node 979: INTRDVX-mean = 517.44658
+             Node 122: ALCBEVPQ > 255.00000 or NA
+               Node 245: INTRDVX-mean = 1515.6883
+           Node 61: PSU /= "NA", "S23A", "S48B", "S49D"
+             Node 123: PROPTXCQ <= 379.16665
+               Node 246: INTRDVX-mean = 59.468991
+             Node 123: PROPTXCQ > 379.16665 or NA
+               Node 247: INTRDVX-mean = 109.66882
+       Node 15: CUTENURE /= "1"
+         Node 31: INTRDVX-mean = 1896.5683
  
  ***************************************************************
  Predictor means below are weighted means of cases with no missing values.
@@ -1148,11 +1303,412 @@ Node 2: Intermediate node
  A case goes into Node 4 if INC_RANK <= 0.84018625
  INC_RANK mean = 0.64479638
  ----------------------------
-Node 4: Terminal node
+Node 4: Intermediate node
+ A case goes into Node 8 if REF_RACE = "2", "4"
+ REF_RACE mode = "1"
+ ----------------------------
+Node 8: Intermediate node
+ A case goes into Node 16 if PSU = "S12A", "S12B", "S23A", "S24B", "S35C", "S37B", "S48A",
+ "S49D"
+ PSU mode = "NA"
+ ----------------------------
+Node 16: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      2823.        11.12       0.3331E-15
- INTRDVX mean = 2822.64
+ Constant      1018.        1.945       0.5960E-01
+ INTRDVX mean = 1018.31
+ ----------------------------
+Node 17: Intermediate node
+ A case goes into Node 34 if HLFBATHQ <= 0.50000000
+ HLFBATHQ mean = 0.46178712
+ ----------------------------
+Node 34: Intermediate node
+ A case goes into Node 68 if ESHELTRC <= 1047.3335
+ ESHELTRC mean = 1065.3854
+ ----------------------------
+Node 68: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      164.0       0.6431       0.5254    
+ INTRDVX mean = 163.995
+ ----------------------------
+Node 69: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      26.66        2.653       0.1394E-01
+ INTRDVX mean = 26.6586
+ ----------------------------
+Node 35: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1097.        1.902       0.6424E-01
+ INTRDVX mean = 1097.21
+ ----------------------------
+Node 9: Intermediate node
+ A case goes into Node 18 if REF_RACE = "1"
+ REF_RACE mode = "1"
+ ----------------------------
+Node 18: Intermediate node
+ A case goes into Node 36 if STOCKX <= 59950.000 or NA
+ STOCKX mean = 320465.25
+ ----------------------------
+Node 36: Intermediate node
+ A case goes into Node 72 if MRTINTPQ <= 1.8333500
+ MRTINTPQ mean = 358.32404
+ ----------------------------
+Node 72: Intermediate node
+ A case goes into Node 144 if FINCBTAX <= 106565.50
+ FINCBTAX mean = 51420.225
+ ----------------------------
+Node 144: Intermediate node
+ A case goes into Node 288 if FINCBTAX <= 49134.500
+ FINCBTAX mean = 45901.780
+ ----------------------------
+Node 288: Intermediate node
+ A case goes into Node 576 if STATE = "13", "18", "19", "27", "31", "33", "40", "41", "47", "54"
+ STATE mode = "NA"
+ ----------------------------
+Node 576: Intermediate node
+ A case goes into Node 1152 if HIGH_EDU <= 13.500000
+ HIGH_EDU mean = 13.592087
+ ----------------------------
+Node 1152: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      60.66        1.993       0.5685E-01
+ INTRDVX mean = 60.6553
+ ----------------------------
+Node 1153: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      250.2        3.236       0.3398E-02
+ INTRDVX mean = 250.204
+ ----------------------------
+Node 577: Intermediate node
+ A case goes into Node 1154 if STATE = "4", "6", "9", "20", "36", "48", "49", "55"
+ STATE mode = "NA"
+ ----------------------------
+Node 1154: Intermediate node
+ A case goes into Node 2308 if HIGH_EDU <= 13.500000
+ HIGH_EDU mean = 13.975842
+ ----------------------------
+Node 2308: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      876.2        2.496       0.1630E-01
+ INTRDVX mean = 876.201
+ ----------------------------
+Node 2309: Intermediate node
+ A case goes into Node 4618 if RACE2 = "1"
+ RACE2 mode = "NA"
+ ----------------------------
+Node 4618: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      588.4        3.227       0.3726E-02
+ INTRDVX mean = 588.431
+ ----------------------------
+Node 4619: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      5469.        4.856       0.2642E-04
+ INTRDVX mean = 5468.64
+ ----------------------------
+Node 1155: Intermediate node
+ A case goes into Node 2310 if EDUCA2 <= 13.500000
+ EDUCA2 mean = 13.122783
+ ----------------------------
+Node 2310: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      358.5        3.281       0.2148E-02
+ INTRDVX mean = 358.516
+ ----------------------------
+Node 2311: Intermediate node
+ A case goes into Node 4622 if FRRETIRM <= 24439.000
+ FRRETIRM mean = 17914.274
+ ----------------------------
+Node 4622: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1164.        4.366       0.2658E-04
+ INTRDVX mean = 1164.09
+ ----------------------------
+Node 4623: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      3011.        5.133       0.8759E-05
+ INTRDVX mean = 3011.34
+ ----------------------------
+Node 289: Intermediate node
+ A case goes into Node 578 if AGE2 <= 76.500000 or NA
+ AGE2 mean = 69.323360
+ ----------------------------
+Node 578: Intermediate node
+ A case goes into Node 1156 if VEHQ <= 2.5000000
+ VEHQ mean = 2.1997058
+ ----------------------------
+Node 1156: Intermediate node
+ A case goes into Node 2312 if FSALARYX <= 1750.0000
+ FSALARYX mean = 38946.322
+ ----------------------------
+Node 2312: Intermediate node
+ A case goes into Node 4624 if FFTAXOWE <= 2058.0000
+ FFTAXOWE mean = 2861.9480
+ ----------------------------
+Node 4624: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      3053.        2.555       0.1769E-01
+ INTRDVX mean = 3053.01
+ ----------------------------
+Node 4625: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      5648.        3.405       0.2239E-02
+ INTRDVX mean = 5648.22
+ ----------------------------
+Node 2313: Intermediate node
+ A case goes into Node 4626 if WATRPSPQ <= 49.500000
+ WATRPSPQ mean = 100.17186
+ ----------------------------
+Node 4626: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      116.4        2.080       0.4379E-01
+ INTRDVX mean = 116.413
+ ----------------------------
+Node 4627: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1975.        2.943       0.4815E-02
+ INTRDVX mean = 1974.83
+ ----------------------------
+Node 1157: Intermediate node
+ A case goes into Node 2314 if INC_RANK <= 0.58000360
+ INC_RANK mean = 0.62218058
+ ----------------------------
+Node 2314: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1792.        3.469       0.1991E-02
+ INTRDVX mean = 1791.72
+ ----------------------------
+Node 2315: Intermediate node
+ A case goes into Node 4630 if SHELTCQ <= 407.50000
+ SHELTCQ mean = 715.09875
+ ----------------------------
+Node 4630: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      4425.        1.907       0.6909E-01
+ INTRDVX mean = 4424.90
+ ----------------------------
+Node 4631: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      8066.        3.631       0.1400E-02
+ INTRDVX mean = 8065.56
+ ----------------------------
+Node 579: Intermediate node
+ A case goes into Node 1158 if ETOTALC <= 4565.6665
+ ETOTALC mean = 4886.3764
+ ----------------------------
+Node 1158: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant     0.1352E+05    4.434       0.1910E-03
+ INTRDVX mean = 13515.5
+ ----------------------------
+Node 1159: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      7175.        4.805       0.7568E-04
+ INTRDVX mean = 7175.31
+ ----------------------------
+Node 145: Intermediate node
+ A case goes into Node 290 if PERINSPQ <= 848.19170
+ PERINSPQ mean = 2000.2975
+ ----------------------------
+Node 290: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant     0.2430E+05    2.994       0.6485E-02
+ INTRDVX mean = 24298.0
+ ----------------------------
+Node 291: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      5740.        2.436       0.2171E-01
+ INTRDVX mean = 5740.33
+ ----------------------------
+Node 73: Intermediate node
+ A case goes into Node 146 if RETSURVX <= 3650.0000
+ RETSURVX mean = 16698.900
+ ----------------------------
+Node 146: Intermediate node
+ A case goes into Node 292 if BUILT <= 1988.0000
+ BUILT mean = 1977.2620
+ ----------------------------
+Node 292: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      2049.        2.518       0.1719E-01
+ INTRDVX mean = 2048.66
+ ----------------------------
+Node 293: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      3208.        4.076       0.4660E-03
+ INTRDVX mean = 3207.55
+ ----------------------------
+Node 147: Intermediate node
+ A case goes into Node 294 if PERSOT64 <= 0.50000000
+ PERSOT64 mean = 0.75470586
+ ----------------------------
+Node 294: Intermediate node
+ A case goes into Node 588 if UNISTRQ = "3", "8", "9"
+ UNISTRQ mode = "3"
+ ----------------------------
+Node 588: Intermediate node
+ A case goes into Node 1176 if STATE = "9", "12", "17", "24", "25", "26", "32", "34", "41", "53"
+ STATE mode = "49"
+ ----------------------------
+Node 1176: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      58.84        4.441       0.9478E-04
+ INTRDVX mean = 58.8374
+ ----------------------------
+Node 1177: Intermediate node
+ A case goes into Node 2354 if DIVISION = "3", "4", "5", "6"
+ DIVISION mode = "4"
+ ----------------------------
+Node 2354: Intermediate node
+ A case goes into Node 4708 if PROPTXPQ <= 487.50000
+ PROPTXPQ mean = 524.36245
+ ----------------------------
+Node 4708: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      92.03        3.643       0.1044E-02
+ INTRDVX mean = 92.0333
+ ----------------------------
+Node 4709: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      965.4        2.132       0.4347E-01
+ INTRDVX mean = 965.426
+ ----------------------------
+Node 2355: Intermediate node
+ A case goes into Node 4710 if ALCBEVPQ <= 22.500000
+ ALCBEVPQ mean = 102.48340
+ ----------------------------
+Node 4710: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      49.15        2.492       0.2035E-01
+ INTRDVX mean = 49.1516
+ ----------------------------
+Node 4711: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      326.0        4.172       0.2980E-03
+ INTRDVX mean = 326.007
+ ----------------------------
+Node 589: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1416.        1.370       0.1835    
+ INTRDVX mean = 1416.48
+ ----------------------------
+Node 295: Intermediate node
+ A case goes into Node 590 if STATE = "6", "8", "28", "53", "NA"
+ STATE mode = "6"
+ ----------------------------
+Node 590: Intermediate node
+ A case goes into Node 1180 if NUM_AUTO <= 0.50000000
+ NUM_AUTO mean = 0.73892652
+ ----------------------------
+Node 1180: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      300.9        4.009       0.5154E-03
+ INTRDVX mean = 300.949
+ ----------------------------
+Node 1181: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      2997.        3.900       0.3906E-03
+ INTRDVX mean = 2996.66
+ ----------------------------
+Node 591: Intermediate node
+ A case goes into Node 1182 if FRRETIRM <= 1392.0000
+ FRRETIRM mean = 23003.941
+ ----------------------------
+Node 1182: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      7282.        2.695       0.1216E-01
+ INTRDVX mean = 7282.37
+ ----------------------------
+Node 1183: Intermediate node
+ A case goes into Node 2366 if NUM_AUTO <= 0.50000000
+ NUM_AUTO mean = 0.68884590
+ ----------------------------
+Node 2366: Intermediate node
+ A case goes into Node 4732 if ELCTRCPQ <= 201.50000
+ ELCTRCPQ mean = 234.24085
+ ----------------------------
+Node 4732: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      398.5        2.320       0.2882E-01
+ INTRDVX mean = 398.517
+ ----------------------------
+Node 4733: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      374.2        1.105       0.2807    
+ INTRDVX mean = 374.218
+ ----------------------------
+Node 2367: Intermediate node
+ A case goes into Node 4734 if FOODCQ <= 630.50000
+ FOODCQ mean = 977.63663
+ ----------------------------
+Node 4734: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      485.6        1.466       0.1526    
+ INTRDVX mean = 485.610
+ ----------------------------
+Node 4735: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1452.        2.373       0.2309E-01
+ INTRDVX mean = 1452.12
+ ----------------------------
+Node 37: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      9803.        4.506       0.5207E-04
+ INTRDVX mean = 9803.02
+ ----------------------------
+Node 19: Intermediate node
+ A case goes into Node 38 if STATE = "2", "6"
+ STATE mode = "6"
+ ----------------------------
+Node 38: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      3377.        2.173       0.3871E-01
+ INTRDVX mean = 3377.38
+ ----------------------------
+Node 39: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      8154.        2.711       0.1115E-01
+ INTRDVX mean = 8154.16
  ----------------------------
 Node 5: Intermediate node
  A case goes into Node 10 if EARNCOMP = "8"
@@ -1178,21 +1734,142 @@ Node 11: Intermediate node
  A case goes into Node 22 if FFTAXOWE <= 27769.500
  FFTAXOWE mean = 36491.278
  ----------------------------
-Node 22: Terminal node
+Node 22: Intermediate node
+ A case goes into Node 44 if UNISTRQ = "4", "5", "6"
+ UNISTRQ mode = "3"
+ ----------------------------
+Node 44: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      2647.        3.066       0.2411E-02
- INTRDVX mean = 2646.54
+ Constant      6613.        1.164       0.2554    
+ INTRDVX mean = 6613.21
+ ----------------------------
+Node 45: Intermediate node
+ A case goes into Node 90 if PSU = "S49A", "S49B", "S49D", "S49E", "S49G"
+ PSU mode = "NA"
+ ----------------------------
+Node 90: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1207.        1.862       0.7274E-01
+ INTRDVX mean = 1207.39
+ ----------------------------
+Node 91: Intermediate node
+ A case goes into Node 182 if FJSSDEDX <= 15951.000
+ FJSSDEDX mean = 11838.942
+ ----------------------------
+Node 182: Intermediate node
+ A case goes into Node 364 if STATE = "1", "4", "9", "12", "25", "31", "40", "42", "48", "49",
+ "51", "53", "NA"
+ STATE mode = "42"
+ ----------------------------
+Node 364: Intermediate node
+ A case goes into Node 728 if REGION = "3", "NA"
+ REGION mode = "3"
+ ----------------------------
+Node 728: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      5495.        2.886       0.7929E-02
+ INTRDVX mean = 5495.02
+ ----------------------------
+Node 729: Intermediate node
+ A case goes into Node 1458 if OCCUCOD2 = "3", "6", "NA"
+ OCCUCOD2 mode = "3"
+ ----------------------------
+Node 1458: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      429.4        1.225       0.2324    
+ INTRDVX mean = 429.363
+ ----------------------------
+Node 1459: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      120.3        2.665       0.1353E-01
+ INTRDVX mean = 120.286
+ ----------------------------
+Node 365: Intermediate node
+ A case goes into Node 730 if DIVISION = "2", "3", "5", "8"
+ DIVISION mode = "3"
+ ----------------------------
+Node 730: Intermediate node
+ A case goes into Node 1460 if OCCUCOD2 = "1", "3", "12"
+ OCCUCOD2 mode = "NA"
+ ----------------------------
+Node 1460: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1600.        3.176       0.3716E-02
+ INTRDVX mean = 1600.38
+ ----------------------------
+Node 1461: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      60.19        4.935       0.2800E-04
+ INTRDVX mean = 60.1851
+ ----------------------------
+Node 731: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1923.        3.098       0.4122E-02
+ INTRDVX mean = 1923.04
+ ----------------------------
+Node 183: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      6628.        1.069       0.2961    
+ INTRDVX mean = 6627.86
  ----------------------------
 Node 23: Intermediate node
  A case goes into Node 46 if AGE2 <= 56.500000 or NA
  AGE2 mean = 54.155118
  ----------------------------
-Node 46: Terminal node
+Node 46: Intermediate node
+ A case goes into Node 92 if FINCBTAX <= 444350.00
+ FINCBTAX mean = 336331.43
+ ----------------------------
+Node 92: Intermediate node
+ A case goes into Node 184 if POPSIZE <= 1.5000000
+ POPSIZE mean = 2.1902460
+ ----------------------------
+Node 184: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      8036.        3.982       0.1047E-03
- INTRDVX mean = 8036.33
+ Constant      9872.        2.624       0.1305E-01
+ INTRDVX mean = 9871.58
+ ----------------------------
+Node 185: Intermediate node
+ A case goes into Node 370 if RACE2 = "4", "NA"
+ RACE2 mode = "1"
+ ----------------------------
+Node 370: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      7289.        1.526       0.1369    
+ INTRDVX mean = 7288.57
+ ----------------------------
+Node 371: Intermediate node
+ A case goes into Node 742 if EOWNDWLC <= 1190.6670
+ EOWNDWLC mean = 2382.8781
+ ----------------------------
+Node 742: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      4620.        2.875       0.7626E-02
+ INTRDVX mean = 4619.92
+ ----------------------------
+Node 743: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1767.        4.923       0.2162E-04
+ INTRDVX mean = 1766.85
+ ----------------------------
+Node 93: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant     0.1997E+05    2.269       0.3253E-01
+ INTRDVX mean = 19967.9
  ----------------------------
 Node 47: Intermediate node
  A case goes into Node 94 if BATHRMQ <= 2.5000000
@@ -1210,16 +1887,206 @@ Node 95: Terminal node
  Constant     0.4670E+05    6.082       0.2775E-06
  INTRDVX mean = 46702.4
  ----------------------------
-Node 3: Terminal node
+Node 3: Intermediate node
+ A case goes into Node 6 if PSU = "S11A", "S12A", "S12B", "S35C", "S35D", "S35E", "S37B",
+ "S48A", "S49B", "S49F", "S49G"
+ PSU mode = "NA"
+ ----------------------------
+Node 6: Intermediate node
+ A case goes into Node 12 if INC_RANK <= 0.79216550
+ INC_RANK mean = 0.71560803
+ ----------------------------
+Node 12: Intermediate node
+ A case goes into Node 24 if POPSIZE <= 1.5000000
+ POPSIZE mean = 1.5409784
+ ----------------------------
+Node 24: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      980.4        3.232       0.1300E-02
- INTRDVX mean = 980.353
+ Constant      481.6        2.313       0.2960E-01
+ INTRDVX mean = 481.594
  ----------------------------
- Proportion of variance (R-squared) explained by tree model: 0.3766
+Node 25: Intermediate node
+ A case goes into Node 50 if PSU = "S11A", "S35D", "S35E"
+ PSU mode = "S11A"
+ ----------------------------
+Node 50: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      468.0        2.578       0.1622E-01
+ INTRDVX mean = 468.010
+ ----------------------------
+Node 51: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      246.4        1.594       0.1240    
+ INTRDVX mean = 246.350
+ ----------------------------
+Node 13: Intermediate node
+ A case goes into Node 26 if LIFINSPQ <= 86.000000
+ LIFINSPQ mean = 82.849079
+ ----------------------------
+Node 26: Intermediate node
+ A case goes into Node 52 if RETPENCQ <= 1287.4250
+ RETPENCQ mean = 1860.3079
+ ----------------------------
+Node 52: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1280.        2.362       0.2704E-01
+ INTRDVX mean = 1279.57
+ ----------------------------
+Node 53: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      2819.        2.360       0.2713E-01
+ INTRDVX mean = 2818.86
+ ----------------------------
+Node 27: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      2638.        3.079       0.5305E-02
+ INTRDVX mean = 2638.29
+ ----------------------------
+Node 7: Intermediate node
+ A case goes into Node 14 if CUTENURE = "4", "6"
+ CUTENURE mode = "1"
+ ----------------------------
+Node 14: Intermediate node
+ A case goes into Node 28 if LIQUIDX = NA
+ LIQUIDX mean = 48995.117
+ ----------------------------
+Node 28: Intermediate node
+ A case goes into Node 56 if UNISTRQ = "6", "7"
+ UNISTRQ mode = "10"
+ ----------------------------
+Node 56: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1577.        2.053       0.5110E-01
+ INTRDVX mean = 1577.28
+ ----------------------------
+Node 57: Intermediate node
+ A case goes into Node 114 if INCLASS2 <= 4.5000000
+ INCLASS2 mean = 3.8538856
+ ----------------------------
+Node 114: Intermediate node
+ A case goes into Node 228 if OCCUCOD1 = "3", "6", "7", "9", "10"
+ OCCUCOD1 mode = "10"
+ ----------------------------
+Node 228: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      26.38        2.433       0.2077E-01
+ INTRDVX mean = 26.3841
+ ----------------------------
+Node 229: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      97.49        1.809       0.7857E-01
+ INTRDVX mean = 97.4856
+ ----------------------------
+Node 115: Intermediate node
+ A case goes into Node 230 if UNISTRQ = "4", "10"
+ UNISTRQ mode = "10"
+ ----------------------------
+Node 230: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      78.58        2.950       0.6983E-02
+ INTRDVX mean = 78.5829
+ ----------------------------
+Node 231: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      611.4        1.750       0.9146E-01
+ INTRDVX mean = 611.352
+ ----------------------------
+Node 29: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      266.8        3.051       0.4148E-02
+ INTRDVX mean = 266.799
+ ----------------------------
+Node 15: Intermediate node
+ A case goes into Node 30 if CUTENURE = "1"
+ CUTENURE mode = "1"
+ ----------------------------
+Node 30: Intermediate node
+ A case goes into Node 60 if DIVISION = "1", "7", "NA"
+ DIVISION mode = "5"
+ ----------------------------
+Node 60: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      6973.        1.118       0.2745    
+ INTRDVX mean = 6973.48
+ ----------------------------
+Node 61: Intermediate node
+ A case goes into Node 122 if PSU = "NA", "S23A", "S48B", "S49D"
+ PSU mode = "NA"
+ ----------------------------
+Node 122: Intermediate node
+ A case goes into Node 244 if ALCBEVPQ <= 255.00000
+ ALCBEVPQ mean = 179.02235
+ ----------------------------
+Node 244: Intermediate node
+ A case goes into Node 488 if EDUC_REF <= 14.500000
+ EDUC_REF mean = 14.619715
+ ----------------------------
+Node 488: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      74.84        1.307       0.2030    
+ INTRDVX mean = 74.8428
+ ----------------------------
+Node 489: Intermediate node
+ A case goes into Node 978 if HOUSOPCQ <= 91.500000
+ HOUSOPCQ mean = 595.07241
+ ----------------------------
+Node 978: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      177.7        2.925       0.6188E-02
+ INTRDVX mean = 177.654
+ ----------------------------
+Node 979: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      517.4        2.374       0.2557E-01
+ INTRDVX mean = 517.447
+ ----------------------------
+Node 245: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1516.        2.633       0.1430E-01
+ INTRDVX mean = 1515.69
+ ----------------------------
+Node 123: Intermediate node
+ A case goes into Node 246 if PROPTXCQ <= 379.16665
+ PROPTXCQ mean = 264.42774
+ ----------------------------
+Node 246: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      59.47        4.006       0.2692E-03
+ INTRDVX mean = 59.4690
+ ----------------------------
+Node 247: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      109.7        4.152       0.3353E-03
+ INTRDVX mean = 109.669
+ ----------------------------
+Node 31: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1897.        3.436       0.1612E-02
+ INTRDVX mean = 1896.57
+ ----------------------------
+ Proportion of variance (R-squared) explained by tree model: 0.4112
  
- Observed and fitted values are stored in cons.fit
- LaTeX code for tree is in cons.tex
+ Observed and fitted values are stored in cons.tree
  R code is stored in cons.r
- Split and fit variable names are stored in cons.split
- Elapsed time in seconds: 58.175
+ Split and fit variable names are stored in cons.fit
+ Elapsed time in seconds: 14.224
