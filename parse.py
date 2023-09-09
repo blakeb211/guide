@@ -59,14 +59,16 @@ class Settings():
     split_vars = None
     fit_vars = None
     m_variables = None
-    MAX_DEPTH = 12
-    MIN_SAMPLES_LEAF = 24
+    MAX_DEPTH = None 
+    MIN_SAMPLES_LEAF = None 
     idx_active = None
 
-    def __init__(self, data_dir, dsc_file, model):
+    def __init__(self, data_dir, dsc_file, model, max_depth=12, min_samples_leaf=24):
         self.data_dir = data_dir
         self.model = model
         self.dsc_file = dsc_file
+        self.MAX_DEPTH = max_depth
+        self.MIN_SAMPLES_LEAF = min_samples_leaf
         assert os.path.exists(self.data_dir +
                               self.dsc_file), f"{self.dsc_file} not found"
 
@@ -231,7 +233,7 @@ def parse_data(settings : Settings):
     print(
         f"Weight variable range    : {df[weight_var].min():.4e}, {df[weight_var].max():.4e}")
     print()
-    print(col_data)
+    print(col_data[col_data.var_role != 'x'])
     print(
         f"Number of split variables: {len(_variables_by_role(col_data, 'c')) + len(_variables_by_role(col_data, 'S'))}")
     x_vars = _variables_by_role(col_data, 'x')

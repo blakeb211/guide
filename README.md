@@ -1,8 +1,7 @@
 # Minimum Viable Product
-1. write test cases for output 
-1. baseball dataset
-1. consumer expenditure
-1. port over tree plotter
+1. write split var test case
+1. write split point test case
+1. debug
 
 # Done
 1. write predict

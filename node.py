@@ -6,6 +6,7 @@ from enum import Enum
 from parse import Settings, RegressionType, SplitPointMethod
 from typing import List
 from pprint import pprint
+import logging
 import heapq
 import pdb
 import numpy as np
@@ -15,6 +16,9 @@ from collections import defaultdict
 from itertools import combinations, chain
 from dill.source import getsource
 import pandas as pd
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('My Logger')
 
 class TerminalData:
     def __init__(self, value):
@@ -33,6 +37,7 @@ class Node:
     """ Regression tree """
 
     def __init__(self, type_specific_data, depth: int, parent, indices):
+        
         assert isinstance(type_specific_data, TerminalData) or isinstance(type_specific_data, InternalData) or type_specific_data is None
         assert isinstance(depth, int)
         assert isinstance(parent, Node) or parent is None 
@@ -203,8 +208,8 @@ class Model:
                 """
                 x_uniq = _df[col].drop_duplicates().sort_values().values
                 max_r = round(x_uniq.shape[0] / 1.5)
-                max_r = min([max_r, 10]) 
-                print(f"finding best combination of categoricals with max_r = {max_r}")
+                max_r = min([max_r, 5]) 
+                logger.log(level = logging.DEBUG, msg = f"finding best combination of categoricals with max_r = {max_r}")
                 # avoid combinatorial explosion
                 results = {'set' : [],'sum_binom_variance' : []}
                 for subset in chain(*(combinations(x_uniq, r) for r in range(1, max_r + 1))):
@@ -249,7 +254,7 @@ class Model:
     def _get_best_split(self, node) -> str:
         """ Find best unbiased splitter among self.split_vars. """
         # @TODO: Add interaction tests
-        print(f"_get_best_split() running with {node.idx.shape[0]} instances")
+        logger.log(level = logging.DEBUG, msg = f"_get_best_split() running with {node.idx.shape[0]} instances")
         node.y_mean = (self.df.loc[node.idx, self.tgt] *
                        self.df.loc[node.idx, self.weight_var]).sum() / self.df.loc[node.idx, self.weight_var].sum()
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean
@@ -341,7 +346,7 @@ class Model:
                     predicate=predicate, na_goes_left=na_left)
 
             # Split node
-            print(f"splitting node. curr node depth = {curr.depth}. left size = {len(left)}  right size = {len(right)}")
+            logger.log(level = logging.DEBUG, msg = f"splitting node. curr node depth = {curr.depth}. left size = {len(left)}  right size = {len(right)}")
             left_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=left)
             right_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=right)
             curr.left = left_node
@@ -353,10 +358,10 @@ class Model:
 
         # Tree finished building
         self.node_list = node_list
-        print(f"nodelist = {node_list} \n stack = {stack}")
+        logger.log(level = logging.DEBUG, msg = f"nodelist = {node_list} \n stack = {stack}")
         
         for i in node_list:
-            print(str(i))
+            logger.log(level=logging.DEBUG, msg = str(i))
 
     def _prune(node):
         """
