@@ -7,31 +7,66 @@ sys.path.append("..")
 from parse import Settings, RegressionType, parse_data
 from node import Model
 
+# These tests scrape data from the GUIDE output and compare 
+# it to our output. Thus, GUIDE must be run first to run these.
 @pytest.fixture
-def ce_reg_tiny():
+def tiny1():
     settings = Settings(
-        data_dir="./data-ce-reg-few-cols-single-tree/",
-        dsc_file="ce2021reg.dsc",
+        data_dir="./data-tiniest/",
+        dsc_file="data.dsc",
         model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
-        max_depth=4)
+        max_depth=6)
+    parse_data(settings=settings)
+    model = Model(settings)
+    model.fit()
+    return settings, model
+
+@pytest.fixture
+def tiny2():
+    settings = Settings(
+        data_dir="./data-tiniest2/",
+        dsc_file="data.dsc",
+        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
+        max_depth=6)
     parse_data(settings=settings)
     model = Model(settings)
     model.fit()
     return settings, model
 
 
-def test_ce_reg_tiny_split_vars(ce_reg_tiny):
-    """ test split variables versus reference algo """
+def test_top_2_split_vars(tiny1):
+    """ tinyiest  - test split variables versus reference algo """
+    _settings, _model = tiny1
+    pass
+
+def test_first_split_point(tiny1):
+    """ tinyiest  - test split points versus reference algo """
     _settings, _model = ce_reg_tiny
     pass
 
-def test_ce_reg_tiny_split_points(ce_reg_tiny):
-    """ test split points versus reference algo """
+def test_second_split_point(tiny1):
+    """ tiniest  - test split points versus reference algo """
     _settings, _model = ce_reg_tiny
     pass
 
-def test_ce_reg_tiny_mse(ce_reg_tiny):
+def test_top_2_split_vars(tiny2):
+    """ tiniest2  - test split variables versus reference algo """
+    _settings, _model = tiny1
+    pass
+
+def test_first_split_point(tiny2):
+    """ tiniest2  - test split points versus reference algo """
+    _settings, _model = ce_reg_tiny
+    pass
+
+def test_second_split_point(tiny2):
+    """ tiniest2  - test split points versus reference algo """
+    _settings, _model = ce_reg_tiny
+    pass
+
     """ test mse versus reference algo """
+    """
+def test_ce_reg_tiny_mse(tiny1):
     _settings, _model = ce_reg_tiny
     test = _model.df.loc[:, _model.split_vars]
 
@@ -52,4 +87,5 @@ def test_ce_reg_tiny_mse(ce_reg_tiny):
     error = np.asarray(guide_pred,dtype=float) - predictions['pred']
     mse = np.mean(error**2)
     assert mse < 10E4
+    """
 

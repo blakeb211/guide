@@ -1,0 +1,153 @@
+             GGG   U   U  I  DDDD   EEEE
+            G   G  U   U  I  D   D  E
+            G      U   U  I  D   D  E
+            G  GG  U   U  I  D   D  EEE
+            G   G  U   U  I  D   D  E
+            G   G  U   U  I  D   D  E
+             GGG    UUU   I  DDDD   EEEE
+   
+ GUIDE Classification and Regression Trees and Forests
+ Version 41.2 (Build date: April 9, 2023)          
+ Compiled with gfortran 11.3.0 on Ubuntu 22.04.2                       
+ Copyright (c) 1997-2023 Wei-Yin Loh. All rights reserved.
+ This software is based upon work partially supported by the U.S. Army Research Office,
+ National Science Foundation, National Institutes of Health,
+ Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
+  
+ This job was started on 10/28/23 at 19:36
+  
+ Least squares regression tree
+ No pruning
+ Data description file: data.dsc
+ Training sample file: data.txt
+ Missing value code: NA
+ Records in data file start on line 2
+ 2 N variables changed to S
+ D variable is target
+ Piecewise constant model
+ Number of records in data file: 12
+ Length of longest entry in data file: 16
+  
+ Summary information for training sample of size 12
+ d=dependent, b=split and fit cat variable using indicator variables,
+ c=split-only categorical, i=fit-only categorical (via indicators),
+ s=split-only numerical, n=split and fit numerical, f=fit-only numerical,
+ m=missing-value flag variable, p=periodic variable, w=weight
+                                                  #Codes/           
+                                                  Levels/           
+  Column  Name            Minimum      Maximum    Periods   #Missing
+       1  target     d    1.851        9.450    
+       2  num1       s    1.000        3.000    
+       3  num2       s    1.000        2.000    
+       4  cat1       c                                  3
+  
+      Total  #cases w/   #missing
+     #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
+         12          0          0        0        0        0        2
+     #P-var   #M-var   #B-var   #C-var   #I-var
+          0        0        0        1        0
+ No weight variable in data file
+ Number of cases used for training: 12
+ Number of split variables: 3
+  
+ Constant fitted to cases with missing values in regressor variables
+ No nodewise interaction tests
+ Split values for N and S variables based on exhaustive search
+ Maximum number of split levels: 6
+ Minimum node sample size: 2
+ Top-ranked variables and 1-df chi-squared values at root node
+      1  0.9156E+01   cat1
+
+  
+ Structure of final tree. Each terminal node is marked with a T.
+  
+ D-mean is mean of target in the node
+ Cases fit give the number of cases used to fit node
+ MSE is residual sum of squares divided by number of cases in node
+        Node    Total    Cases Matrix    Node      Node          Split
+        label   cases      fit  rank    D-mean     MSE           variable
+           1       12       12     1  6.087E+00  7.837E+00   cat1 
+           2        6        6     1  8.587E+00  4.795E-01   num1 
+           4T       2        2     1  9.416E+00  2.300E-03   - 
+           5T       4        4     1  8.172E+00  1.113E-01   - 
+           3        6        6     1  3.587E+00  1.761E+00   cat1 
+           6T       3        3     1  2.553E+00  5.976E-01   - 
+           7T       3        3     1  4.621E+00  5.976E-01   - 
+  
+ Number of terminal nodes of final tree: 4
+ Total number of nodes of final tree: 7
+ Second best split variable (based on curvature test) at root node is num2
+  
+ Regression tree:
+ For categorical variable splits, values not in training data go to the right
+  
+ Node 1: cat1 = "3"
+   Node 2: num1 <= 1.5000000
+     Node 4: target-mean = 9.4156865
+   Node 2: num1 > 1.5000000 or NA
+     Node 5: target-mean = 8.1723145
+ Node 1: cat1 /= "3"
+   Node 3: cat1 = "1"
+     Node 6: target-mean = 2.5528586
+   Node 3: cat1 /= "1"
+     Node 7: target-mean = 4.6206851
+ 
+ ***************************************************************
+  
+ WARNING: p-values below not adjusted for split search. For a bootstrap solution see:
+  
+ 1. Loh et al. (2016), "Identification of subgroups with differential treatment effects
+ for longitudinal and multiresponse variables", Statistics in Medicine, v.35, 4837-4855.
+  
+ 2. Loh et al. (2019), "Subgroups from regression trees with adjustment for prognostic
+ effects and post-selection inference", Statistics in Medicine, v.38, 545-557.
+  
+ 3. Loh and Zhou (2020), "The GUIDE approach to subgroup identification",
+ in "Design and Analysis of Subgroups with Biopharmaceutical Applications", Springer, pp.147-165.
+  
+Node 1: Intermediate node
+ A case goes into Node 2 if cat1 = "3"
+ cat1 mode = "3"
+ Coefficients of least squares regression function:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      6.087        7.532       0.1153E-04
+ target mean = 6.08677
+ ----------------------------
+Node 2: Intermediate node
+ A case goes into Node 4 if num1 <= 1.5000000
+ num1 mean = 2.0000000
+ ----------------------------
+Node 4: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      9.416        277.6        0.000    
+ target mean = 9.41569
+ ----------------------------
+Node 5: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      8.172        48.99       0.1873E-04
+ target mean = 8.17231
+ ----------------------------
+Node 3: Intermediate node
+ A case goes into Node 6 if cat1 = "1"
+ cat1 mode = "1"
+ ----------------------------
+Node 6: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      2.553        5.720       0.2923E-01
+ target mean = 2.55286
+ ----------------------------
+Node 7: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      4.621        10.35       0.9202E-02
+ target mean = 4.62069
+ ----------------------------
+ Proportion of variance (R-squared) explained by tree model: 0.9684
+ 
+ Observed and fitted values are stored in data.node
+ R code is stored in data.r
+ Split and fit variable names are stored in data.split_and_fit
+ Elapsed time in seconds: 0.41920E-2
