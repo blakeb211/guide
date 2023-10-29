@@ -48,7 +48,6 @@ def parse_output_file_linear_piecewise_constant():
     NODECNT1 = "Number of terminal nodes of final tree:"
     NODECNT2 = "Total number of nodes of final tree:"
     SECT3 = "Regression tree:"
-    pass
 
 @pytest.fixture
 def tiny1():
