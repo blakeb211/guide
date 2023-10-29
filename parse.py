@@ -164,8 +164,13 @@ def parse_data(settings : Settings):
     if weight_var != list():
         weight_var = weight_var[0]
         print(f"Weight variable found    : {weight_var}")
-    idx_zero_or_negative_weight = df[df[_variables_by_role(col_data, 'w')[
-        0]] <= 0.0].index
+
+    wgt_vars = _variables_by_role(col_data, 'w')
+    if (len(wgt_vars) == 0):
+        idx_zero_or_negative_weight = []
+    else:
+        idx_zero_or_negative_weight = df[df[_variables_by_role(col_data, 'w')[
+            0]] <= 0.0].index
     if len(idx_zero_or_negative_weight) > 0:
         print(
             f"Dropped rows w/ weight < 0   : {len(idx_zero_or_negative_weight)}")
