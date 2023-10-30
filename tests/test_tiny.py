@@ -66,11 +66,13 @@ def parse_output_file_linear_piecewise(data_dir, fname):
     SECT1 = "Top-ranked variables and 1-df chi-squared values"
     SECT2 = "D-mean is mean of target in the node"
     SECT3 = "Regression tree:"
+    SECT3END = "***********"
     with open(data_dir + fname) as f: 
         lines = f.readlines()
         top_ranked_root = []
         cases_per_node = {}
         mse_per_node = {}
+        tree_text = ""
         for idx, l in enumerate(lines):
             # Load top two ranked variables for splitting root
             if l.strip().startswith(SECT1):
@@ -93,9 +95,26 @@ def parse_output_file_linear_piecewise(data_dir, fname):
                         index = index + 1
                     else:
                         break
+            if l.strip().startswith(SECT3):
+                index = idx
+                end_index = -1
+                start_found = False
+                while (True):
+                    if start_found == False and lines[index].strip().startswith("Node 1"):
+                        idx = index
+                        start_found = True
+                    if lines[index].strip().startswith(SECT3END):
+                        end_index = index 
+                        break
+                    index = index + 1
+                # grab the tree text into a list
+                tree_text = lines[idx:end_index-1]
+                break
+
         print(top_ranked_root)
         print(cases_per_node)
         print(mse_per_node)
+        print(tree_text)
         assert len(cases_per_node) == len(mse_per_node)
         return top_ranked_root, cases_per_node, mse_per_node
         
