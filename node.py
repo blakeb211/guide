@@ -255,8 +255,11 @@ class Model:
         """ Find best unbiased splitter among self.split_vars. """
         # @TODO: Add interaction tests
         logger.log(level = logging.DEBUG, msg = f"_get_best_split() running with {node.idx.shape[0]} instances")
-        node.y_mean = (self.df.loc[node.idx, self.tgt] *
-                       self.df.loc[node.idx, self.weight_var]).sum() / self.df.loc[node.idx, self.weight_var].sum()
+        if self.weight_var == list():
+            node.y_mean = self.df.loc[node.idx, self.tgt].mean()
+        else:
+            node.y_mean = (self.df.loc[node.idx, self.tgt] *
+                        self.df.loc[node.idx, self.weight_var]).sum() / self.df.loc[node.idx, self.weight_var].sum()
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean
         stat_pval = {
             col: self._calc_chi2_stat(
@@ -331,7 +334,6 @@ class Model:
             left = _df[_df[split_var].map(predicate)].index.values
             right = _df[~_df[split_var].map(predicate)].index.values
             assert left.shape[0] + right.shape[0] == curr.idx.shape[0]
-
 
             if left.shape[0] < self.MIN_SAMPLES_LEAF or right.shape[0] < self.MIN_SAMPLES_LEAF \
                     or curr.depth == self.MAX_DEPTH:
