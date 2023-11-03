@@ -116,7 +116,7 @@ def parse_output_file_linear_piecewise(data_dir, fname):
         print(mse_per_node)
         print(tree_text)
         assert len(cases_per_node) == len(mse_per_node)
-        return top_ranked_root, cases_per_node, mse_per_node
+        return top_ranked_root, cases_per_node, mse_per_node, tree_text
         
 
 @pytest.fixture(scope='session')

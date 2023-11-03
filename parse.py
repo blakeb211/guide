@@ -157,7 +157,11 @@ def parse_data(settings : Settings):
 
     # Remove rows of dataframe with non-positive weight or missing values in d, e, t, r or z variables)
     # @NOTE incomplete. Cases handled so far: missing value in d, nonpositive weight
-    idx_missing_d = df[df[dependent_var].isnull() == True].index
+    dependent_var_null_rows = df[df[dependent_var].isnull() == True]
+    if len(dependent_var_null_rows) > 0:
+        idx_missing_d = df[df[dependent_var].isnull() == True].index
+    else:
+        idx_missing_d = pd.Series([])
     print(f"Dropped missing d rows   : {len(idx_missing_d)}")
 
     weight_var = _variables_by_role(col_data, 'w')
@@ -167,7 +171,7 @@ def parse_data(settings : Settings):
 
     wgt_vars = _variables_by_role(col_data, 'w')
     if (len(wgt_vars) == 0):
-        idx_zero_or_negative_weight = []
+        idx_zero_or_negative_weight = pd.Series([])
     else:
         idx_zero_or_negative_weight = df[df[_variables_by_role(col_data, 'w')[
             0]] <= 0.0].index
@@ -210,7 +214,7 @@ def parse_data(settings : Settings):
     # active indexes used for model fitting
     idx_active = set(df.index.values.flatten()) - set(idx_missing_d.values.flatten()) - set(idx_zero_or_negative_weight.values.flatten())
     idx_active = list(idx_active)
-    idx_active = np.asarray(idx_active)
+    idx_active = pd.Series(idx_active).values
     # Tally levels for categoricals
     # tell user that separate categories will be created
     # @TODO: Match levels output for 'm' and 's' variables with the reference.
@@ -235,8 +239,9 @@ def parse_data(settings : Settings):
         print(f"Missing values found in categorical variables. Separate categories will be created.")
 
     # Report min, max of weights,
-    print(
-        f"Weight variable range    : {df[weight_var].min():.4e}, {df[weight_var].max():.4e}")
+    if (weight_var != list()):
+        print(
+            f"Weight variable range    : {df[weight_var].min():.4e}, {df[weight_var].max():.4e}")
     print()
     print(col_data[col_data.var_role != 'x'])
     print(
