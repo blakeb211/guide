@@ -1,13 +1,9 @@
 # Minimum Viable Product
-1. write split var test case
-1. write split point test case
-1. debug
+1. match reference with greedy split point of unweighted numeric variables with no missing values 
+  1. write predict
+1. match reference for unweighted greedy split of categoricals with no missing values 
 
 # Done
-1. write predict
-1. write fit
-1. write split point method G for categorical
-1. write split point method M
 1. What does M column - missing value flag (codes for missing values)
   - these are only present in some datasets and not present in the 
   final tree for ce2021reg.dsc so we acn save it as a future feature.

@@ -1,23 +1,41 @@
 ## Function for predicting least-squares mean of target
-## Code produced by GUIDE 41.2 on 10/28/23 at 19:36
+## Code produced by GUIDE 41.2 on 11/23/23 at 14:14
 predicted <- function(){
- catvalues <- c("3")
- if(cat1 %in% catvalues){
-   if(!is.na(num1) & num1 <= 1.50000000000 ){
-     nodeid <- 4
-     predict <- 9.41568651168
+ if(!is.na(num2) & num2 <= 4.50000000000 ){
+   if(!is.na(num2) & num2 <= 2.50000000000 ){
+     if(!is.na(num2) & num2 <= 1.50000000000 ){
+       nodeid <- 8
+       predict <- 4.05000000000
+     } else {
+       nodeid <- 9
+       predict <- 6.22500000000
+     }
    } else {
-     nodeid <- 5
-     predict <- 8.17231453924
+     if(!is.na(num2) & num2 <= 3.50000000000 ){
+       nodeid <- 10
+       predict <- 7.70000000000
+     } else {
+       nodeid <- 11
+       predict <- 10.2000000000
+     }
    }
  } else {
-   catvalues <- c("1")
-   if(cat1 %in% catvalues){
-     nodeid <- 6
-     predict <- 2.55285864238
+   if(!is.na(num2) & num2 <= 7.50000000000 ){
+     if(!is.na(num2) & num2 <= 5.50000000000 ){
+       nodeid <- 12
+       predict <- 11.8500000000
+     } else {
+       nodeid <- 13
+       predict <- 15.3500000000
+     }
    } else {
-     nodeid <- 7
-     predict <- 4.62068508440
+     if(!is.na(num1) & num1 <= 3.35000000000 ){
+       nodeid <- 14
+       predict <- 19.4666666667
+     } else {
+       nodeid <- 15
+       predict <- 20.7500000000
+     }
    }
  }
  return(c(nodeid,predict))
@@ -36,7 +54,7 @@ node <- NULL
 pred <- NULL
 for(i in 1:nrow(newdata)){
     num1 <- as.numeric(newdata$num1[i])
-    cat1 <- as.character(newdata$cat1[i])
+    num2 <- as.numeric(newdata$num2[i])
     tmp <- predicted()
     node <- c(node,as.numeric(tmp[1]))
     pred <- c(pred,tmp[2])

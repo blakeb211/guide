@@ -36,7 +36,7 @@ class InternalData:
 class Node:
     """ Regression tree """
 
-    def __init__(self, type_specific_data, depth: int, parent, indices):
+    def __init__(self, type_specific_data, depth: int, parent, indices, node_num=1):
         
         assert isinstance(type_specific_data, TerminalData) or isinstance(type_specific_data, InternalData) or type_specific_data is None
         assert isinstance(depth, int)
@@ -47,6 +47,7 @@ class Node:
         self.right = None
         self.depth = depth
         self.idx = indices
+        self.node_num = node_num 
 
     def __str__(self):
         name = "Internal Node" if isinstance(self.type_specific_data, InternalData) else "Terminal Node"
@@ -99,7 +100,13 @@ class Model:
             depth=0,
             parent=None,
             indices=self.idx_active)
+        self.next_node_num = 1
 
+    def _get_next_node_num(self):
+        ret_val = self.next_node_num
+        self.next_node_num = self.next_node_num + 1
+        return ret_val
+    
     def _calc_chi2_stat(self, y_mean, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
         Calculate chi2_contingency and return p-value """
@@ -175,25 +182,24 @@ class Model:
                 # numeric
                 x_uniq = _df[col].drop_duplicates().sort_values()
                 cutpoints = x_uniq[:-1] + np.diff(x_uniq)/2
-                smallest_tot_sse = None # total weighted sse of the node - left - right
-                cut_with_smallest_sse = None
+                greatest_tot_sse = None
+                best_cut = None
+                node_sse = ((_df[self.tgt] - _df[self.tgt].mean())**2).sum()
                 for cut in cutpoints:
-                    right_idx = _df[_df[col] < cut].index.values
-                    left_idx = _df[_df[col] >= cut].index.values
-                    tot_items = len(right_idx) + len(left_idx)
-                    weights = tot_items / tot_items, len(right_idx)/tot_items, len(left_idx)/tot_items
-                    # Is this correct calculation of sse using the child node means to get the sse on the left and right?
-                    left_resid = _df.loc[left_idx, self.tgt] - _df.loc[left_idx, self.tgt].mean()
-                    right_resid = _df.loc[right_idx, self.tgt] - _df.loc[right_idx, self.tgt].mean()
-                    node_resid = _df[self.tgt].values - node.y_mean
-                    tot_sse = weights[0]*_sse(node_resid) - weights[1] * \
-                        _sse(right_resid) - weights[2]*_sse(left_resid)
-                    if smallest_tot_sse == None or smallest_tot_sse > tot_sse:
-                        smallest_tot_sse = tot_sse
-                        cut_with_smallest_sse = cut
-          
-                # returns None for cut_with_smallest_sse if all values are same for the column
-                return cut_with_smallest_sse, True
+                    right_idx = _df[_df[col] > cut].index
+                    left_idx = _df.drop(right_idx, axis=0).index
+                    left_mean = _df.loc[left_idx][self.tgt].mean()
+                    right_mean = _df.loc[right_idx][self.tgt].mean()
+                    tot_items = len(left_idx) + len(right_idx)
+                    left_sse = ((_df.loc[left_idx][self.tgt] - left_mean)**2).sum()
+                    right_sse = ((_df.loc[right_idx][self.tgt] - right_mean)**2).sum()
+                    weights = 1, len(left_idx) / tot_items, len(right_idx) / tot_items
+                    cut_sse = weights[0]*node_sse - weights[1]*left_sse - weights[2]*right_sse
+                    if greatest_tot_sse == None or cut_sse > greatest_tot_sse:
+                        greatest_tot_sse = cut_sse
+                        best_cut = cut
+                return best_cut, False
+
             case 'c':
                 # categorical
                 """
@@ -275,11 +281,9 @@ class Model:
         #                   neg
         top_3_keys = {key: value for key, value in stat_pval.items(
         ) if value in heapq.nsmallest(3, stat_pval.values())}
-        top_3_keys = sorted(top_3_keys, key=lambda x: x[1])
-        # hopefully heapq is faster!
-        # sorted_items = sorted(stat_pval.items(), key=lambda item: item[1])
-        col = top_3_keys[0]
-        return top_3_keys[0]
+        top_3_keys = sorted(top_3_keys.items(), key=lambda x: x[1])
+        logger.log(level = logging.DEBUG, msg = f"top cols = {top_3_keys}")
+        return top_3_keys[0][0]
 
     def fit(self):
 
@@ -288,6 +292,7 @@ class Model:
         stack = [None]*200     # nodes that need processed
         stack.clear()
         node_list.clear()
+        self.top_node.node_num = self._get_next_node_num()
         stack.append(self.top_node)
         
         assert self.model_type == RegressionType.LINEAR_PIECEWISE_CONSTANT
@@ -307,12 +312,10 @@ class Model:
             elif self.split_point_method == SplitPointMethod.Systematic:
                 raise "not implemented"
 
-
             if split_point == None:
                 curr.type_specific_data = TerminalData(value = curr.y_mean)
                 node_list.append(curr) 
                 continue
-
 
             assert isinstance(curr.idx, np.ndarray)
             _df = self.df.loc[curr.idx]
@@ -349,21 +352,35 @@ class Model:
 
             # Split node
             logger.log(level = logging.DEBUG, msg = f"splitting node. curr node depth = {curr.depth}. left size = {len(left)}  right size = {len(right)}")
-            left_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=left)
-            right_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=right)
+            left_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=left, node_num=self._get_next_node_num())
+            right_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=right, node_num=self._get_next_node_num())
             curr.left = left_node
             curr.right = right_node
             stack.append(left_node)
             stack.append(right_node)
             node_list.append(curr)
 
+    def _print_tree(self, node, depth):
+        """ recursively print out the tree like the reference output """
+        # @TODO: Add support for categoricals
+        spacer = "  "
+        # base case terminal node
+        if node.left == None and node.right == None:
+            print((depth-1)*spacer + f"Node {node.node_num}: target-mean = {node.type_specific_data.value:9f}")
+            return
+        # print left branch
+        print((depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} <= {node.type_specific_data.split_point:9f}")
+        self._print_tree(node.left, depth+1)
+        # print right branch
+        print((depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} > {node.type_specific_data.split_point:9f}")
+        self._print_tree(node.right, depth+1)
 
-        # Tree finished building
-        self.node_list = node_list
-        logger.log(level = logging.DEBUG, msg = f"nodelist = {node_list} \n stack = {stack}")
-        
-        for i in node_list:
-            logger.log(level=logging.DEBUG, msg = str(i))
+    def print(self):
+        curr_node = self.top_node
+        curr_depth = 1
+        self._print_tree(curr_node, curr_depth)
+
+
 
     def _prune(node):
         """

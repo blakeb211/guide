@@ -118,20 +118,6 @@ def parse_output_file_linear_piecewise(data_dir, fname):
         assert len(cases_per_node) == len(mse_per_node)
         return top_ranked_root, cases_per_node, mse_per_node, tree_text
         
-
-@pytest.fixture(scope='session')
-def tiny1():
-    settings = Settings(
-        data_dir="./data-tiniest/",
-        dsc_file="data.dsc",
-        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
-        max_depth=6, min_samples_leaf=2)
-    parse_data(settings=settings)
-    model = Model(settings)
-    model.fit()
-    ref_data = parse_output_file_linear_piecewise(settings.data_dir,"cons.out")
-    return settings, model, ref_data
-
 @pytest.fixture(scope='session')
 def tiny2():
     settings = Settings(
@@ -145,9 +131,7 @@ def tiny2():
     ref_data = parse_output_file_linear_piecewise(settings.data_dir,"cons.out")
     return settings, model, ref_data
 
-
-
-def test_top_2_split_vars(tiny1):
+def test_top_2_split_vars(tiny2):
     """ tinyiest  - test split variables versus reference algo """
     _settings, _model, _ref_data  = tiny1
     pass
