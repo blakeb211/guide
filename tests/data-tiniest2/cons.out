@@ -14,7 +14,7 @@
  National Science Foundation, National Institutes of Health,
  Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
   
- This job was started on 11/23/23 at 14:14
+ This job was started on 11/24/23 at 20:47
   
  Least squares regression tree
  No pruning
@@ -25,10 +25,10 @@
  3 N variables changed to S
  D variable is target
  Piecewise constant model
- Number of records in data file: 30
+ Number of records in data file: 60
  Length of longest entry in data file: 18
   
- Summary information for training sample of size 30
+ Summary information for training sample of size 60
  d=dependent, b=split and fit cat variable using indicator variables,
  c=split-only categorical, i=fit-only categorical (via indicators),
  s=split-only numerical, n=split and fit numerical, f=fit-only numerical,
@@ -36,18 +36,18 @@
                                                   #Codes/           
                                                   Levels/           
   Column  Name            Minimum      Maximum    Periods   #Missing
-       1  target     d    3.300        21.90    
-       2  num1       s    1.000        3.900    
+       1  target     d    4.200        22.80    
+       2  num1       s    1.000        6.900    
        3  num2       s    0.000        9.000    
        4  num3       s   0.6019E-01   0.9476    
   
       Total  #cases w/   #missing
      #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
-         30          0          0        0        0        0        3
+         60          0          0        0        0        0        3
      #P-var   #M-var   #B-var   #C-var   #I-var
           0        0        0        0        0
  No weight variable in data file
- Number of cases used for training: 30
+ Number of cases used for training: 60
  Number of split variables: 3
   
  Constant fitted to cases with missing values in regressor variables
@@ -56,9 +56,9 @@
  Maximum number of split levels: 3
  Minimum node sample size: 2
  Top-ranked variables and 1-df chi-squared values at root node
-      1  0.1765E+02   num2
-      2  0.7340E+00   num3
-      3  0.2489E-01   num1
+      1  0.2245E+02   num1
+      2  0.6132E+01   num2
+      3  0.3108E-01   num3
 
   
  Structure of final tree. Each terminal node is marked with a T.
@@ -68,50 +68,50 @@
  MSE is residual sum of squares divided by number of cases in node
         Node    Total    Cases Matrix    Node      Node          Split
         label   cases      fit  rank    D-mean     MSE           variable
-           1       30       30     1  1.032E+01  3.447E+01   num2 
-           2       17       17     1  5.929E+00  5.052E+00   num2 
-           4       12       12     1  4.775E+00  1.622E+00   num2 
-           8T       8        8     1  4.050E+00  4.429E-01   num2 
-           9T       4        4     1  6.225E+00  7.092E-01   - 
-           5        5        5     1  8.700E+00  2.155E+00   num2 
-          10T       3        3     1  7.700E+00  3.100E-01   - 
-          11T       2        2     1  1.020E+01  5.000E-01   - 
-           3       13       13     1  1.605E+01  1.363E+01   num2 
-           6        8        8     1  1.360E+01  4.269E+00   num2 
-          12T       4        4     1  1.185E+01  1.257E+00   - 
-          13T       4        4     1  1.535E+01  5.367E-01   - 
-           7        5        5     1  1.998E+01  2.117E+00   num1 
-          14T       3        3     1  1.947E+01  1.923E+00   - 
-          15T       2        2     1  2.075E+01  2.645E+00   - 
+           1       60       60     1  1.183E+01  2.093E+01   num1 
+           2       29       29     1  8.559E+00  1.006E+01   num2 
+           4       21       21     1  6.971E+00  3.185E+00   num2 
+           8T      15       15     1  6.320E+00  1.730E+00   num1 
+           9T       6        6     1  8.600E+00  3.440E+00   num1 
+           5        8        8     1  1.273E+01  3.748E+00   num1 
+          10T       5        5     1  1.148E+01  1.252E+00   num3 
+          11T       3        3     1  1.480E+01  2.800E-01   - 
+           3       31       31     1  1.490E+01  1.170E+01   num2 
+           6       21       21     1  1.297E+01  3.185E+00   num2 
+          12T      15       15     1  1.232E+01  1.730E+00   num1 
+          13T       6        6     1  1.460E+01  3.440E+00   num1 
+           7       10       10     1  1.894E+01  5.120E+00   num1 
+          14T       6        6     1  1.737E+01  1.079E+00   num1 
+          15T       4        4     1  2.130E+01  1.187E+00   - 
   
  Number of terminal nodes of final tree: 8
  Total number of nodes of final tree: 15
- Second best split variable (based on curvature test) at root node is num3
+ Second best split variable (based on curvature test) at root node is num2
   
  Regression tree:
   
- Node 1: num2 <= 4.5000000
-   Node 2: num2 <= 2.5000000
-     Node 4: num2 <= 1.5000000
-       Node 8: target-mean = 4.0500000
-     Node 4: num2 > 1.5000000 or NA
-       Node 9: target-mean = 6.2250000
-   Node 2: num2 > 2.5000000 or NA
-     Node 5: num2 <= 3.5000000
-       Node 10: target-mean = 7.7000000
-     Node 5: num2 > 3.5000000 or NA
-       Node 11: target-mean = 10.200000
- Node 1: num2 > 4.5000000 or NA
-   Node 3: num2 <= 7.5000000
-     Node 6: num2 <= 5.5000000
-       Node 12: target-mean = 11.850000
-     Node 6: num2 > 5.5000000 or NA
-       Node 13: target-mean = 15.350000
-   Node 3: num2 > 7.5000000 or NA
-     Node 7: num1 <= 3.3500000
-       Node 14: target-mean = 19.466667
-     Node 7: num1 > 3.3500000 or NA
-       Node 15: target-mean = 20.750000
+ Node 1: num1 <= 3.8500000
+   Node 2: num2 <= 5.5000000
+     Node 4: num2 <= 3.5000000
+       Node 8: target-mean = 6.3200000
+     Node 4: num2 > 3.5000000 or NA
+       Node 9: target-mean = 8.6000000
+   Node 2: num2 > 5.5000000 or NA
+     Node 5: num1 <= 2.9500000
+       Node 10: target-mean = 11.480000
+     Node 5: num1 > 2.9500000 or NA
+       Node 11: target-mean = 14.800000
+ Node 1: num1 > 3.8500000 or NA
+   Node 3: num2 <= 5.5000000
+     Node 6: num2 <= 3.5000000
+       Node 12: target-mean = 12.320000
+     Node 6: num2 > 3.5000000 or NA
+       Node 13: target-mean = 14.600000
+   Node 3: num2 > 5.5000000 or NA
+     Node 7: num1 <= 5.9500000
+       Node 14: target-mean = 17.366667
+     Node 7: num1 > 5.9500000 or NA
+       Node 15: target-mean = 21.300000
  
  ***************************************************************
   
@@ -127,88 +127,88 @@
  in "Design and Analysis of Subgroups with Biopharmaceutical Applications", Springer, pp.147-165.
   
 Node 1: Intermediate node
- A case goes into Node 2 if num2 <= 4.5000000
- num2 mean = 3.9333333
+ A case goes into Node 2 if num1 <= 3.8500000
+ num1 mean = 3.9500000
  Coefficients of least squares regression function:
  Regressor    Coefficient  t-stat      p-value
- Constant      10.32        9.625       0.1050E-09
- target mean = 10.3167
+ Constant      11.83        20.04        0.000    
+ target mean = 11.8333
  ----------------------------
 Node 2: Intermediate node
- A case goes into Node 4 if num2 <= 2.5000000
- num2 mean = 1.7647059
+ A case goes into Node 4 if num2 <= 5.5000000
+ num2 mean = 3.7586207
  ----------------------------
 Node 4: Intermediate node
- A case goes into Node 8 if num2 <= 1.5000000
- num2 mean = 1.0833333
+ A case goes into Node 8 if num2 <= 3.5000000
+ num2 mean = 2.3809524
  ----------------------------
 Node 8: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      4.050        17.21       0.5484E-06
- target mean = 4.05000
+ Constant      6.320        18.61       0.2852E-10
+ target mean = 6.32000
  ----------------------------
 Node 9: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      6.225        14.78       0.6714E-03
- target mean = 6.22500
+ Constant      8.600        11.36       0.9256E-04
+ target mean = 8.60000
  ----------------------------
 Node 5: Intermediate node
- A case goes into Node 10 if num2 <= 3.5000000
- num2 mean = 3.4000000
+ A case goes into Node 10 if num1 <= 2.9500000
+ num1 mean = 2.6750000
  ----------------------------
 Node 10: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      7.700        23.95       0.1738E-02
- target mean = 7.70000
+ Constant      11.48        22.94       0.3778E-02
+ target mean = 11.4800
  ----------------------------
 Node 11: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      10.20        20.40        0.000    
- target mean = 10.2000
+ Constant      14.80        48.44       0.4258E-03
+ target mean = 14.8000
  ----------------------------
 Node 3: Intermediate node
- A case goes into Node 6 if num2 <= 7.5000000
- num2 mean = 6.7692308
+ A case goes into Node 6 if num2 <= 5.5000000
+ num2 mean = 4.0967742
  ----------------------------
 Node 6: Intermediate node
- A case goes into Node 12 if num2 <= 5.5000000
- num2 mean = 5.7500000
+ A case goes into Node 12 if num2 <= 3.5000000
+ num2 mean = 2.3809524
  ----------------------------
 Node 12: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      11.85        21.14       0.2315E-03
- target mean = 11.8500
+ Constant      12.32        36.27       0.3220E-14
+ target mean = 12.3200
  ----------------------------
 Node 13: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      15.35        41.91       0.2990E-04
- target mean = 15.3500
+ Constant      14.60        19.28       0.6920E-05
+ target mean = 14.6000
  ----------------------------
 Node 7: Intermediate node
- A case goes into Node 14 if num1 <= 3.3500000
- num1 mean = 3.1800000
+ A case goes into Node 14 if num1 <= 5.9500000
+ num1 mean = 5.6200000
  ----------------------------
 Node 14: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      19.47        24.31       0.1688E-02
- target mean = 19.4667
+ Constant      17.37        40.96       0.1636E-06
+ target mean = 17.3667
  ----------------------------
 Node 15: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      20.75        18.04        0.000    
- target mean = 20.7500
+ Constant      21.30        39.11       0.3679E-04
+ target mean = 21.3000
  ----------------------------
- Proportion of variance (R-squared) explained by tree model: 0.9818
+ Proportion of variance (R-squared) explained by tree model: 0.9211
  
  Observed and fitted values are stored in data.node
  R code is stored in data.r
  Split and fit variable names are stored in data.split_and_fit
- Elapsed time in seconds: 0.38710E-2
+ Elapsed time in seconds: 0.72000E-2

@@ -1,40 +1,40 @@
 ## Function for predicting least-squares mean of target
-## Code produced by GUIDE 41.2 on 11/23/23 at 14:14
+## Code produced by GUIDE 41.2 on 11/24/23 at 20:47
 predicted <- function(){
- if(!is.na(num2) & num2 <= 4.50000000000 ){
-   if(!is.na(num2) & num2 <= 2.50000000000 ){
-     if(!is.na(num2) & num2 <= 1.50000000000 ){
+ if(!is.na(num1) & num1 <= 3.85000000000 ){
+   if(!is.na(num2) & num2 <= 5.50000000000 ){
+     if(!is.na(num2) & num2 <= 3.50000000000 ){
        nodeid <- 8
-       predict <- 4.05000000000
+       predict <- 6.32000000000
      } else {
        nodeid <- 9
-       predict <- 6.22500000000
+       predict <- 8.60000000000
      }
    } else {
-     if(!is.na(num2) & num2 <= 3.50000000000 ){
+     if(!is.na(num1) & num1 <= 2.95000000000 ){
        nodeid <- 10
-       predict <- 7.70000000000
+       predict <- 11.4800000000
      } else {
        nodeid <- 11
-       predict <- 10.2000000000
+       predict <- 14.8000000000
      }
    }
  } else {
-   if(!is.na(num2) & num2 <= 7.50000000000 ){
-     if(!is.na(num2) & num2 <= 5.50000000000 ){
+   if(!is.na(num2) & num2 <= 5.50000000000 ){
+     if(!is.na(num2) & num2 <= 3.50000000000 ){
        nodeid <- 12
-       predict <- 11.8500000000
+       predict <- 12.3200000000
      } else {
        nodeid <- 13
-       predict <- 15.3500000000
+       predict <- 14.6000000000
      }
    } else {
-     if(!is.na(num1) & num1 <= 3.35000000000 ){
+     if(!is.na(num1) & num1 <= 5.95000000000 ){
        nodeid <- 14
-       predict <- 19.4666666667
+       predict <- 17.3666666667
      } else {
        nodeid <- 15
-       predict <- 20.7500000000
+       predict <- 21.3000000000
      }
    }
  }

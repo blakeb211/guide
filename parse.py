@@ -246,6 +246,8 @@ def parse_data(settings : Settings):
     print(col_data[col_data.var_role != 'x'])
     print(
         f"Number of split variables: {len(_variables_by_role(col_data, 'c')) + len(_variables_by_role(col_data, 'S'))}")
+    print(f"Max depth of tree: {settings.MAX_DEPTH}")
+    print(f"Min samples per node: {settings.MIN_SAMPLES_LEAF}")
     x_vars = _variables_by_role(col_data, 'x')
     settings.col_data = col_data
     settings.df = df

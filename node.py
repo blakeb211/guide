@@ -1,7 +1,8 @@
 """
 Build a tree similar to the GUIDE algorithm
 """
-
+import math
+import sys
 from enum import Enum
 from parse import Settings, RegressionType, SplitPointMethod
 from typing import List
@@ -11,11 +12,12 @@ import heapq
 import pdb
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import chi2_contingency
+from scipy.stats import chi2_contingency, chi2
 from collections import defaultdict
 from itertools import combinations, chain
 from dill.source import getsource
 import pandas as pd
+from statsmodels.sandbox.stats.multicomp import multipletests
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('My Logger')
@@ -101,40 +103,47 @@ class Model:
             parent=None,
             indices=self.idx_active)
         self.next_node_num = 1
+        self.one_df_chi2_at_root = {}
 
     def _get_next_node_num(self):
         ret_val = self.next_node_num
         self.next_node_num = self.next_node_num + 1
         return ret_val
-    
-    def _calc_chi2_stat(self, y_mean, col) -> np.float64:
+   
+
+    def _calc_chi2_stat(self, node, y_mean, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
         Calculate chi2_contingency and return p-value """
         # @NOTE: can we use pvalues as is or do I need to use modified wilson-hilferty to 
         # get the chi-squared degree 1 and rank the variables like that? The 2002 regression
         # paper says to sort based on p-values but the tutorial video part 1 says to rank
-        # based on the chi-squared degree of freedom 1. Note the video is 20 years older
+        # based on the chi-squared degree of freedom 1. Note the video is 20 years newer
         # than the paper.
-        residuals = self.df.loc[self.idx_active, self.tgt] - y_mean
-        pvalue = 999.99
+        y_mean = self.df.loc[node.idx, self.tgt].mean()
+        residuals = self.df.loc[node.idx, self.tgt] - y_mean
+        # logger.log(level = logging.DEBUG, msg = f"idx_active size in chi2_stat = {len(node.idx)}")
+        pvalue = sys.float_info.max 
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
             case 'S':
-                # Specify the number of quartiles
-                num_quartiles = 4
                 # Convert the column to a NumPy array
-                column_array = self.df.loc[self.idx_active, col].values
-                indexes = self.df.loc[self.idx_active, col].index.values
+                vals = self.df.loc[node.idx, col].values
+                indexes = self.df.loc[node.idx, col].index.values
+                
                 # Bin the quartiles
-                quartile_edges = np.percentile(
-                    column_array, [25, 50, 75, 100], method='linear')
+                if (len(residuals) >= 60):
+                    edges = np.percentile(
+                        vals, [25, 50, 75, 100], method='linear')
+                else:
+                    edges = np.percentile(
+                        vals, [100/3, 200/3, 300/3], method='linear')
                 # Bin the data using np.digitize
-                quartile_bins = np.digitize(
-                    column_array, quartile_edges, right=True)
+                bins = np.digitize(
+                    vals, edges, right=True)
                 # Create a defaultdict to store grouped indexes
                 grouped_indexes = defaultdict(list)
 
                 # Iterate through the bins and indexes arrays
-                for bin_value, index in zip(quartile_bins, indexes):
+                for bin_value, index in zip(bins, indexes):
                     grouped_indexes[bin_value].append(index)
 
                 grouped_index_keys = list(grouped_indexes.keys())
@@ -142,16 +151,28 @@ class Model:
                 chi_squared = np.zeros(shape=(2, num_groups))
                 for _bin in range(0, num_groups):
                     chi_squared[0, _bin] = (
-                        residuals[grouped_indexes[grouped_index_keys[_bin]]] >= 0).sum()
+                        residuals[grouped_indexes[grouped_index_keys[_bin]]] > 0).sum()
                     chi_squared[1, _bin] = (
-                        residuals[grouped_indexes[grouped_index_keys[_bin]]] < 0).sum()
-                pvalue = chi2_contingency(chi_squared).pvalue
+                        residuals[grouped_indexes[grouped_index_keys[_bin]]] <= 0).sum()
+
+                # @TODO add column and row sum checks
+
+                contingency_result = chi2_contingency(chi_squared, False)
+                statistic = contingency_result.statistic
+                dof = contingency_result.dof 
+                one_dof_stat = wilson_hilferty(statistic, dof)
+                # save the 1-df chi2 values at root node
+                if node.node_num == 1:
+                    self.one_df_chi2_at_root[col] = one_dof_stat
+                pvalue = pvalue_for_one_dof(one_dof_stat) 
+                return pvalue
+
             case 'c':
                 # Specify the number of columns in the contingency table
                 unique_vals = self.df.loc[self.idx_active, col].unique()  # includes NA
                 num_cat = len(unique_vals)
                 # Convert the column to a NumPy array
-                column_array = self.df.loc[self.idx_active, col].values
+                vals = self.df.loc[self.idx_active, col].values
                 indexes_by_value = self.df.loc[self.idx_active].groupby(col, dropna=False).apply(lambda group: group.index.values)
 
                 chi_squared = np.zeros(shape=(2, num_cat))
@@ -258,9 +279,14 @@ class Model:
                 return self._get_split_point_greedy(node, col)
 
     def _get_best_variable(self, node) -> str:
-        """ Find best unbiased splitter among self.split_vars. """
-        # @TODO: Add interaction tests
-        logger.log(level = logging.DEBUG, msg = f"_get_best_variable() running with {node.idx.shape[0]} instances")
+        """ Find best unbiased splitter among self.split_vars. 
+            1. Curvature tests
+            2. Interaction test (@todo)
+        """
+        if node.node_num == 2:
+            pass
+            # pdb.set_trace()
+        
         if self.weight_var == list():
             node.y_mean = self.df.loc[node.idx, self.tgt].mean()
         else:
@@ -269,20 +295,23 @@ class Model:
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean
         stat_pval = {
             col: self._calc_chi2_stat(
+                node=node, 
                 y_mean=node.y_mean,
                 col=col) for col in self.split_vars}
-        # numerical val          |  0   0.25% | 0.25 to 0.50 | 0.50 to 0.75 | 0.75 - 1.0 |
-        #                   pos
-        #                   neg
+        
+        # Bonferonni correction (uses statsmodels)
+        p_adjusted = multipletests([*stat_pval.values()], method='bonferroni')[1]
+        stat_pval = { k : p_adjusted[idx] for idx, k in enumerate(stat_pval.keys())}
 
-        # categorical val
-        #                        |   cat1     |   cat2       |    cat3      |   NA       | ... etc
-        #                   pos
-        #                   neg
         top_3_keys = {key: value for key, value in stat_pval.items(
         ) if value in heapq.nsmallest(3, stat_pval.values())}
         top_3_keys = sorted(top_3_keys.items(), key=lambda x: x[1])
-        logger.log(level = logging.DEBUG, msg = f"top cols = {top_3_keys}")
+        if node == self.top_node:
+            print()
+            print("Top-ranked variables and 1-df chi-squared values at root node")
+            for idx, (col, stat) in enumerate(self.one_df_chi2_at_root.items()):
+                print(" "*5 + f"{idx+1} {stat:4.4E} {col}")
+            print()
         return top_3_keys[0][0]
 
     def fit(self):
@@ -350,7 +379,6 @@ class Model:
                     predicate=predicate, na_goes_left=na_left)
 
             # Split node
-            logger.log(level = logging.DEBUG, msg = f"splitting node. curr node depth = {curr.depth}. left size = {len(left)}  right size = {len(right)}")
             left_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=left, node_num=self._get_next_node_num())
             right_node = Node(type_specific_data=None, depth = curr.depth + 1, parent=curr, indices=right, node_num=self._get_next_node_num())
             curr.left = left_node
@@ -452,3 +480,22 @@ class Model:
 def _sse(vals: np.ndarray):
     """ calc sum of squares """
     return np.sum(vals**2)
+
+def wilson_hilferty(stat, dof) -> np.float64:
+    """ approximately convert chi-squared with dof degrees of freedom to 1 degree of freedom """
+    w1 = (math.sqrt(2*stat) - math.sqrt(2*dof - 1) + 1)**2 / 2
+    temp = 7/9 + math.sqrt(dof)*( (stat/dof)**(1/3) - 1 + 2 / (9 * dof) )
+    w2 = max(0, temp ** 3) 
+
+    w = None
+    if stat < dof + 10 * math.sqrt(2*dof):
+        w = w2
+    elif stat >= dof + 10 * math.sqrt(2*dof) and w2 < stat:
+        w = (w1 + w2) / 2
+    else:
+        w = w1
+    return w
+
+def pvalue_for_one_dof(stat):
+    """ pvalue for a 1 dof chi squared statistic """
+    return 1 - chi2.cdf(stat, 1)
