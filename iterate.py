@@ -13,3 +13,4 @@ if __name__ == "__main__":
     model = Model(settings)
     model.fit()
     model.print()
+    model.predict_train_data(print_me = True)

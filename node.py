@@ -155,7 +155,12 @@ class Model:
                     chi_squared[1, _bin] = (
                         residuals[grouped_indexes[grouped_index_keys[_bin]]] <= 0).sum()
 
-                # @TODO add column and row sum checks
+                # Column and row sum checks
+                # @TODO remove rows or columns is they are empty
+                column_sums = np.sum(chi_squared, axis=0)
+                row_sums = np.sum(chi_squared, axis=1)
+                assert np.sum(column_sums == 0) == 0
+                assert np.sum(row_sums == 0) == 0
 
                 contingency_result = chi2_contingency(chi_squared, False)
                 statistic = contingency_result.statistic
@@ -424,12 +429,20 @@ class Model:
         """
         pass
 
-    def predict(self, test):
-        predictions = [] 
-        idxs = []
-        """ Generate model predictions """
-        for idx, row in test.iterrows():
+    def predict_train_data(self, print_me=False) -> pd.DataFrame:
+        """ Generate model predictions on train data equivalent to the data.node file """
+        predictions = pd.DataFrame(columns=["train", "node", "observed", "predicted"])
+
+        for idx, row in self.df.iterrows(): 
             curr = self.top_node    
+            train = 'n'
+            node = None 
+            observed = None 
+            predicted = None 
+
+            if idx in self.top_node.idx:
+                train = 'y'
+            
             # Get to leaf node
             while isinstance(curr.type_specific_data, InternalData):
                 feat = curr.type_specific_data.split_var
@@ -441,38 +454,18 @@ class Model:
                     curr = curr.left
                 else:
                     curr = curr.right
+                if isinstance(curr.type_specific_data, TerminalData):
+                    node = curr.node_num
+                    observed = row[self.tgt]
+                    predicted = self.df.loc[curr.idx, self.tgt].mean()
 
-            # add leaf value to predictions
-            assert isinstance(curr.type_specific_data, TerminalData)
-            predictions.append(curr.type_specific_data.value)
-            idxs.append(idx)
-        
-        assert test.shape[0] == len(predictions) and test.shape[0] == len(idxs)
+            df2 = pd.DataFrame({'train' : train, 'node' : node, 'observed' : observed, 'predicted' : predicted}, index=[idx])
+            predictions = pd.concat([predictions,df2])
 
-        return pd.DataFrame(index=idxs, columns=['pred'],data=predictions)
-    
-        """ Predict the model results for a test dataframe. 
-        self is the top node of the tree.  
-        predictions = []
-        row_idx = -1 
-        while len(predictions) < df.shape[0]:
-            row_idx += 1
-            curr_node = self
-            curr_row = df.iloc[row_idx]
-            while curr_node.type == 'node':
-                curr_feat = curr_node.feature
-                curr_cutpoint = curr_node.cutpoint
-                if curr_row[curr_feat] >= curr_cutpoint:
-                    curr_node = curr_node.left
-                else:
-                    curr_node = curr_node.right
-            # once made it here, we should be at a leaf
-            assert curr_node.type == 'leaf'
-            predictions.append(curr_node.value)
-        return np.asarray(predictions)
-        """
+        if print_me == True:
+            print()
+            print(predictions.to_string(index=False))
         return predictions
-
 
 #####################################################
 # Helper functions
