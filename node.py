@@ -182,7 +182,7 @@ class Model:
                 # numeric
                 x_uniq = _df[col].drop_duplicates().sort_values()
                 cutpoints = x_uniq[:-1] + np.diff(x_uniq)/2
-                greatest_tot_sse = None
+                greatest_tot_sse = -999
                 best_cut = None
                 node_sse = ((_df[self.tgt] - _df[self.tgt].mean())**2).sum()
                 for cut in cutpoints:
@@ -190,14 +190,14 @@ class Model:
                     left_idx = _df.drop(right_idx, axis=0).index
                     left_mean = _df.loc[left_idx][self.tgt].mean()
                     right_mean = _df.loc[right_idx][self.tgt].mean()
-                    tot_items = len(left_idx) + len(right_idx)
-                    left_sse = ((_df.loc[left_idx][self.tgt] - left_mean)**2).sum()
-                    right_sse = ((_df.loc[right_idx][self.tgt] - right_mean)**2).sum()
-                    weights = 1, len(left_idx) / tot_items, len(right_idx) / tot_items
-                    cut_sse = weights[0]*node_sse - weights[1]*left_sse - weights[2]*right_sse
-                    if greatest_tot_sse == None or cut_sse > greatest_tot_sse:
+                    nAL = len(left_idx)
+                    nAR = len(right_idx)
+                    tot_items = nAL + nAR 
+                    cut_sse = (nAL * nAR / tot_items) * (left_mean - right_mean)**2
+                    if cut_sse > greatest_tot_sse:
                         greatest_tot_sse = cut_sse
                         best_cut = cut
+                
                 return best_cut, False
 
             case 'c':
@@ -257,10 +257,10 @@ class Model:
                 # whether we are in Median or Greedy split point mode.
                 return self._get_split_point_greedy(node, col)
 
-    def _get_best_split(self, node) -> str:
+    def _get_best_variable(self, node) -> str:
         """ Find best unbiased splitter among self.split_vars. """
         # @TODO: Add interaction tests
-        logger.log(level = logging.DEBUG, msg = f"_get_best_split() running with {node.idx.shape[0]} instances")
+        logger.log(level = logging.DEBUG, msg = f"_get_best_variable() running with {node.idx.shape[0]} instances")
         if self.weight_var == list():
             node.y_mean = self.df.loc[node.idx, self.tgt].mean()
         else:
@@ -286,7 +286,6 @@ class Model:
         return top_3_keys[0][0]
 
     def fit(self):
-
         """ Build model from training data """
         node_list = [None]*200 # all nodes of tree
         stack = [None]*200     # nodes that need processed
@@ -304,7 +303,7 @@ class Model:
             curr = stack.pop(0)     
             # get split variable and split point
             na_left = None
-            split_var = self._get_best_split(node=curr)
+            split_var = self._get_best_variable(node=curr)
             if self.split_point_method == SplitPointMethod.Greedy:
                 split_point, na_left = self._get_split_point_greedy(node=curr, col=split_var)
             elif self.split_point_method == SplitPointMethod.Median:
@@ -366,13 +365,13 @@ class Model:
         spacer = "  "
         # base case terminal node
         if node.left == None and node.right == None:
-            print((depth-1)*spacer + f"Node {node.node_num}: target-mean = {node.type_specific_data.value:9f}")
+            print((depth-1)*spacer + f"Node {node.node_num} : target-mean = {node.type_specific_data.value:9f} ({len(node.idx)})")
             return
         # print left branch
-        print((depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} <= {node.type_specific_data.split_point:9f}")
+        print((depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} <= {node.type_specific_data.split_point:9f} ({len(node.idx)})")
         self._print_tree(node.left, depth+1)
         # print right branch
-        print((depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} > {node.type_specific_data.split_point:9f}")
+        print((depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} > {node.type_specific_data.split_point:9f} ({len(node.idx)})")
         self._print_tree(node.right, depth+1)
 
     def print(self):
