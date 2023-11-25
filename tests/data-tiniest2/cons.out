@@ -14,7 +14,7 @@
  National Science Foundation, National Institutes of Health,
  Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
   
- This job was started on 11/24/23 at 20:47
+ This job was started on 11/25/23 at 13:24
   
  Least squares regression tree
  No pruning
@@ -211,4 +211,4 @@ Node 15: Terminal node
  Observed and fitted values are stored in data.node
  R code is stored in data.r
  Split and fit variable names are stored in data.split_and_fit
- Elapsed time in seconds: 0.72000E-2
+ Elapsed time in seconds: 0.48690E-2

@@ -1,5 +1,5 @@
 ## Function for predicting least-squares mean of target
-## Code produced by GUIDE 41.2 on 11/24/23 at 20:47
+## Code produced by GUIDE 41.2 on 11/25/23 at 13:24
 predicted <- function(){
  if(!is.na(num1) & num1 <= 3.85000000000 ){
    if(!is.na(num2) & num2 <= 5.50000000000 ){

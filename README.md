@@ -1,10 +1,17 @@
 # Minimum Viable Product
-1. match 1-df chi squared value at root node
-1. match reference with greedy split point, unweighted numeric variables only, no interaction tests, no missing values, no bootstrap collection for piecewise constant
-1. write predict 
+1. write predict to generate node file
+1. write test that can compare node files
 1. match reference for unweighted greedy split of categoricals with no missing values 
 
 # Done
+1. match reference with greedy split point, unweighted numeric variables only, no interaction tests, no missing values, no bootstrap collection for piecewise constant
+
+# WISHLIST
+1. Categoricals
+1. Weights
+1. Pruning
+1. Missing values
+1. Match 1-df chi squared value at root node (we are close but not exact match)
 
 ## Missing values
 1. How are new categories created for missing categoricals
