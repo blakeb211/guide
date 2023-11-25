@@ -23,7 +23,6 @@
 1. What does M column - missing value flag (codes for missing values)
   - these are only present in some datasets. Save it as a future feature.
 
-
 ## Pruning
 1. How is cost complexity calculated for regression? (I have a note what 0-SE is)
   pruning on SSE of residuals
@@ -44,6 +43,7 @@ Table: Variable role meanings
 | w            | Weight                                                   |
 
 # Holistic Overview
+1. run tests with `make test` from this directory
 1. Parse creates a Settings object
 1. Model takes the settings object and builds the model
 1. Selecting split variables 

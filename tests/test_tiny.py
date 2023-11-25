@@ -84,7 +84,7 @@ def tiny2():
     predictions = model.predict_train_data()
     return settings, model, predictions
 
-def test_node_file_predictions(tiny2):
+def test_node_file_predictions_for_tiniest2(tiny2):
     """ Compare predictions of fitted model on the training data,
     including the node number they were made on. This is 
     essentially a downstream integration test of the model versus the reference. """
