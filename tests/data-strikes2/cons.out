@@ -1,0 +1,157 @@
+             GGG   U   U  I  DDDD   EEEE
+            G   G  U   U  I  D   D  E
+            G      U   U  I  D   D  E
+            G  GG  U   U  I  D   D  EEE
+            G   G  U   U  I  D   D  E
+            G   G  U   U  I  D   D  E
+             GGG    UUU   I  DDDD   EEEE
+   
+ GUIDE Classification and Regression Trees and Forests
+ Version 41.2 (Build date: April 9, 2023)          
+ Compiled with gfortran 11.3.0 on Ubuntu 22.04.2                       
+ Copyright (c) 1997-2023 Wei-Yin Loh. All rights reserved.
+ This software is based upon work partially supported by the U.S. Army Research Office,
+ National Science Foundation, National Institutes of Health,
+ Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
+  
+ This job was started on 11/26/23 at 10:53
+  
+ Least squares regression tree
+ No pruning
+ Data description file: data.dsc
+ Training sample file: data.txt
+ Missing value code: NA
+ Records in data file start on line 3
+ 2 N variables changed to S
+ D variable is strikes
+ Piecewise constant model
+ Number of records in data file: 625
+ Length of longest entry in data file: 6
+  
+ Summary information for training sample of size 625
+ d=dependent, b=split and fit cat variable using indicator variables,
+ c=split-only categorical, i=fit-only categorical (via indicators),
+ s=split-only numerical, n=split and fit numerical, f=fit-only numerical,
+ m=missing-value flag variable, p=periodic variable, w=weight
+                                                  #Codes/           
+                                                  Levels/           
+  Column  Name            Minimum      Maximum    Periods   #Missing
+       3  strikes    d    0.000        7000.    
+       4  unemp      c                                  4
+       5  inflat     c                                  3
+       6  politis    s    8.160        78.70    
+       7  union      s    0.000        1.000    
+  
+      Total  #cases w/   #missing
+     #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
+        625          0          0        2        0        0        2
+     #P-var   #M-var   #B-var   #C-var   #I-var
+          0        0        0        2        0
+ No weight variable in data file
+ Number of cases used for training: 625
+ Number of split variables: 4
+  
+ Constant fitted to cases with missing values in regressor variables
+ No nodewise interaction tests
+ Split values for N and S variables based on exhaustive search
+ Maximum number of split levels: 2
+ Minimum node sample size: 5
+ Top-ranked variables and 1-df chi-squared values at root node
+      1  0.9044E+02   unemp
+      2  0.5937E+02   union
+      3  0.1338E+02   inflat
+      4  0.3721E+01   politis
+
+  
+ Structure of final tree. Each terminal node is marked with a T.
+  
+ D-mean is mean of strikes in the node
+ Cases fit give the number of cases used to fit node
+ MSE is residual sum of squares divided by number of cases in node
+        Node    Total    Cases Matrix    Node      Node          Split
+        label   cases      fit  rank    D-mean     MSE           variable
+           1      625      625     1  3.023E+02  3.143E+05   unemp 
+           2      325      325     1  1.586E+02  1.584E+05   union 
+           4T     243      243     1  1.893E+02  1.985E+05   union 
+           5T      82       82     1  6.788E+01  2.958E+04   union 
+           3      300      300     1  4.579E+02  4.376E+05   union 
+           6T     234      234     1  5.436E+02  5.132E+05   inflat 
+           7T      66       66     1  1.541E+02  5.303E+04   politis 
+  
+ Number of terminal nodes of final tree: 4
+ Total number of nodes of final tree: 7
+ Second best split variable (based on curvature test) at root node is union
+  
+ Regression tree:
+ For categorical variable splits, values not in training data go to the right
+  
+ Node 1: unemp = "0.0", "1.0"
+   Node 2: union <= 0.81250000
+     Node 4: strikes-mean = 189.25103
+   Node 2: union > 0.81250000 or NA
+     Node 5: strikes-mean = 67.878049
+ Node 1: unemp /= "0.0", "1.0"
+   Node 3: union <= 0.62500000
+     Node 6: strikes-mean = 543.64530
+   Node 3: union > 0.62500000 or NA
+     Node 7: strikes-mean = 154.12121
+ 
+ ***************************************************************
+  
+ WARNING: p-values below not adjusted for split search. For a bootstrap solution see:
+  
+ 1. Loh et al. (2016), "Identification of subgroups with differential treatment effects
+ for longitudinal and multiresponse variables", Statistics in Medicine, v.35, 4837-4855.
+  
+ 2. Loh et al. (2019), "Subgroups from regression trees with adjustment for prognostic
+ effects and post-selection inference", Statistics in Medicine, v.38, 545-557.
+  
+ 3. Loh and Zhou (2020), "The GUIDE approach to subgroup identification",
+ in "Design and Analysis of Subgroups with Biopharmaceutical Applications", Springer, pp.147-165.
+  
+Node 1: Intermediate node
+ A case goes into Node 2 if unemp = "0.0", "1.0"
+ unemp mode = "1.0"
+ Coefficients of least squares regression function:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      302.3        13.48       0.1443E-14
+ strikes mean = 302.302
+ ----------------------------
+Node 2: Intermediate node
+ A case goes into Node 4 if union <= 0.81250000
+ union mean = 0.53961538
+ ----------------------------
+Node 4: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      189.3        6.622       0.2274E-09
+ strikes mean = 189.251
+ ----------------------------
+Node 5: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      67.88        3.574       0.5962E-03
+ strikes mean = 67.8780
+ ----------------------------
+Node 3: Intermediate node
+ A case goes into Node 6 if union <= 0.62500000
+ union mean = 0.36541667
+ ----------------------------
+Node 6: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      543.6        11.61        0.000    
+ strikes mean = 543.645
+ ----------------------------
+Node 7: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      154.1        5.437       0.8749E-06
+ strikes mean = 154.121
+ ----------------------------
+ Proportion of variance (R-squared) explained by tree model: 0.1157
+ 
+ Observed and fitted values are stored in data.node
+ R code is stored in data.r
+ Split and fit variable names are stored in data.split_and_fit
+ Elapsed time in seconds: 0.17384E-1

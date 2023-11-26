@@ -118,8 +118,8 @@ def test_node_file_predictions_for_tiny2(tiny2):
     titles_match =  _predictions.columns == reference.columns 
     train_y_or_n_matches =  _predictions.train == reference.train 
     nodes_that_cases_landed_in_match =  _predictions.node == reference.node 
-    observed_differences =  _predictions.observed - reference.observed 
-    prediction_differences =  _predictions.predicted - reference.predicted 
+    observed_differences =  np.abs(_predictions.observed - reference.observed)
+    prediction_differences = np.abs(_predictions.predicted - reference.predicted)
 
     num_cases = _predictions.shape[0]
     logger.log(logging.CRITICAL, msg = f"num cases = {num_cases} max pred diff = {prediction_differences.max():.2g}")
@@ -145,8 +145,8 @@ def test_node_file_predictions_for_strikes1(strikes1):
     titles_match =  _predictions.columns == reference.columns 
     train_y_or_n_matches =  _predictions.train == reference.train 
     nodes_that_cases_landed_in_match =  _predictions.node == reference.node 
-    observed_differences =  _predictions.observed - reference.observed 
-    prediction_differences =  _predictions.predicted - reference.predicted 
+    observed_differences =  np.abs(_predictions.observed - reference.observed)
+    prediction_differences = np.abs(_predictions.predicted - reference.predicted)
 
     num_cases = _predictions.shape[0]
     logger.log(logging.CRITICAL, msg = f"num cases = {num_cases} max pred diff = {prediction_differences.max():.2g}")

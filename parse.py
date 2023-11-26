@@ -41,39 +41,28 @@ class SplitPointMethod(Enum):
 
 # Globals
 class Settings():
-    df = None
     datafile_name = None
     dsc_file = None
-    missing_vals = list()
     datafile_start_line_idx = None
     col_data = pd.DataFrame()
     data_dir = "./regression-lsr-CE-data/"
     model = RegressionType.LINEAR_PIECEWISE_CONSTANT
-    weight_var = None
-    numeric_vars = None
-    categorical_vars = None
-    dependent_var = None
     # Variables to use for splitting and/or fitting are 
     # determined during parsing just like every other
     # model parameter.
-    split_vars = None
-    fit_vars = None
-    m_variables = None
-    MAX_DEPTH = None 
-    MIN_SAMPLES_LEAF = None 
-    idx_active = None
 
-    def __init__(self, data_dir, dsc_file, model, max_depth=12, min_samples_leaf=24):
+    def __init__(self, data_dir, dsc_file, model, max_depth=10, min_samples_leaf=6,prune_by_cv=0):
         self.data_dir = data_dir
         self.model = model
         self.dsc_file = dsc_file
         self.MAX_DEPTH = max_depth
         self.MIN_SAMPLES_LEAF = min_samples_leaf
+        self.prune_by_cv  = prune_by_cv  # holds number of SEs to prune by, default 0
         assert os.path.exists(self.data_dir +
                               self.dsc_file), f"{self.dsc_file} not found"
 
 
-def _variables_by_role(df, char: str) -> list():
+def _vars_by_role(df, char: str) -> list():
     """ Return variables names that have particular GUIDE role in the analysis """
     assert len(char) == 1, "variable roles are exactly one char long"
     return df[df['var_role'] == char].var_name.values.tolist()
@@ -151,7 +140,7 @@ def parse_data(settings : Settings):
         na_values=settings.missing_vals,
         header=int(settings.datafile_start_line_idx)-2) 
     assert df.shape[1] == col_data.shape[0], "dsc and txt file have unequal column counts"
-    dependent_var = _variables_by_role(col_data, 'd')[0]
+    dependent_var = _vars_by_role(col_data, 'd')[0]
     print(f"Number of rows datafile  : {df.shape[0]}")
     print(f"Dependent variable       : {dependent_var}")
     num_missing_in_d = df[dependent_var].isnull().sum()
@@ -166,16 +155,16 @@ def parse_data(settings : Settings):
         idx_missing_d = pd.Series([])
     print(f"Dropped missing d rows   : {len(idx_missing_d)}")
 
-    weight_var = _variables_by_role(col_data, 'w')
+    weight_var = _vars_by_role(col_data, 'w')
     if weight_var != list():
         weight_var = weight_var[0]
         print(f"Weight variable found    : {weight_var}")
 
-    wgt_vars = _variables_by_role(col_data, 'w')
+    wgt_vars = _vars_by_role(col_data, 'w')
     if (len(wgt_vars) == 0):
         idx_zero_or_negative_weight = pd.Series([])
     else:
-        idx_zero_or_negative_weight = df[df[_variables_by_role(col_data, 'w')[
+        idx_zero_or_negative_weight = df[df[_vars_by_role(col_data, 'w')[
             0]] <= 0.0].index
     if len(idx_zero_or_negative_weight) > 0:
         print(
@@ -193,7 +182,7 @@ def parse_data(settings : Settings):
     print(f"Converted {n_var_idx.shape[0]} n variables to S variables")
 
    # If column type s, w, or d add min and max missing to the col_data table
-    numeric_var_names = _variables_by_role(col_data, 'S') + _variables_by_role(col_data, 'w')
+    numeric_var_names = _vars_by_role(col_data, 'S') + _vars_by_role(col_data, 'w')
 
     _missing_vals_in_noncategorical_flag = False
     for col in numeric_var_names:
@@ -211,7 +200,7 @@ def parse_data(settings : Settings):
     if _missing_vals_in_noncategorical_flag == True:
         print(f"Missing values found in non-categorical variables.")
 
-    categorical_vars = _variables_by_role(col_data, 'c') + _variables_by_role(col_data, 'm')
+    categorical_vars = _vars_by_role(col_data, 'c') + _vars_by_role(col_data, 'm')
 
     # active indexes used for model fitting
     idx_active = set(df.index.values.flatten()) - set(idx_missing_d.values.flatten()) - set(idx_zero_or_negative_weight.values.flatten())
@@ -247,16 +236,16 @@ def parse_data(settings : Settings):
     print()
     print(col_data[col_data.var_role != 'x'])
     print(
-        f"Number of split variables: {len(_variables_by_role(col_data, 'c')) + len(_variables_by_role(col_data, 'S'))}")
+        f"Number of split variables: {len(_vars_by_role(col_data, 'c')) + len(_vars_by_role(col_data, 'S'))}")
     print(f"Max depth of tree: {settings.MAX_DEPTH}")
     print(f"Min samples per node: {settings.MIN_SAMPLES_LEAF}")
-    x_vars = _variables_by_role(col_data, 'x')
+    x_vars = _vars_by_role(col_data, 'x')
     settings.col_data = col_data
     settings.df = df
     settings.idx_active = idx_active
-    settings.split_vars = _variables_by_role(col_data, 'S') + _variables_by_role(col_data, 'c')
-    settings.fit_vars = _variables_by_role(col_data, 'n')
-    settings.categorical_vars = _variables_by_role(col_data, 'c') 
+    settings.split_vars = _vars_by_role(col_data, 'S') + _vars_by_role(col_data, 'c')
+    settings.fit_vars = _vars_by_role(col_data, 'n')
+    settings.categorical_vars = _vars_by_role(col_data, 'c') 
     settings.numeric_vars = numeric_var_names
     settings.dependent_var = dependent_var
     settings.weight_var = weight_var
