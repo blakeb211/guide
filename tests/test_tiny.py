@@ -92,6 +92,8 @@ def test_node_file_predictions_for_tiniest2(tiny2):
     reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
     titles_match =  _predictions.columns == reference.columns 
     assert titles_match.all()
+    train_y_or_n_matches =  _predictions.train == reference.train 
+    assert train_y_or_n_matches.all() 
     nodes_that_cases_landed_in_match =  _predictions.node == reference.node 
     assert nodes_that_cases_landed_in_match.all()
     observed_differences =  _predictions.observed - reference.observed 
