@@ -262,11 +262,20 @@ class Model:
                 contingency_result = chi2_contingency(chi_squared, False)
                 statistic = contingency_result.statistic
                 dof = contingency_result.dof 
-                one_dof_stat = wilson_hilferty(statistic, dof)
+
+                # statistic == 0 breaks wilson_hilferty
+                if abs(statistic - 0) > 1E-7:
+                    one_dof_stat = wilson_hilferty(statistic, dof)
+                    pvalue = pvalue_for_one_dof(one_dof_stat) 
+                else:
+                    one_dof_stat = 0.0
+                    pvalue = 1.0 
+
                 # save the 1-df chi2 values at root node
                 if node.node_num == 1:
                     self.one_df_chi2_at_root[col] = one_dof_stat
-                pvalue = pvalue_for_one_dof(one_dof_stat) 
+                    # statistic == 0 breaks wilson_hilferty
+                    pvalue = 1.0 
                 return pvalue
 
             case 'c':
