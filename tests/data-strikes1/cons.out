@@ -14,7 +14,7 @@
  National Science Foundation, National Institutes of Health,
  Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
   
- This job was started on 11/25/23 at 21:10
+ This job was started on 11/26/23 at 10:53
   
  Least squares regression tree
  No pruning
@@ -54,7 +54,7 @@
  Constant fitted to cases with missing values in regressor variables
  No nodewise interaction tests
  Split values for N and S variables based on exhaustive search
- Maximum number of split levels: 3
+ Maximum number of split levels: 2
  Minimum node sample size: 5
  Top-ranked variables and 1-df chi-squared values at root node
       1  0.9044E+02   unemp
@@ -72,22 +72,14 @@
         label   cases      fit  rank    D-mean     MSE           variable
            1      625      625     1  3.023E+02  3.143E+05   unemp 
            2      325      325     1  1.586E+02  1.584E+05   union 
-           4      243      243     1  1.893E+02  1.985E+05   union 
-           8T     186      186     1  1.672E+02  7.381E+04   union 
-           9T      57       57     1  2.612E+02  6.070E+05   politis 
-           5       82       82     1  6.788E+01  2.958E+04   union 
-          10T      60       60     1  8.287E+01  3.851E+04   politis 
-          11T      22       22     1  2.700E+01  3.500E+03   politis 
+           4T     243      243     1  1.893E+02  1.985E+05   union 
+           5T      82       82     1  6.788E+01  2.958E+04   union 
            3      300      300     1  4.579E+02  4.376E+05   union 
-           6      234      234     1  5.436E+02  5.132E+05   inflat 
-          12T      76       76     1  4.440E+02  5.737E+05   union 
-          13T     158      158     1  5.916E+02  4.805E+05   unemp 
-           7       66       66     1  1.541E+02  5.303E+04   politis 
-          14T      10       10     1  4.675E+02  1.723E+05   - 
-          15T      56       56     1  9.816E+01  1.344E+04   union 
+           6T     234      234     1  5.436E+02  5.132E+05   inflat 
+           7T      66       66     1  1.541E+02  5.303E+04   politis 
   
- Number of terminal nodes of final tree: 8
- Total number of nodes of final tree: 15
+ Number of terminal nodes of final tree: 4
+ Total number of nodes of final tree: 7
  Second best split variable (based on curvature test) at root node is union
   
  Regression tree:
@@ -95,26 +87,14 @@
   
  Node 1: unemp = "0.0", "1.0"
    Node 2: union <= 0.81250000
-     Node 4: union <= 0.62500000
-       Node 8: strikes-mean = 167.21505
-     Node 4: union > 0.62500000 or NA
-       Node 9: strikes-mean = 261.15789
+     Node 4: strikes-mean = 189.25103
    Node 2: union > 0.81250000 or NA
-     Node 5: union <= 0.93750000
-       Node 10: strikes-mean = 82.866667
-     Node 5: union > 0.93750000 or NA
-       Node 11: strikes-mean = 27.000000
+     Node 5: strikes-mean = 67.878049
  Node 1: unemp /= "0.0", "1.0"
    Node 3: union <= 0.62500000
-     Node 6: inflat = "0.0"
-       Node 12: strikes-mean = 443.96053
-     Node 6: inflat /= "0.0"
-       Node 13: strikes-mean = 591.59494
+     Node 6: strikes-mean = 543.64530
    Node 3: union > 0.62500000 or NA
-     Node 7: politis <= 28.900000
-       Node 14: strikes-mean = 467.50000
-     Node 7: politis > 28.900000 or NA
-       Node 15: strikes-mean = 98.160714
+     Node 7: strikes-mean = 154.12121
  
  ***************************************************************
   
@@ -141,77 +121,37 @@ Node 2: Intermediate node
  A case goes into Node 4 if union <= 0.81250000
  union mean = 0.53961538
  ----------------------------
-Node 4: Intermediate node
- A case goes into Node 8 if union <= 0.62500000
- union mean = 0.41512346
- ----------------------------
-Node 8: Terminal node
+Node 4: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      167.2        8.394        0.000    
- strikes mean = 167.215
+ Constant      189.3        6.622       0.2274E-09
+ strikes mean = 189.251
  ----------------------------
-Node 9: Terminal node
+Node 5: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      261.2        2.531       0.1422E-01
- strikes mean = 261.158
- ----------------------------
-Node 5: Intermediate node
- A case goes into Node 10 if union <= 0.93750000
- union mean = 0.90853659
- ----------------------------
-Node 10: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      82.87        3.271       0.1794E-02
- strikes mean = 82.8667
- ----------------------------
-Node 11: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      27.00        2.141       0.4421E-01
- strikes mean = 27.0000
+ Constant      67.88        3.574       0.5962E-03
+ strikes mean = 67.8780
  ----------------------------
 Node 3: Intermediate node
  A case goes into Node 6 if union <= 0.62500000
  union mean = 0.36541667
  ----------------------------
-Node 6: Intermediate node
- A case goes into Node 12 if inflat = "0.0"
- inflat mode = "2.0"
- ----------------------------
-Node 12: Terminal node
+Node 6: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      444.0        5.110       0.2381E-05
- strikes mean = 443.961
+ Constant      543.6        11.61        0.000    
+ strikes mean = 543.645
  ----------------------------
-Node 13: Terminal node
+Node 7: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      591.6        10.73        0.000    
- strikes mean = 591.595
+ Constant      154.1        5.437       0.8749E-06
+ strikes mean = 154.121
  ----------------------------
-Node 7: Intermediate node
- A case goes into Node 14 if politis <= 28.900000
- politis mean = 38.780303
- ----------------------------
-Node 14: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      467.5        3.562       0.6100E-02
- strikes mean = 467.500
- ----------------------------
-Node 15: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      98.16        6.335       0.4592E-07
- strikes mean = 98.1607
- ----------------------------
- Proportion of variance (R-squared) explained by tree model: 0.1295
+ Proportion of variance (R-squared) explained by tree model: 0.1157
  
  Observed and fitted values are stored in data.node
  R code is stored in data.r
  Split and fit variable names are stored in data.split_and_fit
- Elapsed time in seconds: 0.18129E-1
+ Elapsed time in seconds: 0.17384E-1

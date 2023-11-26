@@ -111,6 +111,7 @@ def parse_data(settings : Settings):
     print(f"Number of variables      : {len(col_data)}")
     role_counts = dict(Counter(col_data['var_role'].to_list()))
     print(f"Variable types           : {role_counts}")
+
     # Count number of m columns following a,c,n, and s
     m_role_association = {}
     m_variables = []
@@ -146,8 +147,9 @@ def parse_data(settings : Settings):
     """
     df = pd.read_csv(
         settings.data_dir + settings.datafile_name,
-        delimiter=" ",
-        na_values=settings.missing_vals)  # MS-DOS CSV
+        delim_whitespace=True,
+        na_values=settings.missing_vals,
+        header=int(settings.datafile_start_line_idx)-2) 
     assert df.shape[1] == col_data.shape[0], "dsc and txt file have unequal column counts"
     dependent_var = _variables_by_role(col_data, 'd')[0]
     print(f"Number of rows datafile  : {df.shape[0]}")

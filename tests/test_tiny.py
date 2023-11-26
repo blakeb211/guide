@@ -3,11 +3,15 @@ import sys
 import os
 import pdb
 import re
+import logging
 import numpy as np
 import pandas as pd
 sys.path.append("..")
 from parse import Settings, RegressionType, parse_data
 from node import Model
+
+logging.basicConfig(level=logging.CRITICAL)
+logger = logging.getLogger('Test Logger')
 
 # These tests scrape data from the GUIDE output and compare 
 
@@ -82,21 +86,73 @@ def tiny2():
     model = Model(settings)
     model.fit()
     predictions = model.predict_train_data()
+    logger.log(logging.CRITICAL, msg = f"fixture loaded")
     return settings, model, predictions
 
-def test_node_file_predictions_for_tiniest2(tiny2):
-    """ Compare predictions of fitted model on the training data,
-    including the node number they were made on. This is 
-    essentially a downstream integration test of the model versus the reference. """
+@pytest.fixture(scope='session')
+def strikes1(): 
+    settings = Settings(
+        data_dir="./data-strikes1/",
+        dsc_file="data.dsc",
+        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
+        max_depth=2, min_samples_leaf=5)
+    parse_data(settings=settings)
+    model = Model(settings)
+    model.fit()
+    predictions = model.predict_train_data()
+    logger.log(logging.CRITICAL, msg = f"fixture loaded")
+    return settings, model, predictions
+
+def test_node_file_predictions_for_tiny2(tiny2):
+    """ Compare predictions of fitted model on the training data to
+    reference software output. 
+    Case:   piecewise constant
+            no weight var
+            all numeric variables 
+            no missing values
+            no interaction test
+    """
     _settings, _model, _predictions = tiny2
     reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
+
     titles_match =  _predictions.columns == reference.columns 
-    assert titles_match.all()
     train_y_or_n_matches =  _predictions.train == reference.train 
-    assert train_y_or_n_matches.all() 
     nodes_that_cases_landed_in_match =  _predictions.node == reference.node 
-    assert nodes_that_cases_landed_in_match.all()
     observed_differences =  _predictions.observed - reference.observed 
     prediction_differences =  _predictions.predicted - reference.predicted 
+
+    num_cases = _predictions.shape[0]
+    logger.log(logging.CRITICAL, msg = f"num cases = {num_cases} max pred diff = {prediction_differences.max():.2g}")
+    
+    assert titles_match.all()
+    assert train_y_or_n_matches.all() 
+    assert nodes_that_cases_landed_in_match.all()
+    assert (observed_differences < 1E-3).all()
+    assert (prediction_differences < 1E-3).all()
+
+def test_node_file_predictions_for_strikes1(strikes1):
+    """ Compare predictions of fitted model on the training data to
+    reference software output. 
+    Case:   piecewise constant
+            no weight var
+            categoric and numeric variables 
+            no missing values
+            no interaction test
+    """
+    _settings, _model, _predictions = strikes1 
+    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
+
+    titles_match =  _predictions.columns == reference.columns 
+    train_y_or_n_matches =  _predictions.train == reference.train 
+    nodes_that_cases_landed_in_match =  _predictions.node == reference.node 
+    observed_differences =  _predictions.observed - reference.observed 
+    prediction_differences =  _predictions.predicted - reference.predicted 
+
+    num_cases = _predictions.shape[0]
+    logger.log(logging.CRITICAL, msg = f"num cases = {num_cases} max pred diff = {prediction_differences.max():.2g}")
+    
+    assert titles_match.all()
+    assert train_y_or_n_matches.all() 
+    assert nodes_that_cases_landed_in_match.all()
     assert (observed_differences < 1E-3).all()
     assert (prediction_differences < 1E-3).all()

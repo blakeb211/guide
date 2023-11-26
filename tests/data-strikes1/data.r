@@ -1,43 +1,22 @@
 ## Function for predicting least-squares mean of strikes
-## Code produced by GUIDE 41.2 on 11/25/23 at 21:10
+## Code produced by GUIDE 41.2 on 11/26/23 at 10:53
 predicted <- function(){
  catvalues <- c("0.0","1.0")
  if(unemp %in% catvalues){
    if(!is.na(union) & union <= 0.812500000000 ){
-     if(!is.na(union) & union <= 0.625000000000 ){
-       nodeid <- 8
-       predict <- 167.215053763
-     } else {
-       nodeid <- 9
-       predict <- 261.157894737
-     }
+     nodeid <- 4
+     predict <- 189.251028807
    } else {
-     if(!is.na(union) & union <= 0.937500000000 ){
-       nodeid <- 10
-       predict <- 82.8666666667
-     } else {
-       nodeid <- 11
-       predict <- 27.0000000000
-     }
+     nodeid <- 5
+     predict <- 67.8780487805
    }
  } else {
    if(!is.na(union) & union <= 0.625000000000 ){
-     catvalues <- c("0.0")
-     if(inflat %in% catvalues){
-       nodeid <- 12
-       predict <- 443.960526316
-     } else {
-       nodeid <- 13
-       predict <- 591.594936709
-     }
+     nodeid <- 6
+     predict <- 543.645299145
    } else {
-     if(!is.na(politis) & politis <= 28.9000000000 ){
-       nodeid <- 14
-       predict <- 467.500000000
-     } else {
-       nodeid <- 15
-       predict <- 98.1607142857
-     }
+     nodeid <- 7
+     predict <- 154.121212121
    }
  }
  return(c(nodeid,predict))
@@ -56,8 +35,6 @@ node <- NULL
 pred <- NULL
 for(i in 1:nrow(newdata)){
     unemp <- as.character(newdata$unemp[i])
-    inflat <- as.character(newdata$inflat[i])
-    politis <- as.numeric(newdata$politis[i])
     union <- as.numeric(newdata$union[i])
     tmp <- predicted()
     node <- c(node,as.numeric(tmp[1]))

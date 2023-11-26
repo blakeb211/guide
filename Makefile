@@ -6,4 +6,4 @@ run:
 	python3 iterate.py
 
 test:
-	cd tests && pytest -rA --log-cli-level DEBUG .
+	cd tests && pytest -rA --log-cli-level CRITICAL .
