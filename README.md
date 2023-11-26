@@ -1,10 +1,11 @@
-# Next up 
+# Todo 
 1. match reference for unweighted greedy split of categoricals with no missing values 
 
 # Done
 1. match reference with greedy split point, unweighted numeric variables only, no interaction tests, no missing values, no bootstrap collection for piecewise constant
 1. write predict to generate node file
 1. write test that can compare node files
+
 
 # WISHLIST
 1. Categoricals
@@ -13,7 +14,11 @@
 1. Interaction tests
 1. Pruning
 1. Bootstrap correction
+1. Regression beyond PIECEWISE_CONSTANT
+1. Classification
+1. Priors / Misclassification costs
 1. Match 1-df chi squared value at root node (we are close but not exact match)
+1. Reduce dependencies
 
 ## Missing values
 1. How are new categories created for missing categoricals
