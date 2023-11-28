@@ -14,7 +14,7 @@
  National Science Foundation, National Institutes of Health,
  Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
   
- This job was started on 11/26/23 at 15:46
+ This job was started on 11/27/23 at 20:02
   
  Least squares regression tree
  No pruning
@@ -53,8 +53,8 @@
  Constant fitted to cases with missing values in regressor variables
  No nodewise interaction tests
  Split values for N and S variables based on exhaustive search
- Maximum number of split levels: 10
- Minimum node sample size: 6
+ Maximum number of split levels: 7
+ Minimum node sample size: 24
  Top-ranked variables and 1-df chi-squared values at root node
       1  0.2354E+02   num1
       2  0.7121E+01   num2
@@ -75,109 +75,37 @@
           16T      29       29     1  1.404E+04  2.054E+08   - 
           17      183      183     1  7.685E+03  7.542E+07   cat1 
           34       68       68     1  9.528E+03  7.151E+07   cat1 
-          68T      22       22     1  9.767E+03  7.319E+07   - 
-          69       46       46     1  9.414E+03  7.227E+07   cat1 
-         138T      27       27     1  9.380E+03  4.766E+07   - 
-         139T      19       19     1  9.464E+03  1.118E+08   - 
+          68T      27       27     1  9.380E+03  4.766E+07   - 
+          69T      41       41     1  9.627E+03  8.877E+07   - 
           35      115      115     1  6.595E+03  7.515E+07   cat1 
-          70       30       30     1  5.045E+03  3.355E+07   cat1 
-         140T      15       15     1  4.576E+03  3.233E+07   - 
-         141T      15       15     1  5.514E+03  3.670E+07   - 
+          70T      30       30     1  5.045E+03  3.355E+07   - 
           71       85       85     1  7.141E+03  8.925E+07   cat1 
-         142T      24       24     1  7.739E+03  9.766E+07   - 
-         143       61       61     1  6.906E+03  8.731E+07   cat1 
-         286T      19       19     1  7.166E+03  1.062E+08   - 
-         287       42       42     1  6.789E+03  8.108E+07   cat1 
-         574T      27       27     1  6.834E+03  8.218E+07   - 
-         575T      15       15     1  6.707E+03  8.484E+07   - 
+         142T      42       42     1  6.789E+03  8.108E+07   - 
+         143T      43       43     1  7.486E+03  9.910E+07   - 
            9       99       99     1  1.217E+04  1.484E+08   num2 
-          18       31       31     1  1.763E+04  2.301E+08   cat1 
-          36T      11       11     1  2.714E+04  3.048E+08   - 
-          37       20       20     1  1.240E+04  1.219E+08   cat1 
-          74T       9        9     1  7.880E+03  2.919E+07   - 
-          75T      11       11     1  1.611E+04  1.748E+08   - 
+          18T      31       31     1  1.763E+04  2.301E+08   - 
           19       68       68     1  9.679E+03  9.392E+07   cat1 
-          38       21       21     1  1.551E+04  1.613E+08   num2 
-          76T       9        9     1  1.444E+04  2.690E+08   - 
-          77T      12       12     1  1.632E+04  9.602E+07   - 
-          39       47       47     1  7.073E+03  4.420E+07   num2 
-          78T      11       11     1  6.107E+03  1.592E+07   - 
-          79       36       36     1  7.368E+03  5.315E+07   num2 
-         158       15       15     1  7.010E+03  1.001E+08   cat1 
-         316T       7        7     1  9.816E+03  1.377E+08   - 
-         317T       8        8     1  4.555E+03  6.728E+07   - 
-         159       21       21     1  7.624E+03  2.281E+07   cat1 
-         318T      12       12     1  6.640E+03  9.550E+06   - 
-         319T       9        9     1  8.937E+03  4.051E+07   - 
+          38T      41       41     1  6.864E+03  4.415E+07   - 
+          39T      27       27     1  1.395E+04  1.426E+08   - 
            5      106      106     1  4.992E+03  9.807E+07   num2 
           10       67       67     1  6.456E+03  1.200E+08   cat1 
-          20       24       24     1  3.394E+03  2.934E+07   cat1 
-          40       15       15     1  3.859E+03  4.162E+07   cat1 
-          80T       9        9     1  3.638E+03  6.090E+07   - 
-          81T       6        6     1  4.190E+03  1.890E+07   - 
-          41T       9        9     1  2.620E+03  1.043E+07   - 
-          21       43       43     1  8.166E+03  1.641E+08   cat1 
-          42       24       24     1  9.262E+03  2.032E+08   cat1 
-          84T       8        8     1  8.434E+03  9.550E+07   - 
-          85       16       16     1  9.676E+03  2.665E+08   cat1 
-         170T       8        8     1  9.707E+03  2.586E+08   - 
-         171T       8        8     1  9.645E+03  3.125E+08   - 
-          43       19       19     1  6.781E+03  1.197E+08   num2 
-          86T       9        9     1  6.594E+03  1.711E+08   - 
-          87T      10       10     1  6.948E+03  8.727E+07   - 
-          11       39       39     1  2.476E+03  5.231E+07   cat1 
-          22T       7        7     1  8.005E+03  2.499E+08   - 
-          23       32       32     1  1.267E+03  7.352E+06   num2 
-          46       19       19     1  1.139E+03  2.914E+06   cat1 
-          92T       7        7     1  2.333E+02  3.971E+04   - 
-          93T      12       12     1  1.668E+03  3.920E+06   - 
-          47T      13       13     1  1.454E+03  1.456E+07   - 
+          20T      27       27     1  3.731E+03  2.697E+07   - 
+          21T      40       40     1  8.296E+03  1.765E+08   - 
+          11T      39       39     1  2.476E+03  5.231E+07   - 
            3      208      208     1  1.306E+04  1.480E+08   num2 
            6      171      171     1  1.530E+04  1.495E+08   num2 
           12      102      102     1  1.740E+04  1.456E+08   num2 
-          24       43       43     1  1.398E+04  1.358E+08   num2 
-          48       33       33     1  1.589E+04  1.522E+08   cat1 
-          96T      10       10     1  9.996E+03  5.658E+07   - 
-          97       23       23     1  1.846E+04  1.756E+08   cat1 
-         194T      15       15     1  1.669E+04  1.457E+08   - 
-         195T       8        8     1  2.177E+04  2.414E+08   - 
-          49T      10       10     1  7.657E+03  3.466E+07   - 
-          25       59       59     1  1.989E+04  1.403E+08   num2 
-          50       17       17     1  2.305E+04  2.661E+08   cat1 
-         100T       8        8     1  2.982E+04  2.722E+08   - 
-         101T       9        9     1  1.703E+04  2.072E+08   - 
-          51       42       42     1  1.861E+04  8.880E+07   cat1 
-         102T      14       14     1  2.248E+04  1.579E+08   - 
-         103       28       28     1  1.668E+04  4.719E+07   cat1 
-         206T       8        8     1  1.408E+04  2.339E+07   - 
-         207       20       20     1  1.771E+04  5.447E+07   cat1 
-         414T       7        7     1  1.650E+04  4.591E+07   - 
-         415T      13       13     1  1.837E+04  6.196E+07   - 
+          24T      43       43     1  1.398E+04  1.358E+08   - 
+          25       59       59     1  1.989E+04  1.403E+08   cat1 
+          50T      26       26     1  1.629E+04  6.466E+07   - 
+          51T      33       33     1  2.273E+04  1.849E+08   - 
           13       69       69     1  1.220E+04  1.410E+08   num2 
-          26       36       36     1  1.329E+04  1.727E+08   cat1 
-          52       16       16     1  5.711E+03  7.709E+07   cat1 
-         104T       7        7     1  8.733E+03  1.514E+08   - 
-         105T       9        9     1  3.360E+03  1.678E+07   - 
-          53       20       20     1  1.936E+04  1.700E+08   cat1 
-         106T       9        9     1  2.317E+04  2.304E+08   - 
-         107T      11       11     1  1.625E+04  1.150E+08   - 
-          27       33       33     1  1.100E+04  1.080E+08   cat1 
-          54T       8        8     1  1.829E+04  1.636E+08   - 
-          55       25       25     1  8.667E+03  7.292E+07   cat1 
-         110       15       15     1  1.042E+04  1.060E+08   cat1 
-         220T       7        7     1  9.904E+03  1.260E+08   - 
-         221T       8        8     1  1.087E+04  1.035E+08   - 
-         111T      10       10     1  6.041E+03  1.685E+07   - 
-           7       37       37     1  2.719E+03  1.135E+07   num2 
-          14       30       30     1  3.111E+03  1.293E+07   cat1 
-          28T       9        9     1  1.289E+03  3.345E+06   - 
-          29       21       21     1  3.892E+03  1.528E+07   cat1 
-          58T      10       10     1  3.050E+03  8.657E+06   - 
-          59T      11       11     1  4.658E+03  2.141E+07   - 
-          15T       7        7     1  1.035E+03  1.533E+06   - 
+          26T      36       36     1  1.329E+04  1.727E+08   - 
+          27T      33       33     1  1.100E+04  1.080E+08   - 
+           7T      37       37     1  2.719E+03  1.135E+07   - 
   
- Number of terminal nodes of final tree: 54
- Total number of nodes of final tree: 107
+ Number of terminal nodes of final tree: 18
+ Total number of nodes of final tree: 35
  Second best split variable (based on curvature test) at root node is num2
   
  Regression tree:
@@ -190,159 +118,51 @@
          Node 16: tgt-mean = 14041.219
        Node 8: cat1 /= "J"
          Node 17: cat1 = "A", "G", "H"
-           Node 34: cat1 = "H"
-             Node 68: tgt-mean = 9767.1273
-           Node 34: cat1 /= "H"
-             Node 69: cat1 = "A"
-               Node 138: tgt-mean = 9379.5000
-             Node 69: cat1 /= "A"
-               Node 139: tgt-mean = 9463.8142
+           Node 34: cat1 = "A"
+             Node 68: tgt-mean = 9379.5000
+           Node 34: cat1 /= "A"
+             Node 69: tgt-mean = 9626.5676
          Node 17: cat1 /= "A", "G", "H"
            Node 35: cat1 = "C", "F"
-             Node 70: cat1 = "C"
-               Node 140: tgt-mean = 4575.7873
-             Node 70: cat1 /= "C"
-               Node 141: tgt-mean = 5514.1333
+             Node 70: tgt-mean = 5044.9603
            Node 35: cat1 /= "C", "F"
-             Node 71: cat1 = "D"
-               Node 142: tgt-mean = 7739.4200
-             Node 71: cat1 /= "D"
-               Node 143: cat1 = "I"
-                 Node 286: tgt-mean = 7166.1026
-               Node 143: cat1 /= "I"
-                 Node 287: cat1 = "B"
-                   Node 574: tgt-mean = 6834.0800
-                 Node 287: cat1 /= "B"
-                   Node 575: tgt-mean = 6706.6620
+             Node 71: cat1 = "B", "E"
+               Node 142: tgt-mean = 6788.5736
+             Node 71: cat1 /= "B", "E"
+               Node 143: tgt-mean = 7486.0937
      Node 4: num1 > 0.50000000 or NA
        Node 9: num2 <= 0.62500000E-1
-         Node 18: cat1 = "G", "I", "J"
-           Node 36: tgt-mean = 27137.581
-         Node 18: cat1 /= "G", "I", "J"
-           Node 37: cat1 = "A", "D", "F"
-             Node 74: tgt-mean = 7880.2367
-           Node 37: cat1 /= "A", "D", "F"
-             Node 75: tgt-mean = 16105.021
+         Node 18: tgt-mean = 17631.960
        Node 9: num2 > 0.62500000E-1 or NA
-         Node 19: cat1 = "E", "H", "I"
-           Node 38: num2 <= 0.31250000
-             Node 76: tgt-mean = 14437.311
-           Node 38: num2 > 0.31250000 or NA
-             Node 77: tgt-mean = 16318.578
-         Node 19: cat1 /= "E", "H", "I"
-           Node 39: num2 <= 0.18750000
-             Node 78: tgt-mean = 6106.9173
-           Node 39: num2 > 0.18750000 or NA
-             Node 79: num2 <= 0.31250000
-               Node 158: cat1 = "B", "G"
-                 Node 316: tgt-mean = 9816.3914
-               Node 158: cat1 /= "B", "G"
-                 Node 317: tgt-mean = 4554.6112
-             Node 79: num2 > 0.31250000 or NA
-               Node 159: cat1 = "A", "B", "D"
-                 Node 318: tgt-mean = 6639.7533
-               Node 159: cat1 /= "A", "B", "D"
-                 Node 319: tgt-mean = 8936.8733
+         Node 19: cat1 = "A", "B", "D", "G", "J"
+           Node 38: tgt-mean = 6864.1466
+         Node 19: cat1 /= "A", "B", "D", "G", "J"
+           Node 39: tgt-mean = 13954.272
    Node 2: num2 > 0.43750000 or NA
      Node 5: num2 <= 0.81250000
-       Node 10: cat1 = "A", "E", "F", "G"
-         Node 20: cat1 = "A", "E"
-           Node 40: cat1 = "A"
-             Node 80: tgt-mean = 3638.1944
-           Node 40: cat1 /= "A"
-             Node 81: tgt-mean = 4189.6800
-         Node 20: cat1 /= "A", "E"
-           Node 41: tgt-mean = 2619.7544
-       Node 10: cat1 /= "A", "E", "F", "G"
-         Node 21: cat1 = "B", "C", "J"
-           Node 42: cat1 = "B"
-             Node 84: tgt-mean = 8434.3050
-           Node 42: cat1 /= "B"
-             Node 85: cat1 = "C"
-               Node 170: tgt-mean = 9707.4625
-             Node 85: cat1 /= "C"
-               Node 171: tgt-mean = 9644.6050
-         Node 21: cat1 /= "B", "C", "J"
-           Node 43: num2 <= 0.62500000
-             Node 86: tgt-mean = 6594.4200
-           Node 43: num2 > 0.62500000 or NA
-             Node 87: tgt-mean = 6948.0650
+       Node 10: cat1 = "A", "D", "E", "F", "G"
+         Node 20: tgt-mean = 3731.1741
+       Node 10: cat1 /= "A", "D", "E", "F", "G"
+         Node 21: tgt-mean = 8295.9832
      Node 5: num2 > 0.81250000 or NA
-       Node 11: cat1 = "D", "J"
-         Node 22: tgt-mean = 8005.4629
-       Node 11: cat1 /= "D", "J"
-         Node 23: num2 <= 0.93750000
-           Node 46: cat1 = "A", "C", "E", "G"
-             Node 92: tgt-mean = 233.26143
-           Node 46: cat1 /= "A", "C", "E", "G"
-             Node 93: tgt-mean = 1667.5142
-         Node 23: num2 > 0.93750000 or NA
-           Node 47: tgt-mean = 1453.9669
+       Node 11: tgt-mean = 2476.4823
  Node 1: num1 > 1.5000000 or NA
    Node 3: num2 <= 1.6250000
      Node 6: num2 <= 0.87500000
        Node 12: num2 <= 0.37500000
-         Node 24: num2 <= 0.12500000
-           Node 48: cat1 = "A", "E", "H", "I"
-             Node 96: tgt-mean = 9995.9580
-           Node 48: cat1 /= "A", "E", "H", "I"
-             Node 97: cat1 = "B", "D", "J"
-               Node 194: tgt-mean = 16687.904
-             Node 97: cat1 /= "B", "D", "J"
-               Node 195: tgt-mean = 21771.975
-         Node 24: num2 > 0.12500000 or NA
-           Node 49: tgt-mean = 7656.7740
+         Node 24: tgt-mean = 13977.248
        Node 12: num2 > 0.37500000 or NA
-         Node 25: num2 <= 0.62500000
-           Node 50: cat1 = "C", "G", "I"
-             Node 100: tgt-mean = 29824.595
-           Node 50: cat1 /= "C", "G", "I"
-             Node 101: tgt-mean = 17025.628
-         Node 25: num2 > 0.62500000 or NA
-           Node 51: cat1 = "D", "G", "H"
-             Node 102: tgt-mean = 22477.761
-           Node 51: cat1 /= "D", "G", "H"
-             Node 103: cat1 = "B", "E"
-               Node 206: tgt-mean = 14082.525
-             Node 103: cat1 /= "B", "E"
-               Node 207: cat1 = "J"
-                 Node 414: tgt-mean = 16498.406
-               Node 207: cat1 /= "J"
-                 Node 415: tgt-mean = 18369.825
+         Node 25: cat1 = "A", "B", "C", "E", "J"
+           Node 50: tgt-mean = 16289.909
+         Node 25: cat1 /= "A", "B", "C", "E", "J"
+           Node 51: tgt-mean = 22725.309
      Node 6: num2 > 0.87500000 or NA
        Node 13: num2 <= 1.2500000
-         Node 26: cat1 = "A", "C", "D", "J"
-           Node 52: cat1 = "A", "D"
-             Node 104: tgt-mean = 8732.9157
-           Node 52: cat1 /= "A", "D"
-             Node 105: tgt-mean = 3360.0644
-         Node 26: cat1 /= "A", "C", "D", "J"
-           Node 53: cat1 = "G", "H"
-             Node 106: tgt-mean = 23166.812
-           Node 53: cat1 /= "G", "H"
-             Node 107: tgt-mean = 16249.631
+         Node 26: tgt-mean = 13294.951
        Node 13: num2 > 1.2500000 or NA
-         Node 27: cat1 = "A", "E"
-           Node 54: tgt-mean = 18294.556
-         Node 27: cat1 /= "A", "E"
-           Node 55: cat1 = "B", "D", "F", "H"
-             Node 110: cat1 = "B", "F"
-               Node 220: tgt-mean = 9904.0000
-             Node 110: cat1 /= "B", "F"
-               Node 221: tgt-mean = 10867.000
-           Node 55: cat1 /= "B", "D", "F", "H"
-             Node 111: tgt-mean = 6041.4640
+         Node 27: tgt-mean = 11001.063
    Node 3: num2 > 1.6250000 or NA
-     Node 7: num2 <= 1.8750000
-       Node 14: cat1 = "B", "D", "I"
-         Node 28: tgt-mean = 1289.1111
-       Node 14: cat1 /= "B", "D", "I"
-         Node 29: cat1 = "C", "G", "J"
-           Node 58: tgt-mean = 3050.0710
-         Node 29: cat1 /= "C", "G", "J"
-           Node 59: tgt-mean = 4658.1582
-     Node 7: num2 > 1.8750000 or NA
-       Node 15: tgt-mean = 1034.6929
+     Node 7: tgt-mean = 2718.5216
  
  ***************************************************************
   
@@ -388,298 +208,98 @@ Node 17: Intermediate node
  cat1 mode = "A"
  ----------------------------
 Node 34: Intermediate node
- A case goes into Node 68 if cat1 = "H"
+ A case goes into Node 68 if cat1 = "A"
  cat1 mode = "A"
  ----------------------------
 Node 68: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      9767.        5.355       0.2605E-04
- tgt mean = 9767.13
- ----------------------------
-Node 69: Intermediate node
- A case goes into Node 138 if cat1 = "A"
- cat1 mode = "A"
- ----------------------------
-Node 138: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
  Constant      9380.        7.060       0.1697E-06
  tgt mean = 9379.50
  ----------------------------
-Node 139: Terminal node
+Node 69: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      9464.        3.901       0.1047E-02
- tgt mean = 9463.81
+ Constant      9627.        6.542       0.8178E-07
+ tgt mean = 9626.57
  ----------------------------
 Node 35: Intermediate node
  A case goes into Node 70 if cat1 = "C", "F"
  cat1 mode = "B"
  ----------------------------
-Node 70: Intermediate node
- A case goes into Node 140 if cat1 = "C"
- cat1 mode = "C"
- ----------------------------
-Node 140: Terminal node
+Node 70: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      4576.        3.117       0.7574E-02
- tgt mean = 4575.79
- ----------------------------
-Node 141: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      5514.        3.525       0.3361E-02
- tgt mean = 5514.13
+ Constant      5045.        4.771       0.4798E-04
+ tgt mean = 5044.96
  ----------------------------
 Node 71: Intermediate node
- A case goes into Node 142 if cat1 = "D"
+ A case goes into Node 142 if cat1 = "B", "E"
  cat1 mode = "B"
  ----------------------------
 Node 142: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      7739.        3.837       0.8433E-03
- tgt mean = 7739.42
+ Constant      6789.        4.886       0.1618E-04
+ tgt mean = 6788.57
  ----------------------------
-Node 143: Intermediate node
- A case goes into Node 286 if cat1 = "I"
- cat1 mode = "B"
- ----------------------------
-Node 286: Terminal node
+Node 143: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      7166.        3.030       0.7194E-02
- tgt mean = 7166.10
- ----------------------------
-Node 287: Intermediate node
- A case goes into Node 574 if cat1 = "B"
- cat1 mode = "B"
- ----------------------------
-Node 574: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      6834.        3.917       0.5798E-03
- tgt mean = 6834.08
- ----------------------------
-Node 575: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      6707.        2.820       0.1363E-01
- tgt mean = 6706.66
+ Constant      7486.        4.931       0.1331E-04
+ tgt mean = 7486.09
  ----------------------------
 Node 9: Intermediate node
  A case goes into Node 18 if num2 <= 0.62500000E-1
  num2 mean = 0.19318182
  ----------------------------
-Node 18: Intermediate node
- A case goes into Node 36 if cat1 = "G", "I", "J"
- cat1 mode = "I"
- ----------------------------
-Node 36: Terminal node
+Node 18: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant     0.2714E+05    5.156       0.4279E-03
- tgt mean = 27137.6
- ----------------------------
-Node 37: Intermediate node
- A case goes into Node 74 if cat1 = "A", "D", "F"
- cat1 mode = "C"
- ----------------------------
-Node 74: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      7880.        4.376       0.2362E-02
- tgt mean = 7880.24
- ----------------------------
-Node 75: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.1611E+05    4.040       0.2360E-02
- tgt mean = 16105.0
+ Constant     0.1763E+05    6.471       0.3767E-06
+ tgt mean = 17632.0
  ----------------------------
 Node 19: Intermediate node
- A case goes into Node 38 if cat1 = "E", "H", "I"
+ A case goes into Node 38 if cat1 = "A", "B", "D", "G", "J"
  cat1 mode = "B"
  ----------------------------
-Node 38: Intermediate node
- A case goes into Node 76 if num2 <= 0.31250000
- num2 mean = 0.29166667
- ----------------------------
-Node 76: Terminal node
+Node 38: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant     0.1444E+05    2.641       0.2967E-01
- tgt mean = 14437.3
+ Constant      6864.        6.614       0.6481E-07
+ tgt mean = 6864.15
  ----------------------------
-Node 77: Terminal node
+Node 39: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant     0.1632E+05    5.769       0.1248E-03
- tgt mean = 16318.6
- ----------------------------
-Node 39: Intermediate node
- A case goes into Node 78 if num2 <= 0.18750000
- num2 mean = 0.27659574
- ----------------------------
-Node 78: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      6107.        5.076       0.4808E-03
- tgt mean = 6106.92
- ----------------------------
-Node 79: Intermediate node
- A case goes into Node 158 if num2 <= 0.31250000
- num2 mean = 0.32291667
- ----------------------------
-Node 158: Intermediate node
- A case goes into Node 316 if cat1 = "B", "G"
- cat1 mode = "B"
- ----------------------------
-Node 316: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      9816.        2.213       0.6887E-01
- tgt mean = 9816.39
- ----------------------------
-Node 317: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      4555.        1.571       0.1603    
- tgt mean = 4554.61
- ----------------------------
-Node 159: Intermediate node
- A case goes into Node 318 if cat1 = "A", "B", "D"
- cat1 mode = "A"
- ----------------------------
-Node 318: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      6640.        7.443       0.1288E-04
- tgt mean = 6639.75
- ----------------------------
-Node 319: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      8937.        4.212       0.2946E-02
- tgt mean = 8936.87
+ Constant     0.1395E+05    6.071       0.2049E-05
+ tgt mean = 13954.3
  ----------------------------
 Node 5: Intermediate node
  A case goes into Node 10 if num2 <= 0.81250000
  num2 mean = 0.72995283
  ----------------------------
 Node 10: Intermediate node
- A case goes into Node 20 if cat1 = "A", "E", "F", "G"
+ A case goes into Node 20 if cat1 = "A", "D", "E", "F", "G"
  cat1 mode = "A"
  ----------------------------
-Node 20: Intermediate node
- A case goes into Node 40 if cat1 = "A", "E"
- cat1 mode = "A"
- ----------------------------
-Node 40: Intermediate node
- A case goes into Node 80 if cat1 = "A"
- cat1 mode = "A"
- ----------------------------
-Node 80: Terminal node
+Node 20: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      3638.        1.399       0.1995    
- tgt mean = 3638.19
+ Constant      3731.        3.734       0.9329E-03
+ tgt mean = 3731.17
  ----------------------------
-Node 81: Terminal node
+Node 21: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      4190.        2.361       0.6469E-01
- tgt mean = 4189.68
+ Constant      8296.        3.950       0.3182E-03
+ tgt mean = 8295.98
  ----------------------------
-Node 41: Terminal node
+Node 11: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      2620.        2.434       0.4096E-01
- tgt mean = 2619.75
- ----------------------------
-Node 21: Intermediate node
- A case goes into Node 42 if cat1 = "B", "C", "J"
- cat1 mode = "I"
- ----------------------------
-Node 42: Intermediate node
- A case goes into Node 84 if cat1 = "B"
- cat1 mode = "B"
- ----------------------------
-Node 84: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      8434.        2.441       0.4469E-01
- tgt mean = 8434.30
- ----------------------------
-Node 85: Intermediate node
- A case goes into Node 170 if cat1 = "C"
- cat1 mode = "C"
- ----------------------------
-Node 170: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      9707.        1.708       0.1315    
- tgt mean = 9707.46
- ----------------------------
-Node 171: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      9645.        1.543       0.1667    
- tgt mean = 9644.60
- ----------------------------
-Node 43: Intermediate node
- A case goes into Node 86 if num2 <= 0.62500000
- num2 mean = 0.63157895
- ----------------------------
-Node 86: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      6594.        1.513       0.1688    
- tgt mean = 6594.42
- ----------------------------
-Node 87: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      6948.        2.352       0.4316E-01
- tgt mean = 6948.07
- ----------------------------
-Node 11: Intermediate node
- A case goes into Node 22 if cat1 = "D", "J"
- cat1 mode = "G"
- ----------------------------
-Node 22: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      8005.        1.340       0.2288    
- tgt mean = 8005.46
- ----------------------------
-Node 23: Intermediate node
- A case goes into Node 46 if num2 <= 0.93750000
- num2 mean = 0.92578125
- ----------------------------
-Node 46: Intermediate node
- A case goes into Node 92 if cat1 = "A", "C", "E", "G"
- cat1 mode = "B"
- ----------------------------
-Node 92: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      233.3        3.097       0.2120E-01
- tgt mean = 233.261
- ----------------------------
-Node 93: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      1668.        2.917       0.1400E-01
- tgt mean = 1667.51
- ----------------------------
-Node 47: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      1454.        1.374       0.1946    
- tgt mean = 1453.97
+ Constant      2476.        2.138       0.3899E-01
+ tgt mean = 2476.48
  ----------------------------
 Node 3: Intermediate node
  A case goes into Node 6 if num2 <= 1.6250000
@@ -693,213 +313,53 @@ Node 12: Intermediate node
  A case goes into Node 24 if num2 <= 0.37500000
  num2 mean = 0.41666667
  ----------------------------
-Node 24: Intermediate node
- A case goes into Node 48 if num2 <= 0.12500000
- num2 mean = 0.58139535E-1
- ----------------------------
-Node 48: Intermediate node
- A case goes into Node 96 if cat1 = "A", "E", "H", "I"
- cat1 mode = "D"
- ----------------------------
-Node 96: Terminal node
+Node 24: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      9996.        4.203       0.2298E-02
- tgt mean = 9995.96
- ----------------------------
-Node 97: Intermediate node
- A case goes into Node 194 if cat1 = "B", "D", "J"
- cat1 mode = "D"
- ----------------------------
-Node 194: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.1669E+05    5.355       0.1015E-03
- tgt mean = 16687.9
- ----------------------------
-Node 195: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.2177E+05    3.964       0.5436E-02
- tgt mean = 21772.0
- ----------------------------
-Node 49: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      7657.        4.113       0.2626E-02
- tgt mean = 7656.77
+ Constant     0.1398E+05    7.865       0.8654E-09
+ tgt mean = 13977.2
  ----------------------------
 Node 25: Intermediate node
- A case goes into Node 50 if num2 <= 0.62500000
- num2 mean = 0.67796610
- ----------------------------
-Node 50: Intermediate node
- A case goes into Node 100 if cat1 = "C", "G", "I"
+ A case goes into Node 50 if cat1 = "A", "B", "C", "E", "J"
  cat1 mode = "F"
  ----------------------------
-Node 100: Terminal node
+Node 50: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant     0.2982E+05    5.113       0.1380E-02
- tgt mean = 29824.6
+ Constant     0.1629E+05    10.33       0.1151E-09
+ tgt mean = 16289.9
  ----------------------------
-Node 101: Terminal node
+Node 51: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant     0.1703E+05    3.548       0.7530E-02
- tgt mean = 17025.6
- ----------------------------
-Node 51: Intermediate node
- A case goes into Node 102 if cat1 = "D", "G", "H"
- cat1 mode = "J"
- ----------------------------
-Node 102: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.2248E+05    6.693       0.1486E-04
- tgt mean = 22477.8
- ----------------------------
-Node 103: Intermediate node
- A case goes into Node 206 if cat1 = "B", "E"
- cat1 mode = "J"
- ----------------------------
-Node 206: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.1408E+05    8.237       0.7563E-04
- tgt mean = 14082.5
- ----------------------------
-Node 207: Intermediate node
- A case goes into Node 414 if cat1 = "J"
- cat1 mode = "J"
- ----------------------------
-Node 414: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.1650E+05    6.443       0.6618E-03
- tgt mean = 16498.4
- ----------------------------
-Node 415: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.1837E+05    8.414       0.2234E-05
- tgt mean = 18369.8
+ Constant     0.2273E+05    9.600       0.6096E-10
+ tgt mean = 22725.3
  ----------------------------
 Node 13: Intermediate node
  A case goes into Node 26 if num2 <= 1.2500000
  num2 mean = 1.2391304
  ----------------------------
-Node 26: Intermediate node
- A case goes into Node 52 if cat1 = "A", "C", "D", "J"
- cat1 mode = "C"
- ----------------------------
-Node 52: Intermediate node
- A case goes into Node 104 if cat1 = "A", "D"
- cat1 mode = "C"
- ----------------------------
-Node 104: Terminal node
+Node 26: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      8733.        1.878       0.1095    
- tgt mean = 8732.92
+ Constant     0.1329E+05    6.071       0.6234E-06
+ tgt mean = 13295.0
  ----------------------------
-Node 105: Terminal node
+Node 27: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      3360.        2.461       0.3928E-01
- tgt mean = 3360.06
+ Constant     0.1100E+05    6.080       0.8612E-06
+ tgt mean = 11001.1
  ----------------------------
-Node 53: Intermediate node
- A case goes into Node 106 if cat1 = "G", "H"
- cat1 mode = "E"
- ----------------------------
-Node 106: Terminal node
+Node 7: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant     0.2317E+05    4.578       0.1806E-02
- tgt mean = 23166.8
+ Constant      2719.        4.908       0.1990E-04
+ tgt mean = 2718.52
  ----------------------------
-Node 107: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.1625E+05    5.025       0.5179E-03
- tgt mean = 16249.6
- ----------------------------
-Node 27: Intermediate node
- A case goes into Node 54 if cat1 = "A", "E"
- cat1 mode = "A"
- ----------------------------
-Node 54: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.1829E+05    4.045       0.4900E-02
- tgt mean = 18294.6
- ----------------------------
-Node 55: Intermediate node
- A case goes into Node 110 if cat1 = "B", "D", "F", "H"
- cat1 mode = "H"
- ----------------------------
-Node 110: Intermediate node
- A case goes into Node 220 if cat1 = "B", "F"
- cat1 mode = "H"
- ----------------------------
-Node 220: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      9904.        2.335       0.5827E-01
- tgt mean = 9904.00
- ----------------------------
-Node 221: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant     0.1087E+05    3.022       0.1934E-01
- tgt mean = 10867.0
- ----------------------------
-Node 111: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      6041.        4.655       0.1194E-02
- tgt mean = 6041.46
- ----------------------------
-Node 7: Intermediate node
- A case goes into Node 14 if num2 <= 1.8750000
- num2 mean = 1.7972973
- ----------------------------
-Node 14: Intermediate node
- A case goes into Node 28 if cat1 = "B", "D", "I"
- cat1 mode = "H"
- ----------------------------
-Node 28: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      1289.        2.114       0.6740E-01
- tgt mean = 1289.11
- ----------------------------
-Node 29: Intermediate node
- A case goes into Node 58 if cat1 = "C", "G", "J"
- cat1 mode = "H"
- ----------------------------
-Node 58: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      3050.        3.278       0.9559E-02
- tgt mean = 3050.07
- ----------------------------
-Node 59: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      4658.        3.339       0.7501E-02
- tgt mean = 4658.16
- ----------------------------
-Node 15: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      1035.        2.211       0.6906E-01
- tgt mean = 1034.69
- ----------------------------
- Proportion of variance (R-squared) explained by tree model: 0.3029
+ Proportion of variance (R-squared) explained by tree model: 0.2134
  
  Observed and fitted values are stored in data.node
  R code is stored in data.r
  Split and fit variable names are stored in data.split_and_fit
- Elapsed time in seconds: 0.28995E-1
+ Elapsed time in seconds: 0.21087E-1

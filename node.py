@@ -162,7 +162,7 @@ class Model:
                 x_uniq = _df[col].drop_duplicates().sort_values().values
                 max_r = int(round(x_uniq.shape[0] / 2 - 0.1))
                 max_r = max(max_r, 1)
-                logger.log(level = logging.DEBUG, msg = f"finding best {max_r} of {len(x_uniq)} category combos")
+                # logger.log(level = logging.DEBUG, msg = f"finding best {max_r} of {len(x_uniq)} category combos")
                 
                 results = {'set' : [],'gain' : []}
                 subsets = [subset for subset in chain(*(combinations(x_uniq, r) for r in range(1, max_r + 1)))]
@@ -183,11 +183,11 @@ class Model:
                    gini_left = 2 * mean_left * (1 - mean_left)
                    gini_right = 2 * mean_right * (1 - mean_right)
                    gain = p[0]*gini_node - p[1]*gini_left - p[2]*gini_right
-
+    
                    results['set'].append(subset)
                    results['gain'].append(gain)
-                
-                logger.log(logging.DEBUG, msg = f"results = {results}")
+
+
                 idx_max = np.argmax(results['gain'])
                 return results['set'][idx_max], None
 
@@ -208,7 +208,7 @@ class Model:
                 return self._get_split_point_greedy(node, col)
 
 
-    def _calc_chi2_stat(self, node, y_mean, col) -> np.float64:
+    def _calc_chi2_stat(self, node, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
         Calculate chi2_contingency and return p-value """
         # @NOTE: can we use pvalues as is or do I need to use modified wilson-hilferty to 
@@ -217,7 +217,7 @@ class Model:
         # based on the chi-squared degree of freedom 1. Note the video is 20 years newer
         # than the paper.
         y_mean = self.df.loc[node.idx, self.tgt].mean()
-        residuals = self.df.loc[node.idx, self.tgt] - y_mean
+        residuals = self.df.loc[node.idx, self.tgt] - node.y_mean 
         # logger.log(level = logging.DEBUG, msg = f"idx_active size in chi2_stat = {len(node.idx)}")
         pvalue = sys.float_info.max 
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
@@ -333,7 +333,6 @@ class Model:
         stat_pval = {
             col: self._calc_chi2_stat(
                 node=node, 
-                y_mean=node.y_mean,
                 col=col) for col in self.split_vars}
         
         # Bonferonni correction (uses statsmodels)

@@ -1,5 +1,5 @@
 ## Function for predicting least-squares mean of tgt
-## Code produced by GUIDE 41.2 on 11/26/23 at 15:46
+## Code produced by GUIDE 41.2 on 11/27/23 at 20:2
 predicted <- function(){
  if(!is.na(num1) & num1 <= 1.50000000000 ){
    if(!is.na(num2) & num2 <= 0.437500000000 ){
@@ -11,297 +11,89 @@ predicted <- function(){
        } else {
          catvalues <- c("A","G","H")
          if(cat1 %in% catvalues){
-           catvalues <- c("H")
+           catvalues <- c("A")
            if(cat1 %in% catvalues){
              nodeid <- 68
-             predict <- 9767.12727273
+             predict <- 9379.50000000
            } else {
-             catvalues <- c("A")
-             if(cat1 %in% catvalues){
-               nodeid <- 138
-               predict <- 9379.50000000
-             } else {
-               nodeid <- 139
-               predict <- 9463.81421053
-             }
+             nodeid <- 69
+             predict <- 9626.56756098
            }
          } else {
            catvalues <- c("C","F")
            if(cat1 %in% catvalues){
-             catvalues <- c("C")
-             if(cat1 %in% catvalues){
-               nodeid <- 140
-               predict <- 4575.78733333
-             } else {
-               nodeid <- 141
-               predict <- 5514.13333333
-             }
+             nodeid <- 70
+             predict <- 5044.96033333
            } else {
-             catvalues <- c("D")
+             catvalues <- c("B","E")
              if(cat1 %in% catvalues){
                nodeid <- 142
-               predict <- 7739.42000000
+               predict <- 6788.57357143
              } else {
-               catvalues <- c("I")
-               if(cat1 %in% catvalues){
-                 nodeid <- 286
-                 predict <- 7166.10263158
-               } else {
-                 catvalues <- c("B")
-                 if(cat1 %in% catvalues){
-                   nodeid <- 574
-                   predict <- 6834.08000000
-                 } else {
-                   nodeid <- 575
-                   predict <- 6706.66200000
-                 }
-               }
+               nodeid <- 143
+               predict <- 7486.09372093
              }
            }
          }
        }
      } else {
        if(!is.na(num2) & num2 <= 0.625000000000E-1 ){
-         catvalues <- c("G","I","J")
-         if(cat1 %in% catvalues){
-           nodeid <- 36
-           predict <- 27137.5809091
-         } else {
-           catvalues <- c("A","D","F")
-           if(cat1 %in% catvalues){
-             nodeid <- 74
-             predict <- 7880.23666667
-           } else {
-             nodeid <- 75
-             predict <- 16105.0209091
-           }
-         }
+         nodeid <- 18
+         predict <- 17631.9596774
        } else {
-         catvalues <- c("E","H","I")
+         catvalues <- c("A","B","D","G","J")
          if(cat1 %in% catvalues){
-           if(!is.na(num2) & num2 <= 0.312500000000 ){
-             nodeid <- 76
-             predict <- 14437.3111111
-           } else {
-             nodeid <- 77
-             predict <- 16318.5783333
-           }
+           nodeid <- 38
+           predict <- 6864.14658537
          } else {
-           if(!is.na(num2) & num2 <= 0.187500000000 ){
-             nodeid <- 78
-             predict <- 6106.91727273
-           } else {
-             if(!is.na(num2) & num2 <= 0.312500000000 ){
-               catvalues <- c("B","G")
-               if(cat1 %in% catvalues){
-                 nodeid <- 316
-                 predict <- 9816.39142857
-               } else {
-                 nodeid <- 317
-                 predict <- 4554.61125000
-               }
-             } else {
-               catvalues <- c("A","B","D")
-               if(cat1 %in% catvalues){
-                 nodeid <- 318
-                 predict <- 6639.75333333
-               } else {
-                 nodeid <- 319
-                 predict <- 8936.87333333
-               }
-             }
-           }
+           nodeid <- 39
+           predict <- 13954.2722222
          }
        }
      }
    } else {
      if(!is.na(num2) & num2 <= 0.812500000000 ){
-       catvalues <- c("A","E","F","G")
+       catvalues <- c("A","D","E","F","G")
        if(cat1 %in% catvalues){
-         catvalues <- c("A","E")
-         if(cat1 %in% catvalues){
-           catvalues <- c("A")
-           if(cat1 %in% catvalues){
-             nodeid <- 80
-             predict <- 3638.19444444
-           } else {
-             nodeid <- 81
-             predict <- 4189.68000000
-           }
-         } else {
-           nodeid <- 41
-           predict <- 2619.75444444
-         }
+         nodeid <- 20
+         predict <- 3731.17407407
        } else {
-         catvalues <- c("B","C","J")
-         if(cat1 %in% catvalues){
-           catvalues <- c("B")
-           if(cat1 %in% catvalues){
-             nodeid <- 84
-             predict <- 8434.30500000
-           } else {
-             catvalues <- c("C")
-             if(cat1 %in% catvalues){
-               nodeid <- 170
-               predict <- 9707.46250000
-             } else {
-               nodeid <- 171
-               predict <- 9644.60500000
-             }
-           }
-         } else {
-           if(!is.na(num2) & num2 <= 0.625000000000 ){
-             nodeid <- 86
-             predict <- 6594.42000000
-           } else {
-             nodeid <- 87
-             predict <- 6948.06500000
-           }
-         }
+         nodeid <- 21
+         predict <- 8295.98325000
        }
      } else {
-       catvalues <- c("D","J")
-       if(cat1 %in% catvalues){
-         nodeid <- 22
-         predict <- 8005.46285714
-       } else {
-         if(!is.na(num2) & num2 <= 0.937500000000 ){
-           catvalues <- c("A","C","E","G")
-           if(cat1 %in% catvalues){
-             nodeid <- 92
-             predict <- 233.261428571
-           } else {
-             nodeid <- 93
-             predict <- 1667.51416667
-           }
-         } else {
-           nodeid <- 47
-           predict <- 1453.96692308
-         }
-       }
+       nodeid <- 11
+       predict <- 2476.48230769
      }
    }
  } else {
    if(!is.na(num2) & num2 <= 1.62500000000 ){
      if(!is.na(num2) & num2 <= 0.875000000000 ){
        if(!is.na(num2) & num2 <= 0.375000000000 ){
-         if(!is.na(num2) & num2 <= 0.125000000000 ){
-           catvalues <- c("A","E","H","I")
-           if(cat1 %in% catvalues){
-             nodeid <- 96
-             predict <- 9995.95800000
-           } else {
-             catvalues <- c("B","D","J")
-             if(cat1 %in% catvalues){
-               nodeid <- 194
-               predict <- 16687.9040000
-             } else {
-               nodeid <- 195
-               predict <- 21771.9750000
-             }
-           }
-         } else {
-           nodeid <- 49
-           predict <- 7656.77400000
-         }
+         nodeid <- 24
+         predict <- 13977.2483721
        } else {
-         if(!is.na(num2) & num2 <= 0.625000000000 ){
-           catvalues <- c("C","G","I")
-           if(cat1 %in% catvalues){
-             nodeid <- 100
-             predict <- 29824.5950000
-           } else {
-             nodeid <- 101
-             predict <- 17025.6277778
-           }
+         catvalues <- c("A","B","C","E","J")
+         if(cat1 %in% catvalues){
+           nodeid <- 50
+           predict <- 16289.9088462
          } else {
-           catvalues <- c("D","G","H")
-           if(cat1 %in% catvalues){
-             nodeid <- 102
-             predict <- 22477.7614286
-           } else {
-             catvalues <- c("B","E")
-             if(cat1 %in% catvalues){
-               nodeid <- 206
-               predict <- 14082.5250000
-             } else {
-               catvalues <- c("J")
-               if(cat1 %in% catvalues){
-                 nodeid <- 414
-                 predict <- 16498.4057143
-               } else {
-                 nodeid <- 415
-                 predict <- 18369.8246154
-               }
-             }
-           }
+           nodeid <- 51
+           predict <- 22725.3090909
          }
        }
      } else {
        if(!is.na(num2) & num2 <= 1.25000000000 ){
-         catvalues <- c("A","C","D","J")
-         if(cat1 %in% catvalues){
-           catvalues <- c("A","D")
-           if(cat1 %in% catvalues){
-             nodeid <- 104
-             predict <- 8732.91571429
-           } else {
-             nodeid <- 105
-             predict <- 3360.06444444
-           }
-         } else {
-           catvalues <- c("G","H")
-           if(cat1 %in% catvalues){
-             nodeid <- 106
-             predict <- 23166.8122222
-           } else {
-             nodeid <- 107
-             predict <- 16249.6309091
-           }
-         }
+         nodeid <- 26
+         predict <- 13294.9511111
        } else {
-         catvalues <- c("A","E")
-         if(cat1 %in% catvalues){
-           nodeid <- 54
-           predict <- 18294.5562500
-         } else {
-           catvalues <- c("B","D","F","H")
-           if(cat1 %in% catvalues){
-             catvalues <- c("B","F")
-             if(cat1 %in% catvalues){
-               nodeid <- 220
-               predict <- 9904.00000000
-             } else {
-               nodeid <- 221
-               predict <- 10867.0000000
-             }
-           } else {
-             nodeid <- 111
-             predict <- 6041.46400000
-           }
-         }
+         nodeid <- 27
+         predict <- 11001.0633333
        }
      }
    } else {
-     if(!is.na(num2) & num2 <= 1.87500000000 ){
-       catvalues <- c("B","D","I")
-       if(cat1 %in% catvalues){
-         nodeid <- 28
-         predict <- 1289.11111111
-       } else {
-         catvalues <- c("C","G","J")
-         if(cat1 %in% catvalues){
-           nodeid <- 58
-           predict <- 3050.07100000
-         } else {
-           nodeid <- 59
-           predict <- 4658.15818182
-         }
-       }
-     } else {
-       nodeid <- 15
-       predict <- 1034.69285714
-     }
+     nodeid <- 7
+     predict <- 2718.52162162
    }
  }
  return(c(nodeid,predict))
