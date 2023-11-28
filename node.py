@@ -127,24 +127,44 @@ class Model:
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
             case 'S':
                 # numeric
+                
                 x_uniq = _df[col].drop_duplicates().sort_values()
                 cutpoints = x_uniq[:-1] + np.diff(x_uniq)/2
                 greatest_tot_sse = -999
                 best_cut = None
                 node_sse = ((_df[self.tgt] - node.y_mean)**2).sum()
-                for cut in cutpoints:
+                sse_tab = pd.DataFrame({'cut':[],'sse':[]})
+
+                for idx, cut in enumerate(cutpoints):
                     right_idx = _df[_df[col] > cut].index
                     left_idx = _df.drop(right_idx, axis=0).index
                     left_mean = _df.loc[left_idx][self.tgt].mean()
                     right_mean = _df.loc[right_idx][self.tgt].mean()
+
+
+                    
+                    left_sse = ( (_df.loc[left_idx, self.tgt]- _df.loc[left_idx, self.tgt].mean())**2 ).sum()
+                    right_sse = ( (_df.loc[right_idx, self.tgt]- _df.loc[right_idx, self.tgt].mean())**2 ).sum()
+                    sse_sum2 = len(left_idx)*left_sse + len(right_idx)*right_sse
+
+                    
+
                     nAL = len(left_idx)
                     nAR = len(right_idx)
                     tot_items = nAL + nAR 
                     cut_sse = (nAL * nAR / tot_items) * (left_mean - right_mean)**2
-                    if cut_sse > greatest_tot_sse:
+                    sse_tab = pd.concat([sse_tab,pd.DataFrame({'cut':cut,'sse':cut_sse, 'sse_sum2':sse_sum2},index=[idx])])
+
+
+                    if cut_sse > greatest_tot_sse and len(right_idx) >= self.MIN_SAMPLES_LEAF and len(left_idx) >= self.MIN_SAMPLES_LEAF:
                         greatest_tot_sse = cut_sse
                         best_cut = cut
+            
+                if True and node.node_num == 14:
+                    pdb.set_trace()
                 
+
+                # returns None if no cutpoint found
                 return best_cut, False
 
             case 'c':
@@ -183,6 +203,7 @@ class Model:
                    gini_left = 2 * mean_left * (1 - mean_left)
                    gini_right = 2 * mean_right * (1 - mean_right)
                    gain = p[0]*gini_node - p[1]*gini_left - p[2]*gini_right
+                   gain = round(gain,10)
     
                    results['set'].append(subset)
                    results['gain'].append(gain)
@@ -216,6 +237,7 @@ class Model:
         # paper says to sort based on p-values but the tutorial video part 1 says to rank
         # based on the chi-squared degree of freedom 1. Note the video is 20 years newer
         # than the paper.
+
         y_mean = self.df.loc[node.idx, self.tgt].mean()
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean 
         # logger.log(level = logging.DEBUG, msg = f"idx_active size in chi2_stat = {len(node.idx)}")
@@ -262,7 +284,7 @@ class Model:
                 contingency_result = chi2_contingency(chi_squared, False)
                 statistic = contingency_result.statistic
                 dof = contingency_result.dof 
-
+           
                 # statistic == 0 breaks wilson_hilferty
                 if abs(statistic - 0) > 1E-7:
                     one_dof_stat = wilson_hilferty(statistic, dof)
@@ -275,7 +297,7 @@ class Model:
                 if node.node_num == 1:
                     self.one_df_chi2_at_root[col] = one_dof_stat
                     # statistic == 0 breaks wilson_hilferty
-                    pvalue = 1.0 
+
                 return pvalue
 
             case 'c':
@@ -304,11 +326,19 @@ class Model:
                 contingency_result = chi2_contingency(chi_squared, False)
                 statistic = contingency_result.statistic
                 dof = contingency_result.dof 
-                one_dof_stat = wilson_hilferty(statistic, dof)
+           
+                # statistic == 0 breaks wilson_hilferty
+                if abs(statistic - 0) > 1E-7:
+                    one_dof_stat = wilson_hilferty(statistic, dof)
+                    pvalue = pvalue_for_one_dof(one_dof_stat) 
+                else:
+                    one_dof_stat = 0.0
+                    pvalue = 1.0 
+
                 # save the 1-df chi2 values at root node
                 if node.node_num == 1:
                     self.one_df_chi2_at_root[col] = one_dof_stat
-                pvalue = pvalue_for_one_dof(one_dof_stat) 
+                    # statistic == 0 breaks wilson_hilferty
 
             case _:
                 raise f"split_var role not handled in {self.__name__}"
@@ -320,9 +350,6 @@ class Model:
             1. Curvature tests
             2. Interaction test (@todo)
         """
-        if node.node_num == 2:
-            pass
-            # pdb.set_trace()
         
         if self.weight_var == list():
             node.y_mean = self.df.loc[node.idx, self.tgt].mean()
@@ -376,6 +403,9 @@ class Model:
             elif self.split_point_method == SplitPointMethod.Systematic:
                 raise "not implemented"
 
+            if True and curr.node_num == 14:
+                pdb.set_trace()
+            
             if split_point == None:
                 curr.type_specific_data = TerminalData(value = curr.y_mean)
                 node_list.append(curr) 
@@ -403,14 +433,14 @@ class Model:
             right = _df[~_df[split_var].map(predicate)].index.values
             assert left.shape[0] + right.shape[0] == curr.idx.shape[0]
 
-            if left.shape[0] < self.MIN_SAMPLES_LEAF or right.shape[0] < self.MIN_SAMPLES_LEAF \
+            
+            if left.shape[0] <= self.MIN_SAMPLES_LEAF or right.shape[0] <= self.MIN_SAMPLES_LEAF \
                     or curr.depth == self.MAX_DEPTH:
                         # Based on early stopping, make curr node a leaf 
                         curr.type_specific_data = TerminalData(value = curr.y_mean)
                         node_list.append(curr) 
                         continue
            
-            # Terminate left or right node if they are homogonous
             assert predicate is not None
             curr.type_specific_data=InternalData(split_var=split_var, split_point=split_point, \
                     predicate=predicate, na_goes_left=na_left)

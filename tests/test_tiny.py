@@ -103,6 +103,20 @@ def strikes1():
     logger.log(logging.CRITICAL, msg = f"fixture loaded")
     return settings, model, predictions
 
+@pytest.fixture(scope='session')
+def strikes1_deep(): 
+    settings = Settings(
+        data_dir="./data-strikes1-deep/",
+        dsc_file="data.dsc",
+        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
+        max_depth=4, min_samples_leaf=5)
+    parse_data(settings=settings)
+    model = Model(settings)
+    model.fit()
+    predictions = model.predict_train_data()
+    logger.log(logging.CRITICAL, msg = f"fixture loaded")
+    return settings, model, predictions
+
 def test_node_file_predictions_for_tiny2(tiny2):
     """ Compare predictions of fitted model on the training data to
     reference software output. 
@@ -156,3 +170,31 @@ def test_node_file_predictions_for_strikes1(strikes1):
     assert nodes_that_cases_landed_in_match.all()
     assert (observed_differences < 1E-3).all()
     assert (prediction_differences < 1E-3).all()
+
+def test_node_file_predictions_for_strikes1_deep(strikes1_deep):
+    """ Compare predictions of fitted model on the training data to
+    reference software output. 
+    Case:   piecewise constant
+            no weight var
+            categoric and numeric variables 
+            no missing values
+            no interaction test
+            *slightly deeper tree
+    """
+    _settings, _model, _predictions = strikes1_deep
+    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
+
+    titles_match =  _predictions.columns == reference.columns 
+    train_y_or_n_matches =  _predictions.train == reference.train 
+    nodes_that_cases_landed_in_match =  _predictions.node == reference.node 
+    observed_differences =  np.abs(_predictions.observed - reference.observed)
+    prediction_differences = np.abs(_predictions.predicted - reference.predicted)
+
+    num_cases = _predictions.shape[0]
+    logger.log(logging.CRITICAL, msg = f"num cases = {num_cases} max pred diff = {prediction_differences.max():.2g}")
+    
+    assert titles_match.all(), "titles did not match"
+    assert train_y_or_n_matches.all(), "train y or no did not match"
+    print(f"node numbers match = {nodes_that_cases_landed_in_match.all()}")
+    assert (observed_differences < 1E-3).all(), "observed diffs did not match"
+    assert (prediction_differences < 1E-3).all(), "prediction diffs did not match"
