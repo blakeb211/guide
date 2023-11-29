@@ -160,7 +160,7 @@ class Model:
                         greatest_tot_sse = cut_sse
                         best_cut = cut
             
-                if True and node.node_num == 14:
+                if False and node.node_num == 14:
                     pdb.set_trace()
                 
 
@@ -403,7 +403,7 @@ class Model:
             elif self.split_point_method == SplitPointMethod.Systematic:
                 raise "not implemented"
 
-            if True and curr.node_num == 14:
+            if False and curr.node_num == 14:
                 pdb.set_trace()
             
             if split_point == None:

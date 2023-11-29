@@ -41,6 +41,7 @@ class SplitPointMethod(Enum):
 
 # Globals
 class Settings():
+    # @TODO: Should not be class vars
     datafile_name = None
     dsc_file = None
     datafile_start_line_idx = None
@@ -51,13 +52,14 @@ class Settings():
     # determined during parsing just like every other
     # model parameter.
 
-    def __init__(self, data_dir, dsc_file, model, max_depth=10, min_samples_leaf=6,prune_by_cv=0):
+    def __init__(self, data_dir, dsc_file, model, max_depth=10, min_samples_leaf=6,prune_by_cv=0, input_file=None):
         self.data_dir = data_dir
         self.model = model
         self.dsc_file = dsc_file
         self.MAX_DEPTH = max_depth
         self.MIN_SAMPLES_LEAF = min_samples_leaf
         self.prune_by_cv  = prune_by_cv  # holds number of SEs to prune by, default 0
+        self.input_file = input_file
         assert os.path.exists(self.data_dir +
                               self.dsc_file), f"{self.dsc_file} not found"
 
@@ -72,8 +74,26 @@ def parse_data(settings : Settings):
     """ Parse the descr and data files. Modifies settings so it
     can be used to build models.
     """
-    # Parse description file first
-    # @NOTE: Could simplify by making a local dict vars_by_role
+    # Parse Input file if present
+    if settings.input_file != None:
+        with open(settings.data_dir + settings.input_file, "r") as f:
+            lines = f.readlines()
+            for idx, l in enumerate(lines):
+                l = l.strip()
+                if "(max. no. split levels)" in l:
+                    # parse up to the first ( as a number
+                    en = l.find('(')
+                    settings.MAX_DEPTH = int(l[0:en])
+
+                if "(1=default min. node size" in l and l.startswith('2'):
+                    # parse lines[idx+1] to number
+                    settings.MIN_SAMPLES_LEAF = int(lines[idx+1])
+
+
+
+
+
+    # Parse description file
     description_file = settings.data_dir + settings.dsc_file
     with open(description_file, "r") as f:
         lines = f.readlines()

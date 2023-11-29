@@ -5,12 +5,10 @@ import pdb
 
 if __name__ == "__main__":
     settings = Settings(
-#       data_dir="./tests/data-strikes2/",
-        data_dir="./tests/data-strikes1/",
+        data_dir="./tests/data-strikes2/",
         dsc_file="data.dsc",
         model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
-#       max_depth=7, min_samples_leaf=24)
-        max_depth=4, min_samples_leaf=5)
+        input_file='cons.in')
     parse_data(settings=settings)
     model = Model(settings)
     model.fit()
