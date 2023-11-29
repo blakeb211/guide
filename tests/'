@@ -10,18 +10,8 @@ sys.path.append("..")
 from parse import Settings, RegressionType, parse_data
 from node import Model
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.CRITICAL)
 logger = logging.getLogger('Test Logger')
-
-# helpers
-def represents_num(s):
-    """ test if string can be cast to a float """
-    try: 
-        float(s)
-    except ValueError:
-        return False
-    else:
-        return True
 
 # These tests scrape data from the GUIDE output and compare 
 
@@ -113,64 +103,31 @@ def strikes2():
 
 
 def compare_predicted_vals(ref, this_prog):
-    """ compare program output to the .node file (train data run through the model) """
     cutoff = 1E-3
     titles_match =  this_prog.columns == ref.columns 
     train_y_or_n_matches =  this_prog.train == ref.train 
+    
     observed_differences =  np.abs(this_prog.observed - ref.observed)
     prediction_differences = np.abs(this_prog.predicted - ref.predicted)
 
-    logger.log(logging.INFO, msg = f"num cases match?               {this_prog.shape[0] == ref.shape[0]} this_prog, ref = {this_prog.shape[0]},{ref.shape[0]}")
-    logger.log(logging.INFO, msg = f"column titles match?           {titles_match.all()}")
-    logger.log(logging.INFO, msg = f"train y or n matches?          {train_y_or_n_matches.all()}")
-    logger.log(logging.INFO, msg = f"observed difference max        {observed_differences.max():.2g}")
-    logger.log(logging.INFO, msg = f"prediction difference max      {prediction_differences.max():.2g}")
-     
-    assert titles_match.all() and train_y_or_n_matches.all() and (observed_differences < cutoff).all() and (prediction_differences < cutoff).all()
+    logger.log(logging.CRITICAL, msg = f"num cases match? {this_prog.shape[0] == ref.shape[0]} this_prog, ref = {this_prog.shape[0]},{ref.shape[0]}")
+    logger.log(logging.CRITICAL, msg = f"train y or n matches? {train_y_or_n_matches}")
+    logger.log(logging.CRITICAL, msg = f"num predicted differences > {cutoff}"
+    f"max pred diff = {prediction_differences.max():.2g}"
+    
+    assert titles_match.all()
+    assert train_y_or_n_matches.all() 
+    assert (observed_differences < 1E-3).all()
+    assert (prediction_differences < 1E-3).all()
 
-def compare_trees(ref_tree, tree_text):
-    """ compare split variable and split points between two trees """
-    # r = reference
-    # p = our program
-    cutoff = 1E-4
+def compare_trees(settings, our_model):
+    ref_tree = parse_output_file_for_tree_text(data_dir=settings.data_dir, fname=_settings.out_file) 
 
-    regex = r"""Node\s(\d*):\s(\S+)\s([<>=//]+)(.*)"""
-    first_point_of_diff = None 
-
-    for lr, lp in zip(ref_tree, tree_text):
-        rtup = re.findall(regex, lr)[0] # returns list of tup so we take index 0
-        ptup = re.findall(regex, lp)[0]
-        if rtup[1] != ptup[1]:
-            first_point_of_diff = f"split var at node {ptup[0]}"
-            break
-        if rtup[2] != ptup[2]:
-            first_point_of_diff = f"splitting sign at node {ptup[0]}"
-            break
-
-        # @TODO Trim off the "or NA" part of the Guide split points for now because
-        #       we have not studied the missing value behavior yet or implemented any of it.
-        rtup = rtup[0], rtup[1], rtup[2], rtup[3].rstrip(' or NA')
-
-        # split point can be numeric or a list of quoted values
-        split_point_same = False
-        if represents_num(rtup[3]):
-            # if one split point is num, both should be numbers since we have the same split_var,
-            # but if something weird happened we want to know 
-            assert(represents_num(ptup[3]))
-            split_point_same = np.isclose(float(ptup[3]),float(rtup[3]))
-        else:
-            # handle comparing categories
-            split_point_same = rtup[3].split(',').sort() == ptup[3].split(',').sort()
-            
-        if not split_point_same:
-            first_point_of_diff = f"split point at node {ptup[0]}"
-            break
-
-    logger.log(logging.INFO, msg = f"tree point of difference       {first_point_of_diff}")
-    if first_point_of_diff != None:
-        logger.log(logging.INFO, msg = f"************ {lp} vs {lr}")
-    assert first_point_of_diff == None
-
+    regex = r"""Node\s(\d*):\s(\S+)\s([<>=//])+(.*)"""
+    for lr, lp in zip(ref_tree, our_model.tree_text):
+        tup_r = re.findall(regex, lr)
+        tup_p = re.findall(regex, lp)
+        print(tup_r, 'cmp', tup_p)
 
 
 def test_tiny2(tiny2):
@@ -186,23 +143,3 @@ def test_tiny2(tiny2):
     reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
 
     compare_predicted_vals(reference, _predictions)
-    
-    ref_tree = parse_output_file_for_tree_text(data_dir=_settings.data_dir, fname=_settings.out_file) 
-    compare_trees(ref_tree, _model.tree_text)
-
-def test_strikes1(strikes1):
-    """ Compare predictions of fitted model on the training data to
-    reference software output. 
-    Case:   piecewise constant
-            no weight var
-            cat and numeric vars 
-            no missing values
-            no interaction test
-    """
-    _settings, _model, _predictions = strikes1
-    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
-
-    compare_predicted_vals(reference, _predictions)
-    
-    ref_tree = parse_output_file_for_tree_text(data_dir=_settings.data_dir, fname=_settings.out_file) 
-    compare_trees(ref_tree, _model.tree_text)

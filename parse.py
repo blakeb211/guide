@@ -1,5 +1,5 @@
-""" First attempt at reproducing GUIDE output for
-single tree regression test case
+"""
+- parse input file
 - parse description file
 - parse data file
 - Pre process (switching columns, dropping rows)
@@ -52,7 +52,9 @@ class Settings():
     # determined during parsing just like every other
     # model parameter.
 
-    def __init__(self, data_dir, dsc_file, model, max_depth=10, min_samples_leaf=6,prune_by_cv=0, input_file=None):
+    # @TODO: Reference program has a calculation for MIN_SAMPLES_LEAF but I do not know it.
+    #        For testing, better to explicity state the min node size in the input file.
+    def __init__(self, data_dir, dsc_file, out_file, model, max_depth=10, min_samples_leaf=6,prune_by_cv=0, input_file=None):
         self.data_dir = data_dir
         self.model = model
         self.dsc_file = dsc_file
@@ -60,6 +62,7 @@ class Settings():
         self.MIN_SAMPLES_LEAF = min_samples_leaf
         self.prune_by_cv  = prune_by_cv  # holds number of SEs to prune by, default 0
         self.input_file = input_file
+        self.out_file = out_file
         assert os.path.exists(self.data_dir +
                               self.dsc_file), f"{self.dsc_file} not found"
 

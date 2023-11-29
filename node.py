@@ -104,6 +104,7 @@ class Model:
             indices=self.idx_active)
         self.next_node_num = 1
         self.one_df_chi2_at_root = {}
+        self.tree_text = [] 
 
     def _get_next_node_num(self):
         ret_val = self.next_node_num
@@ -454,13 +455,19 @@ class Model:
             stack.append(right_node)
             node_list.append(curr)
 
+        # generate the tree text
+        curr_node = self.top_node
+        curr_depth = 1
+        self._print_tree(curr_node, curr_depth)
+
     def _print_tree(self, node, depth):
-        """ recursively print out the tree like the reference output """
+        """ saves tree text to Model class.  recursively process the tree to match the reference output """
         # @TODO: Add support for categoricals
         spacer = "  "
         # base case terminal node
         if node.left == None and node.right == None:
-            print((depth-1)*spacer + f"Node {node.node_num} : target-mean = {node.type_specific_data.value:9f} ({len(node.idx)})")
+            sn = (depth-1)*spacer + f"Node {node.node_num}: target-mean = {node.type_specific_data.value:9f}"
+            self.tree_text.append(sn)
             return
         
         # symbols for categorical versus numeric
@@ -474,18 +481,26 @@ class Model:
         else:
             left_sym = '='
             right_sym = '/='
-        print((depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} {left_sym} {node.type_specific_data.split_point} ({len(node.idx)})")
+
+        # make split point printed output match ref output with quotes around categories separated by commas
+        printable_split_point = ""
+        if isinstance(node.type_specific_data.split_point, tuple):
+            printable_split_point = ", ".join(["\""+str(i)+"\"" for idx,i in enumerate(node.type_specific_data.split_point)]) 
+        else:
+            printable_split_point = node.type_specific_data.split_point
+        
+
+        sl = (depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} {left_sym} {printable_split_point}"
+        self.tree_text.append(sl)
         self._print_tree(node.left, depth+1)
         # print right branch
-        print((depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} {right_sym} {node.type_specific_data.split_point} ({len(node.idx)})")
+        sr = (depth-1)*spacer + f"Node {node.node_num}: {node.type_specific_data.split_var} {right_sym} {printable_split_point}"
+        self.tree_text.append(sr)
         self._print_tree(node.right, depth+1)
+        
 
     def print(self):
-        curr_node = self.top_node
-        curr_depth = 1
-        self._print_tree(curr_node, curr_depth)
-
-
+        pass
 
     def _prune(node):
         """

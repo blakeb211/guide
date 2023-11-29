@@ -1,5 +1,5 @@
 ## Function for predicting least-squares mean of tgt
-## Code produced by GUIDE 41.2 on 11/27/23 at 20:2
+## Code produced by GUIDE 41.2 on 11/28/23 at 20:21
 predicted <- function(){
  if(!is.na(num1) & num1 <= 1.50000000000 ){
    if(!is.na(num2) & num2 <= 0.437500000000 ){
