@@ -302,7 +302,7 @@ class Model:
                 return pvalue
 
             case 'c':
-                logger.log(logging.DEBUG, msg = f"running _calc_chi2_stat, categorical section, col = {col}, node size = {len(node.idx)}")
+                #logger.log(logging.DEBUG, msg = f"running _calc_chi2_stat, categorical section, col = {col}, node size = {len(node.idx)}")
                 # Specify the number of columns in the contingency table
                 unique_vals = self.df.loc[node.idx, col].unique()  # includes NA
                 num_cat = len(unique_vals)
@@ -429,7 +429,7 @@ class Model:
           
             # Split dataframe
             # @NOTE can index a dataframe by a boolean but need to call .loc to index it with an index
-            logger.log(logging.DEBUG, msg = f"splitting node {curr.node_num} with split_var = {split_var} at split point = {split_point}")
+            # logger.log(logging.DEBUG, msg = f"splitting node {curr.node_num} with split_var = {split_var} at split point = {split_point}")
             left = _df[_df[split_var].map(predicate)].index.values
             right = _df[~_df[split_var].map(predicate)].index.values
             assert left.shape[0] + right.shape[0] == curr.idx.shape[0]
@@ -466,7 +466,7 @@ class Model:
         spacer = "  "
         # base case terminal node
         if node.left == None and node.right == None:
-            sn = (depth-1)*spacer + f"Node {node.node_num}: target-mean = {node.type_specific_data.value:9f}"
+            sn = (depth-1)*spacer + f"Node {node.node_num}: {self.tgt}-mean = {node.type_specific_data.value:9f}"
             self.tree_text.append(sn)
             return
         

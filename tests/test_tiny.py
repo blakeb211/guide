@@ -151,6 +151,8 @@ def compare_trees(ref_tree, tree_text):
         #       we have not studied the missing value behavior yet or implemented any of it.
         rtup = rtup[0], rtup[1], rtup[2], rtup[3].rstrip(' or NA')
 
+        if ptup[1] == 'cat1' and int(ptup[0]) == 8:
+            pdb.set_trace()
         # split point can be numeric or a list of quoted values
         split_point_same = False
         if represents_num(rtup[3]):
@@ -160,7 +162,7 @@ def compare_trees(ref_tree, tree_text):
             split_point_same = np.isclose(float(ptup[3]),float(rtup[3]))
         else:
             # handle comparing categories
-            split_point_same = rtup[3].split(',').sort() == ptup[3].split(',').sort()
+            split_point_same = sorted(rtup[3].split(',')) == sorted(ptup[3].split(','))
             
         if not split_point_same:
             first_point_of_diff = f"split point at node {ptup[0]}"
@@ -183,12 +185,13 @@ def test_tiny2(tiny2):
             no interaction test
     """
     _settings, _model, _predictions = tiny2
-    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
-
-    compare_predicted_vals(reference, _predictions)
     
     ref_tree = parse_output_file_for_tree_text(data_dir=_settings.data_dir, fname=_settings.out_file) 
     compare_trees(ref_tree, _model.tree_text)
+
+    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
+    compare_predicted_vals(reference, _predictions)
+    
 
 def test_strikes1(strikes1):
     """ Compare predictions of fitted model on the training data to
@@ -200,9 +203,44 @@ def test_strikes1(strikes1):
             no interaction test
     """
     _settings, _model, _predictions = strikes1
-    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
-
-    compare_predicted_vals(reference, _predictions)
     
     ref_tree = parse_output_file_for_tree_text(data_dir=_settings.data_dir, fname=_settings.out_file) 
     compare_trees(ref_tree, _model.tree_text)
+
+    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
+    compare_predicted_vals(reference, _predictions)
+
+def test_strikes1_deep(strikes1_deep):
+    """ Compare predictions of fitted model on the training data to
+    reference software output. 
+    Case:   piecewise constant
+            no weight var
+            cat and numeric vars 
+            no missing values
+            no interaction test
+    """
+    _settings, _model, _predictions = strikes1_deep
+    
+    ref_tree = parse_output_file_for_tree_text(data_dir=_settings.data_dir, fname=_settings.out_file) 
+    compare_trees(ref_tree, _model.tree_text)
+
+    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
+    compare_predicted_vals(reference, _predictions)
+    
+
+def test_strikes2(strikes2):
+    """ Compare predictions of fitted model on the training data to
+    reference software output. 
+    Case:   piecewise constant
+            no weight var
+            cat and numeric vars 
+            no missing values
+            no interaction test
+    """
+    _settings, _model, _predictions = strikes2
+
+    ref_tree = parse_output_file_for_tree_text(data_dir=_settings.data_dir, fname=_settings.out_file) 
+    compare_trees(ref_tree, _model.tree_text)
+
+    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
+    compare_predicted_vals(reference, _predictions)
