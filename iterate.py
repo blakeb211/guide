@@ -15,4 +15,4 @@ if __name__ == "__main__":
     model.fit()
     model.print()
     print("\n".join(model.tree_text))
-    model.predict_train_data(print_me = False)
+    model.predict_train_data(print_me = True)

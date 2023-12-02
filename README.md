@@ -1,5 +1,5 @@
 # Todo 
-1. Pruning
+1. switch goal from "exact match to GUIDE v41.2 to 'GUIDE-Compatible implementation"
 
 # Done
 1. match reference for unweighted greedy split of categoricals with no missing values 
@@ -7,18 +7,21 @@
 1. write predict to generate node file
 1. write test that can compare node files
 
-
 # WISHLIST
-1. Missing values
+1. Pruning
 1. Interaction tests
+1. Missing values
 1. Weights
-1. Bootstrap correction
-1. Regression beyond PIECEWISE_CONSTANT
+1. Regression for piecewise best simple linear model 
 1. Classification
-1. Priors / Misclassification costs
+1. Bootstrap correction (is this only for categoricals?)
+1. Priors / Misclassification costs, where does it fit in?
 1. Match 1-df chi squared value at root node (we are close but not exact match)
 1. Reduce dependencies
 1. Increase speed
+
+## Variable roles
+1. For regression, variable can be used for splitting, node modeling, or both
 
 ## Missing values
 1. How are new categories created for missing categoricals
@@ -34,7 +37,6 @@
 1. How is cost complexity calculated for regression? (I have a note what 0-SE is)
   pruning on SSE of residuals
 
-
 Table: Variable role meanings
 | Abbreviation | Meaning                                                   |
 |--------------|-----------------------------------------------------------|
@@ -49,17 +51,13 @@ Table: Variable role meanings
 | p            | Periodic variable                                       |
 | w            | Weight                                                   |
 
-# Holistic Overview
+# How to run
+1. run iterate.py 'make' from this directory
 1. run tests with `make test` from this directory
-1. Parse creates a Settings object
+1. the Makefile is very simple; you do not need make if you just look at it
+
+# Holistic Overview
+1. Parse creates a Settings object from the .in, .dsc, and .txt files
 1. Model takes the settings object and builds the model
-1. Selecting split variables 
+1. Testing
 
- numerical val          |  0   0.25% | 0.25 to 0.50 | 0.50 to 0.75 | 0.75 - 1.0 |
-                   pos
-                   neg
-
- categorical val
-                        |   cat1     |   cat2       |    cat3      |   NA       | ... etc
-                   pos
-                   neg

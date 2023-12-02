@@ -41,25 +41,19 @@ class SplitPointMethod(Enum):
 
 # Globals
 class Settings():
-    # @TODO: Should not be class vars
-    datafile_name = None
-    dsc_file = None
-    datafile_start_line_idx = None
-    col_data = pd.DataFrame()
-    data_dir = "./regression-lsr-CE-data/"
-    model = RegressionType.LINEAR_PIECEWISE_CONSTANT
-    # Variables to use for splitting and/or fitting are 
-    # determined during parsing just like every other
-    # model parameter.
-
-    # @TODO: Reference program has a calculation for MIN_SAMPLES_LEAF but I do not know it.
-    #        For testing, better to explicity state the min node size in the input file.
+    """ The settings object holds model parameters. This should probably just be a dictionary. """ 
     def __init__(self, data_dir, dsc_file, out_file, model, max_depth=10, min_samples_leaf=6,prune_by_cv=0, input_file=None):
+        self.datafile_name = None
+        self.dsc_file = None
+        self.datafile_start_line_idx = None
+        self.col_data = pd.DataFrame()
+        self.data_dir = "./regression-lsr-CE-data/"
+        self.model = RegressionType.LINEAR_PIECEWISE_CONSTANT
         self.data_dir = data_dir
         self.model = model
         self.dsc_file = dsc_file
         self.MAX_DEPTH = max_depth
-        self.MIN_SAMPLES_LEAF = min_samples_leaf
+        self.MIN_SAMPLES_LEAF = min_samples_leaf  # The reference program has a formula to calculate this but we do not
         self.prune_by_cv  = prune_by_cv  # holds number of SEs to prune by, default 0
         self.input_file = input_file
         self.out_file = out_file
@@ -91,9 +85,6 @@ def parse_data(settings : Settings):
                 if "(1=default min. node size" in l and l.startswith('2'):
                     # parse lines[idx+1] to number
                     settings.MIN_SAMPLES_LEAF = int(lines[idx+1])
-
-
-
 
 
     # Parse description file

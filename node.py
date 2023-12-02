@@ -142,13 +142,11 @@ class Model:
                     left_mean = _df.loc[left_idx][self.tgt].mean()
                     right_mean = _df.loc[right_idx][self.tgt].mean()
 
-
-                    
+                    # unused for now            
                     left_sse = ( (_df.loc[left_idx, self.tgt]- _df.loc[left_idx, self.tgt].mean())**2 ).sum()
                     right_sse = ( (_df.loc[right_idx, self.tgt]- _df.loc[right_idx, self.tgt].mean())**2 ).sum()
                     sse_sum2 = len(left_idx)*left_sse + len(right_idx)*right_sse
 
-                    
 
                     nAL = len(left_idx)
                     nAR = len(right_idx)
@@ -233,13 +231,6 @@ class Model:
     def _calc_chi2_stat(self, node, col) -> np.float64:
         """ Split numeric into 4 quartiles, split categoricals into c bins
         Calculate chi2_contingency and return p-value """
-        # @NOTE: can we use pvalues as is or do I need to use modified wilson-hilferty to 
-        # get the chi-squared degree 1 and rank the variables like that? The 2002 regression
-        # paper says to sort based on p-values but the tutorial video part 1 says to rank
-        # based on the chi-squared degree of freedom 1. Note the video is 20 years newer
-        # than the paper.
-
-        y_mean = self.df.loc[node.idx, self.tgt].mean()
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean 
         # logger.log(level = logging.DEBUG, msg = f"idx_active size in chi2_stat = {len(node.idx)}")
         pvalue = sys.float_info.max 
