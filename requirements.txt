@@ -41,11 +41,6 @@ json5==0.9.14
 jsonpointer==2.4
 jsonschema==4.19.0
 jsonschema-specifications==2023.7.1
-jupyter-events==0.7.0
-jupyter_server==2.7.2
-jupyter_server_terminals==0.4.4
-jupyterlab-pygments==0.2.2
-jupyterlab-widgets==3.0.8
 kiwisolver==1.4.4
 lazy-object-proxy==1.9.0
 MarkupSafe==2.1.3

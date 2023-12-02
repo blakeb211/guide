@@ -124,7 +124,7 @@ class Model:
         """
 
         _df = self.df.loc[node.idx, [col, self.tgt]]
-
+        
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
             case 'S':
                 # numeric
@@ -341,6 +341,47 @@ class Model:
         """ Find best unbiased splitter among self.split_vars. 
             1. Curvature tests
             2. Interaction test (@todo)
+            
+            To detect interactions between a pair of numerical-valued variables (Xi , Xj ),
+            divide the (Xi , Xj )-space into four quadrants by splitting the range of each
+            variable into two halves at the sample median; construct a 2 × 4 contingency
+            table using the residual signs as rows and the quadrants as columns; compute
+            the χ2 -statistic and p-value. Again, columns with zero column totals are
+            omitted. We refer to this as an interaction test.
+            5. Do the same for each pair of categorical variables, using their value pairs to
+            divide the sample space. For example, if Xi and Xj take ci and cj values,
+            respectively, the χ2 -statistic and p-value are computed from a table with two
+            rows and number of columns equal to ci cj less the number of columns with
+            zero totals.
+            6. For each pair of variables (Xi , Xj ) where Xi is numerical-valued and Xj is
+            categorical, divide the Xi -space into two at the sample median and the Xj -
+            space into as many sets as the number of categories in its range (if Xj has c
+            categories, this splits the (Xi , Xj )-space into 2c subsets); construct a 2 × 2c
+            contingency table with the signs of the residuals as rows and the subsets
+            as columns; compute a χ2 -statistic and p-value for the table after omitting
+            columns with zero totals.
+            If the smallest p-value is from a curvature test, it is natural to select the
+            associated X variable to split the node. If the smallest p-value is from an in-
+            teraction test, we need to select one of the two interacting variables. We could
+            choose on the basis of the curvature p-values of the two variables but because
+            the goal is to ﬁt a constant model in each node, we base the choice on reduction
+            in SSE.REGRESSION TREES
+            367
+            Algorithm 2. Choice between interacting pair of X variables.
+            Suppose that a pair of variables is selected because their interaction test is
+            the most signiﬁcant among all the curvature and interaction tests.
+            1. If both variables are numerical-valued, the node is split in turn along the
+            sample mean of each variable; for each split, the SSE for a constant model
+            is obtained for each subnode; the variable yielding the split with the smaller
+            total SSE is selected.
+            2. Otherwise if at least one variable is categorical, the one with the smaller
+            curvature p-value is selected.
+            If a variable from a signiﬁcant interaction is selected to split a node, one
+            strategy could be to require the other variable in the pair to split the immediate
+            children nodes. This has the advantage of highlighting the interaction in the tree
+            structure. On the other hand, by letting all the variables compete for splits at
+            every node, it may be possible to obtain a shorter tree. The latter strategy is
+            adopted for this reason.
         """
         
         if self.weight_var == list():

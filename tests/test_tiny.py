@@ -1,5 +1,6 @@
 import pytest
 import sys
+import math
 import os
 import pdb
 import re
@@ -122,7 +123,7 @@ def compare_predicted_vals(ref, this_prog):
     
     this_prog_mse = ((this_prog.observed - this_prog.predicted)**2).mean()
     ref_mse = ((ref.observed - ref.predicted)**2).mean()
-    mse_difference = (this_prog_mse - ref_mse) / ref_mse
+    rel_mse_diff = (this_prog_mse - ref_mse) / ref_mse
 
     logger.log(logging.INFO, msg = f"num cases match?               {this_prog.shape[0] == ref.shape[0]} this_prog, ref = {this_prog.shape[0]},{ref.shape[0]}")
     logger.log(logging.INFO, msg = f"column titles match?           {titles_match.all()}")
@@ -131,7 +132,7 @@ def compare_predicted_vals(ref, this_prog):
     logger.log(logging.INFO, msg = f"prediction difference max      {prediction_differences.max():.2g}")
     logger.log(logging.INFO, msg = f"mse this program               {this_prog_mse}")
     logger.log(logging.INFO, msg = f"mse reference                  {ref_mse}")
-    logger.log(logging.INFO, msg = f"relative mse difference        {mse_difference}")
+    logger.log(logging.INFO, msg = f"relative mse difference        {round(math.fabs(rel_mse_diff)*100.0,2)}%")
      
     # assert titles_match.all() and train_y_or_n_matches.all() and (observed_differences < cutoff).all() and (prediction_differences < cutoff).all()
 
