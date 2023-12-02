@@ -61,7 +61,7 @@ def tiny2():
         data_dir="./data-tiniest2/",
         dsc_file="data.dsc",
         out_file="cons.out",
-        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
+        model=RegressionType.PIECEWISE_CONSTANT,
         max_depth=3, min_samples_leaf=2)
     parse_data(settings=settings)
     model = Model(settings)
@@ -75,7 +75,7 @@ def strikes1():
         data_dir="./data-strikes1/",
         dsc_file="data.dsc",
         out_file="cons.out",
-        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
+        model=RegressionType.PIECEWISE_CONSTANT,
         input_file="cons.in")
     parse_data(settings=settings)
     model = Model(settings)
@@ -89,7 +89,7 @@ def strikes1_deep():
         data_dir="./data-strikes1-deep/",
         dsc_file="data.dsc",
         out_file="cons.out",
-        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
+        model=RegressionType.PIECEWISE_CONSTANT,
         input_file="cons.in")
     parse_data(settings=settings)
     model = Model(settings)
@@ -104,7 +104,7 @@ def strikes2():
         data_dir="./data-strikes2/",
         dsc_file="data.dsc",
         out_file="cons.out",
-        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
+        model=RegressionType.PIECEWISE_CONSTANT,
         input_file="cons.in")
     parse_data(settings=settings)
     model = Model(settings)
@@ -175,7 +175,7 @@ def compare_trees(ref_tree, tree_text):
             break
 
     # Log our tree's first point of difference with the reference tree
-    logger.log(logging.INFO, msg = f"1st tree difference w\ ref     {first_point_of_diff}")
+    logger.log(logging.INFO, msg = f"1st tree difference w\\ ref     {first_point_of_diff}")
     if first_point_of_diff != None:
         logger.log(logging.INFO, msg = f"************ {lp} vs {lr}")
     # assert first_point_of_diff == None

@@ -30,8 +30,8 @@ from collections import Counter
 
 class RegressionType(Enum):
     """ Type of regression """
-    LINEAR_PIECEWISE_CONSTANT = 1
-    QUANTILE = 2
+    PIECEWISE_CONSTANT = 1
+    LINEAR_PIECEWISE = 2
     POISSON = 3
 
 class SplitPointMethod(Enum):
@@ -39,7 +39,6 @@ class SplitPointMethod(Enum):
     Median = 2
     Systematic = 3
 
-# Globals
 class Settings():
     """ The settings object holds model parameters. This should probably just be a dictionary. """ 
     def __init__(self, data_dir, dsc_file, out_file, model, max_depth=10, min_samples_leaf=6,prune_by_cv=0, input_file=None):
@@ -47,8 +46,7 @@ class Settings():
         self.dsc_file = None
         self.datafile_start_line_idx = None
         self.col_data = pd.DataFrame()
-        self.data_dir = "./regression-lsr-CE-data/"
-        self.model = RegressionType.LINEAR_PIECEWISE_CONSTANT
+        self.model = RegressionType.PIECEWISE_CONSTANT
         self.data_dir = data_dir
         self.model = model
         self.dsc_file = dsc_file

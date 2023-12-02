@@ -7,7 +7,7 @@ if __name__ == "__main__":
     settings = Settings(
         data_dir="./tests/data-strikes2/",
         dsc_file="data.dsc",
-        model=RegressionType.LINEAR_PIECEWISE_CONSTANT,
+        model=RegressionType.PIECEWISE_CONSTANT,
         out_file="cons.out",
         input_file='cons.in')
     parse_data(settings=settings)

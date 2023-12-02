@@ -92,7 +92,7 @@ class Model:
         self.split_vars = settings.split_vars
         self.col_data = settings.col_data
         self.split_point_method = SplitPointMethod.Greedy
-        self.model_type = RegressionType.LINEAR_PIECEWISE_CONSTANT
+        self.model_type = RegressionType.PIECEWISE_CONSTANT
         self.MIN_SAMPLES_LEAF = settings.MIN_SAMPLES_LEAF
         self.MAX_DEPTH = settings.MAX_DEPTH
         self.node_list = []
@@ -419,7 +419,7 @@ class Model:
         self.top_node.node_num = self._get_next_node_num()
         stack.append(self.top_node)
         
-        assert self.model_type == RegressionType.LINEAR_PIECEWISE_CONSTANT
+        assert self.model_type == RegressionType.PIECEWISE_CONSTANT, "other models not implemented"
       
         
         # process nodes, adding new nodes as they are created
