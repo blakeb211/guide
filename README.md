@@ -15,8 +15,12 @@
 1. Each directory in the tests folder is a set of GUIDE files input, description, data, output, etc.
 
 # Todo 
-1. Interaction tests
-1. Test for interaction tests from the 2002 paper
+1. Put in fast categoricals
+1. Put in Interaction tests
+1. Write test for interaction tests from the 2002 paper
+1. Clean up parse 
+1. MyLint and MyPy to clean up the code
+1. Open the repo
 
 # Completed 
 1. switched goal from "exact match to GUIDE v41.2 to 'GUIDE-Compatible implementation"

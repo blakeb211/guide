@@ -41,7 +41,7 @@ class SplitPointMethod(Enum):
 
 class Settings():
     """ The settings object holds model parameters. This should probably just be a dictionary. """ 
-    def __init__(self, data_dir, dsc_file, out_file, model, max_depth=10, min_samples_leaf=6,prune_by_cv=0, input_file=None):
+    def __init__(self, data_dir, dsc_file, out_file, model, max_depth=10, min_samples_leaf=6, input_file=None):
         self.datafile_name = None
         self.dsc_file = None
         self.datafile_start_line_idx = None
@@ -52,9 +52,9 @@ class Settings():
         self.dsc_file = dsc_file
         self.MAX_DEPTH = max_depth
         self.MIN_SAMPLES_LEAF = min_samples_leaf  # The reference program has a formula to calculate this but we do not
-        self.prune_by_cv  = prune_by_cv  # holds number of SEs to prune by, default 0
         self.input_file = input_file
         self.out_file = out_file
+        self.interactions_on = False
         assert os.path.exists(self.data_dir +
                               self.dsc_file), f"{self.dsc_file} not found"
 
@@ -82,7 +82,17 @@ def parse_data(settings : Settings):
 
                 if "(1=default min. node size" in l and l.startswith('2'):
                     # parse lines[idx+1] to number
-                    settings.MIN_SAMPLES_LEAF = int(lines[idx+1])
+                    _line = lines[idx+1].strip()
+                    # either a bracket is on the next line or not
+                    # if not, we just strip the line and convert
+                    # it to a number
+                    en = _line.find('(')
+                    if en != -1:
+                        _line = _line[0:en]
+                    settings.MIN_SAMPLES_LEAF = int(_line)
+
+                if "(1=interaction tests, 2=skip them)" in l:
+                    settings.interactions_on = l.startswith('1')
 
 
     # Parse description file
@@ -249,8 +259,9 @@ def parse_data(settings : Settings):
     print(col_data[col_data.var_role != 'x'])
     print(
         f"Number of split variables: {len(_vars_by_role(col_data, 'c')) + len(_vars_by_role(col_data, 'S'))}")
-    print(f"Max depth of tree: {settings.MAX_DEPTH}")
-    print(f"Min samples per node: {settings.MIN_SAMPLES_LEAF}")
+    print(f"Max depth of tree     : {settings.MAX_DEPTH}")
+    print(f"Min samples per node  : {settings.MIN_SAMPLES_LEAF}")
+    print(f"Interaction tests done: {settings.interactions_on}")
     x_vars = _vars_by_role(col_data, 'x')
     settings.col_data = col_data
     settings.df = df

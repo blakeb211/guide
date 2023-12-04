@@ -5,7 +5,7 @@ import pdb
 
 if __name__ == "__main__":
     settings = Settings(
-        data_dir="./tests/data-strikes2/",
+        data_dir="./tests/data-baseball/",
         dsc_file="data.dsc",
         model=RegressionType.PIECEWISE_CONSTANT,
         out_file="cons.out",

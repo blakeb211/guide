@@ -1,0 +1,305 @@
+             GGG   U   U  I  DDDD   EEEE
+            G   G  U   U  I  D   D  E
+            G      U   U  I  D   D  E
+            G  GG  U   U  I  D   D  EEE
+            G   G  U   U  I  D   D  E
+            G   G  U   U  I  D   D  E
+             GGG    UUU   I  DDDD   EEEE
+   
+ GUIDE Classification and Regression Trees and Forests
+ Version 41.2 (Build date: April 9, 2023)          
+ Compiled with gfortran 11.3.0 on Ubuntu 22.04.2                       
+ Copyright (c) 1997-2023 Wei-Yin Loh. All rights reserved.
+ This software is based upon work partially supported by the U.S. Army Research Office,
+ National Science Foundation, National Institutes of Health,
+ Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
+  
+ This job was started on 12/03/23 at 13:39
+  
+ Least squares regression tree
+ No pruning
+ Data description file: data.dsc
+ Training sample file: data.txt
+ Missing value code: NA
+ Records in data file start on line 2
+ 16 N variables changed to S
+ D variable is Salary
+ Piecewise constant model
+ Number of records in data file: 263
+ Length of longest entry in data file: 8
+  
+ Summary information for training sample of size 263
+ d=dependent, b=split and fit cat variable using indicator variables,
+ c=split-only categorical, i=fit-only categorical (via indicators),
+ s=split-only numerical, n=split and fit numerical, f=fit-only numerical,
+ m=missing-value flag variable, p=periodic variable, w=weight
+                                                  #Codes/           
+                                                  Levels/           
+  Column  Name            Minimum      Maximum    Periods   #Missing
+       1  AtBat      s    19.00        687.0    
+       2  Hits       s    1.000        238.0    
+       3  HmRun      s    0.000        40.00    
+       4  Runs       s    0.000        130.0    
+       5  RBI        s    0.000        121.0    
+       6  Walks      s    0.000        105.0    
+       7  Years      s    1.000        24.00    
+       8  CAtBat     s    19.00       0.1405E+05
+       9  CHits      s    4.000        4256.    
+      10  CHmRun     s    0.000        548.0    
+      11  CRuns      s    2.000        2165.    
+      12  CRBI       s    3.000        1659.    
+      13  CWalks     s    1.000        1566.    
+      14  League     c                                  2
+      15  Division   c                                  2
+      16  PutOuts    s    0.000        1377.    
+      17  Assists    s    0.000        492.0    
+      18  Errors     s    0.000        32.00    
+      19  Salary     d    67.50        2460.    
+      20  NewLeague  c                                  2
+  
+      Total  #cases w/   #missing
+     #cases    miss. D  ord. vals   #X-var   #N-var   #F-var   #S-var
+        263          0          0        0        0        0       16
+     #P-var   #M-var   #B-var   #C-var   #I-var
+          0        0        0        3        0
+ No weight variable in data file
+ Number of cases used for training: 263
+ Number of split variables: 19
+  
+ Constant fitted to cases with missing values in regressor variables
+ Nodewise interaction tests on all variables
+ Split values for N and S variables based on exhaustive search
+ Maximum number of split levels: 4
+ Minimum node sample size: 10
+ Top-ranked variables and 1-df chi-squared values at root node
+      1  0.7840E+02   CAtBat
+      2  0.7430E+02   CRuns
+      3  0.7414E+02   CHits
+      4  0.7223E+02   CRBI
+      5  0.6045E+02   CWalks
+      6  0.5719E+02   Hits
+      7  0.5321E+02   Years
+      8  0.5241E+02   CHmRun
+      9  0.4492E+02   RBI
+     10  0.4109E+02   AtBat
+     11  0.3338E+02   Runs
+     12  0.2877E+02   Walks
+     13  0.1854E+02   HmRun
+     14  0.1225E+02   PutOuts
+     15  0.4581E+01   Division
+     16  0.1972E+01   Errors
+     17  0.1786E+01   NewLeague
+     18  0.3958E+00   League
+     19  0.1145E+00   Assists
+
+  
+ Structure of final tree. Each terminal node is marked with a T.
+  
+ D-mean is mean of Salary in the node
+ Cases fit give the number of cases used to fit node
+ MSE is residual sum of squares divided by number of cases in node
+        Node    Total    Cases Matrix    Node      Node      Split          Interacting
+        label   cases      fit  rank    D-mean     MSE       variable       variable
+           1      263      263     1  5.359E+02  2.035E+05   CAtBat 
+           2      123      123     1  2.456E+02  5.519E+04   CAtBat 
+           4       92       92     1  1.890E+02  5.356E+04   CRuns 
+           8T      11       11     1  3.521E+02  4.096E+05   - 
+           9       81       81     1  1.669E+02  5.568E+03   CHits 
+          18T      45       45     1  1.176E+02  1.280E+03   CHits 
+          19T      36       36     1  2.285E+02  4.093E+03   AtBat 
+           5       31       31     1  4.134E+02  2.305E+04   CRBI 
+          10T      14       14     1  3.603E+02  8.065E+03   - 
+          11T      17       17     1  4.572E+02  3.216E+04   - 
+           3      140      140     1  7.910E+02  1.950E+05   RBI 
+           6      108      108     1  6.771E+02  1.058E+05   AtBat 
+          12       45       45     1  4.906E+02  5.777E+04   Years 
+          24T      25       25     1  5.411E+02  6.406E+04   HmRun 
+          25T      20       20     1  4.275E+02  4.531E+04   - 
+          13       63       63     1  8.104E+02  9.832E+04   League 
+          26T      31       31     1  8.605E+02  1.079E+05   CRuns 
+          27T      32       32     1  7.618E+02  8.732E+04   CHmRun 
+           7       32       32     1  1.175E+03  3.115E+05   Walks 
+          14T      11       11     1  7.949E+02  1.127E+05   - 
+          15       21       21     1  1.375E+03  3.052E+05   PutOuts 
+          30T      10       10     1  1.250E+03  1.343E+05   - 
+          31T      11       11     1  1.488E+03  4.599E+05   - 
+  
+ Number of terminal nodes of final tree: 12
+ Total number of nodes of final tree: 23
+ Second best split variable (based on curvature test) at root node is CRuns
+  
+ Regression tree:
+ For categorical variable splits, values not in training data go to the right
+  
+ Node 1: CAtBat <= 1772.5000
+   Node 2: CAtBat <= 1322.0000
+     Node 4: CRuns <= 28.500000
+       Node 8: Salary-mean = 352.07573
+     Node 4: CRuns > 28.500000 or NA
+       Node 9: CHits <= 182.00000
+         Node 18: Salary-mean = 117.60000
+       Node 9: CHits > 182.00000 or NA
+         Node 19: Salary-mean = 228.47686
+   Node 2: CAtBat > 1322.0000 or NA
+     Node 5: CRBI <= 162.00000
+       Node 10: Salary-mean = 360.28571
+     Node 5: CRBI > 162.00000 or NA
+       Node 11: Salary-mean = 457.20588
+ Node 1: CAtBat > 1772.5000 or NA
+   Node 3: RBI <= 78.500000
+     Node 6: AtBat <= 369.00000
+       Node 12: Years <= 12.500000
+         Node 24: Salary-mean = 541.10004
+       Node 12: Years > 12.500000 or NA
+         Node 25: Salary-mean = 427.50000
+     Node 6: AtBat > 369.00000 or NA
+       Node 13: League = "A"
+         Node 26: Salary-mean = 860.47235
+       Node 13: League /= "A"
+         Node 27: Salary-mean = 761.80725
+   Node 3: RBI > 78.500000 or NA
+     Node 7: Walks <= 52.500000
+       Node 14: Salary-mean = 794.92427
+     Node 7: Walks > 52.500000 or NA
+       Node 15: PutOuts <= 316.50000
+         Node 30: Salary-mean = 1249.9793
+       Node 15: PutOuts > 316.50000 or NA
+         Node 31: Salary-mean = 1488.0065
+ 
+ ***************************************************************
+  
+ WARNING: p-values below not adjusted for split search. For a bootstrap solution see:
+  
+ 1. Loh et al. (2016), "Identification of subgroups with differential treatment effects
+ for longitudinal and multiresponse variables", Statistics in Medicine, v.35, 4837-4855.
+  
+ 2. Loh et al. (2019), "Subgroups from regression trees with adjustment for prognostic
+ effects and post-selection inference", Statistics in Medicine, v.38, 545-557.
+  
+ 3. Loh and Zhou (2020), "The GUIDE approach to subgroup identification",
+ in "Design and Analysis of Subgroups with Biopharmaceutical Applications", Springer, pp.147-165.
+  
+Node 1: Intermediate node
+ A case goes into Node 2 if CAtBat <= 1772.5000
+ CAtBat mean = 2657.5437
+ Coefficients of least squares regression function:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      535.9        19.27        0.000    
+ Salary mean = 535.926
+ ----------------------------
+Node 2: Intermediate node
+ A case goes into Node 4 if CAtBat <= 1322.0000
+ CAtBat mean = 861.60976
+ ----------------------------
+Node 4: Intermediate node
+ A case goes into Node 8 if CRuns <= 28.500000
+ CRuns mean = 81.282609
+ ----------------------------
+Node 8: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      352.1        1.825       0.9805E-01
+ Salary mean = 352.076
+ ----------------------------
+Node 9: Intermediate node
+ A case goes into Node 18 if CHits <= 182.00000
+ CHits mean = 174.01235
+ ----------------------------
+Node 18: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      117.6        22.05        0.000    
+ Salary mean = 117.600
+ ----------------------------
+Node 19: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      228.5        21.43        0.000    
+ Salary mean = 228.477
+ ----------------------------
+Node 5: Intermediate node
+ A case goes into Node 10 if CRBI <= 162.00000
+ CRBI mean = 179.80645
+ ----------------------------
+Node 10: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      360.3        15.01       0.1317E-08
+ Salary mean = 360.286
+ ----------------------------
+Node 11: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      457.2        10.51       0.1365E-07
+ Salary mean = 457.206
+ ----------------------------
+Node 3: Intermediate node
+ A case goes into Node 6 if RBI <= 78.500000
+ RBI mean = 58.471429
+ ----------------------------
+Node 6: Intermediate node
+ A case goes into Node 12 if AtBat <= 369.00000
+ AtBat mean = 404.64815
+ ----------------------------
+Node 12: Intermediate node
+ A case goes into Node 24 if Years <= 12.500000
+ Years mean = 12.444444
+ ----------------------------
+Node 24: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      541.1        10.69       0.1317E-09
+ Salary mean = 541.100
+ ----------------------------
+Node 25: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      427.5        8.982       0.2876E-07
+ Salary mean = 427.500
+ ----------------------------
+Node 13: Intermediate node
+ A case goes into Node 26 if League = "A"
+ League mode = "N"
+ ----------------------------
+Node 26: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      860.5        14.59       0.3997E-14
+ Salary mean = 860.472
+ ----------------------------
+Node 27: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      761.8        14.58        0.000    
+ Salary mean = 761.807
+ ----------------------------
+Node 7: Intermediate node
+ A case goes into Node 14 if Walks <= 52.500000
+ Walks mean = 61.500000
+ ----------------------------
+Node 14: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      794.9        7.853       0.1385E-04
+ Salary mean = 794.924
+ ----------------------------
+Node 15: Intermediate node
+ A case goes into Node 30 if PutOuts <= 316.50000
+ PutOuts mean = 540.76190
+ ----------------------------
+Node 30: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1250.        10.79       0.1899E-05
+ Salary mean = 1249.98
+ ----------------------------
+Node 31: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1488.        7.277       0.2671E-04
+ Salary mean = 1488.01
+ ----------------------------
+ Proportion of variance (R-squared) explained by tree model: 0.6213
+ 
+ Observed and fitted values are stored in data.node
+ Elapsed time in seconds: 0.21552E-1
