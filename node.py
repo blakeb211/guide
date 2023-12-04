@@ -97,6 +97,7 @@ class Model:
         self.MAX_DEPTH = settings.MAX_DEPTH
         self.node_list = []
         self.idx_active = settings.idx_active
+        self.interactions_on = settings.interactions_on
         self.top_node = Node(
             type_specific_data=InternalData(None, None, None, True),
             depth=0,
@@ -238,7 +239,7 @@ class Model:
         for col in self.split_vars:
             pvalue = sys.float_info.max 
             match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
-                case 'S':
+                case 'S' | 'n':
                     # Convert the column to a NumPy array
                     vals = self.df.loc[node.idx, col].values
                     indexes = self.df.loc[node.idx, col].index.values
@@ -314,6 +315,66 @@ class Model:
 
     def interaction_test(self, node) -> dict():
         one_dof_stats = {}
+        pairs = [*combinations(self.split_vars,r=2)]
+        pvalues = {}
+        one_dof_stats = {}
+        residuals = self.df.loc[node.idx, self.tgt] - node.y_mean 
+        roles = { var : self.col_data[self.col_data['var_name'] == var].var_role.values[0] for var in self.split_vars}
+        
+        for pval_idx, (a,b) in enumerate(pairs):
+            
+            # case: a and b numeric    
+            if roles[a] in ['S','n'] and roles[b] in ['S','n']:
+                chi_squared = np.zeros(shape=(2,4))
+                quadrants = list(product(['lt','gt'],['lt','gt']))
+                for idx, (ci,cj) in enumerate(quadrants):
+                    if ci == 'lt':
+                        left_bool_idx = self.df.loc[node.idx,a] <= self.df.loc[node.idx,a].median()
+                    else:  
+                        left_bool_idx = self.df.loc[node.idx,a] > self.df.loc[node.idx,a].median()
+                    if cj == 'lt':
+                        right_bool_idx = self.df.loc[node.idx,b] <= self.df.loc[node.idx,b].median()
+                    else:
+                        right_bool_idx = self.df.loc[node.idx,b] > self.df.loc[node.idx,b].median()
+                    chi_squared[0,idx] = (residuals[left_bool_idx & right_bool_idx] <= 0).sum()
+                    chi_squared[1,idx] = (residuals[left_bool_idx & right_bool_idx] > 0).sum()
+                chi_squared = remove_empty_cols(chi_squared)
+                
+            # case: a and b categoric
+            elif roles[a] == roles[b] and roles[a] == 'c':
+                alev = self.df.loc[node.idx,a].unique()
+                blev = self.df.loc[node.idx,b].unique()
+                cat_pairs = list(product(alev,blev))
+                chi_squared = np.zeros(shape=(2, len(cat_pairs)))
+                for idx, (ci,cj) in enumerate(cat_pairs):
+                    chi_squared[0,idx] = (residuals[(self.df.loc[node.idx,a] == ci) & (self.df.loc[node.idx,b] == cj)] < 0).sum()
+                    chi_squared[1,idx] = (residuals[(self.df.loc[node.idx,a] == ci) & (self.df.loc[node.idx,b] == cj)] >= 0).sum()
+                chi_squared = remove_empty_cols(chi_squared)
+                
+            # case: one numeric and one categoric
+            elif (roles[a] == 'c' and roles[b] in ['S','n']) or (roles[a] in ['S','n'] and roles[b] == 'c'):
+                if roles[a] != 'c':
+                    # ensure categorical variable is a
+                    a, b = b, a
+                alev = self.df.loc[node.idx,a].unique()
+                chi_squared = np.zeros(shape=(2,2*len(alev)))
+                groups = list(product(alev,['lt','gt']))
+                for idx, (ci,cj) in enumerate(groups):
+                    if cj == 'lt':
+                        bool_idx = self.df.loc[node.idx,b] <= self.df.loc[node.idx,b].median()
+                    else:
+                        bool_idx = (self.df.loc[node.idx,b] > self.df.loc[node.idx,b].median())
+                    chi_squared[0,idx] = (residuals[(self.df.loc[node.idx,a] == ci) & bool_idx] <= 0).sum()
+                    chi_squared[1,idx] = (residuals[(self.df.loc[node.idx,a] == ci) & bool_idx] > 0).sum()
+                chi_squared = remove_empty_cols(chi_squared)
+                
+            else:
+                assert False, "We should never reach this line. Likely caused by unhandled variable role."
+
+            res = chi2_contingency(chi_squared)
+            dof, stat = res.dof, res.statistic
+            one_dof_stat = wilson_hilferty(stat=stat, dof=dof)
+            one_dof_stats[(a,b)] = one_dof_stat
         #one_dof_stats[(a,b)] = one_dof_stat
         # convert dof to 1-df and get pvalue
         return one_dof_stats
@@ -378,8 +439,12 @@ class Model:
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean
 
         curv_one_dof_stats = self.curvature_test(node) 
+        interaction_one_dof_stats = {}
+        if self.interactions_on == True:
+            interaction_one_dof_stats = self.interaction_test(node)
+            interaction_one_dof_stats = sorted(interaction_one_dof_stats.items(), key = lambda x: x[1],reverse=True)
+            top_pair, top_pair_pval = interaction_one_dof_stats[0][0], pvalue_for_one_dof(interaction_one_dof_stats[0][1])
 
-        interaction_one_dof_stats = self.interaction_test(node)
 
         #@TODO Logic for interaction tests
 
@@ -390,7 +455,8 @@ class Model:
         curv_pval = { k : curv_p_adj[idx] for idx, k in enumerate(curv_pval.keys())}
 
         sorted_pvals = sorted(curv_pval.items(), key=lambda x: x[1])
-        
+
+        # @TODO: correct this, does not print anything right now 
         if node == self.top_node:
             print()
             print("Top-ranked variables and 1-df chi-squared values at root node")
@@ -588,7 +654,6 @@ def wilson_hilferty(stat, dof) -> np.float64:
         return stat 
     if dof == 0:
         return 0
-    print("running wilson hilferty with ", stat, dof)
     w1 = (math.sqrt(2*stat) - math.sqrt(2*dof - 1) + 1)**2 / 2
     temp = 7/9 + math.sqrt(dof)*( (stat/dof)**(1/3) - 1 + 2 / (9 * dof) )
     w2 = max(0, temp ** 3) 
