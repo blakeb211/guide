@@ -112,6 +112,19 @@ def strikes2():
     predictions = model.predict_train_data()
     return settings, model, predictions
 
+@pytest.fixture(scope='session')
+def baseball(): 
+    settings = Settings(
+        data_dir="./data-baseball/",
+        dsc_file="data.dsc",
+        out_file="cons.out",
+        model=RegressionType.PIECEWISE_CONSTANT,
+        input_file="cons.in") 
+    parse_data(settings=settings)
+    model = Model(settings)
+    model.fit()
+    predictions = model.predict_train_data()
+    return settings, model, predictions
 
 def compare_predicted_vals(ref, this_prog):
     """ compare program output to the .node file (train data run through the model) """
@@ -245,6 +258,23 @@ def test_strikes2(strikes2):
             no interaction test
     """
     _settings, _model, _predictions = strikes2
+
+    ref_tree = parse_output_file_for_tree_text(data_dir=_settings.data_dir, fname=_settings.out_file) 
+    compare_trees(ref_tree, _model.tree_text)
+
+    reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
+    compare_predicted_vals(reference, _predictions)
+
+def test_baseball(baseball):
+    """ Compare predictions of fitted model on the training data to
+    reference software output. 
+    Case:   piecewise constant
+            no weight var
+            cat and numeric vars 
+            no missing values
+            Has interaction test
+    """
+    _settings, _model, _predictions = baseball
 
     ref_tree = parse_output_file_for_tree_text(data_dir=_settings.data_dir, fname=_settings.out_file) 
     compare_trees(ref_tree, _model.tree_text)

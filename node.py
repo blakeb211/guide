@@ -60,29 +60,7 @@ class Node:
 
 class Model:
     """
-    At each node, a constant (namely, the sample Y -mean) is ﬁtted and the residuals computed.
-    To solve the ﬁrst problem,
-    we use instead the Pearson chi-square test to detect associations between the
-    signed residuals and groups of predictor values. If X is a c-category predictor,
-    the test is applied to the 2 × c table formed by the two groups of residuals as
-    rows and the categories of X as columns. If X is a numerical-valued variable, its
-    values can be grouped to form the columns of the table. We divide the range of
-    X into four groups at the sample quartiles to yield a 2 × 4 table. There are other
-    ways to deﬁne the groups for ordered variables, but there is probably none that
-    is optimal for all situations. Our experience indicates that this choice provides
-    suﬃcient detection power while keeping the chance of empty cells low.
-
-    @TODO: Skip the interaction tests for the first draft
-    Although the chi-square test is sensitive to curvature along the direct, it does
-    not work as well with with simple interaction models such as
-    I(X1*X2 > 0) - I(X1*X2) <= 0) + noise
-
-
-    So far we have concentrated on the problem of variable selection. To complete
-    the tree construction algorithm, we need to select the split points as well as
-    determine the size of the tree. For the latter, we adopt the CART method of
-    cost-complexity pruning with an independent test set or, in its absence, by cross-
-    validation.
+    GUIDE-like model class
     """
     def __init__(self, settings: Settings):
         self.df = settings.df
@@ -336,18 +314,18 @@ class Model:
 
         return ret_one_dof_stat
 
-    def interaction_test(self, node) -> dict():
+    def interaction_test(self, node) -> dict:
+        """ Per the 2002 regression paper, calc one degree of freedom chi2 stats for interacting pairs """
         one_dof_stats = {}
         pairs = [*combinations(self.split_vars,r=2)]
         pvalues = {}
         one_dof_stats = {}
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean 
-        roles = { var : self.col_data[self.col_data['var_name'] == var].var_role.values[0] for var in self.split_vars}
         
         for pval_idx, (a,b) in enumerate(pairs):
             
             # case: a and b numeric    
-            if roles[a] in ['S','n'] and roles[b] in ['S','n']:
+            if self.roles[a] in ['S','n'] and self.roles[b] in ['S','n']:
                 chi_squared = np.zeros(shape=(2,4))
                 quadrants = list(product(['lt','gt'],['lt','gt']))
                 for idx, (ci,cj) in enumerate(quadrants):
@@ -364,7 +342,7 @@ class Model:
                 chi_squared = remove_empty_cols(chi_squared)
                 
             # case: a and b categoric
-            elif roles[a] == roles[b] and roles[a] == 'c':
+            elif self.roles[a] == self.roles[b] and self.roles[a] == 'c':
                 alev = self.df.loc[node.idx,a].unique()
                 blev = self.df.loc[node.idx,b].unique()
                 cat_pairs = list(product(alev,blev))
@@ -375,8 +353,8 @@ class Model:
                 chi_squared = remove_empty_cols(chi_squared)
                 
             # case: one numeric and one categoric
-            elif (roles[a] == 'c' and roles[b] in ['S','n']) or (roles[a] in ['S','n'] and roles[b] == 'c'):
-                if roles[a] != 'c':
+            elif (self.roles[a] == 'c' and self.roles[b] in ['S','n']) or (self.roles[a] in ['S','n'] and self.roles[b] == 'c'):
+                if self.roles[a] != 'c':
                     # ensure categorical variable is a
                     a, b = b, a
                 alev = self.df.loc[node.idx,a].unique()
@@ -404,38 +382,9 @@ class Model:
     def _get_best_variable(self, node) -> str:
         """ Find best unbiased splitter among self.split_vars. 
             1. Curvature tests
-            2. Interaction test (@todo)
+            2. Interaction test per the 2002 Regression paper. Note that the docs folder has a picture from the 2021 
+            slideshow with another level of tests using linear discriminants.
             
-            To detect interactions between a pair of numerical-valued variables (Xi , Xj ),
-            divide the (Xi , Xj )-space into four quadrants by splitting the range of each
-            variable into two halves at the sample median; construct a 2 × 4 contingency
-            table using the residual signs as rows and the quadrants as columns; compute
-            the χ2 -statistic and p-value. Again, columns with zero column totals are
-            omitted. We refer to this as an interaction test.
-                i0 i50 j0 j50
-            - 
-            +
-
-
-            5. Do the same for each pair of categorical variables, using their value pairs to
-            divide the sample space. For example, if Xi and Xj take ci and cj values,
-            respectively, the χ2 -statistic and p-value are computed from a table with two
-            rows and number of columns equal to ci cj less the number of columns with
-            zero totals.
-            6. For each pair of variables (Xi , Xj ) where Xi is numerical-valued and Xj is
-            categorical, divide the Xi -space into two at the sample median and the Xj -
-            space into as many sets as the number of categories in its range (if Xj has c
-            categories, this splits the (Xi , Xj )-space into 2c subsets); construct a 2 × 2c
-            contingency table with the signs of the residuals as rows and the subsets
-            as columns; compute a χ2 -statistic and p-value for the table after omitting
-            columns with zero totals.
-            If the smallest p-value is from a curvature test, it is natural to select the
-            associated X variable to split the node. If the smallest p-value is from an in-
-            teraction test, we need to select one of the two interacting variables. We could
-            choose on the basis of the curvature p-values of the two variables but because
-            the goal is to ﬁt a constant model in each node, we base the choice on reduction
-            in SSE.REGRESSION TREES
-            367
             Algorithm 2. Choice between interacting pair of X variables.
             Suppose that a pair of variables is selected because their interaction test is
             the most signiﬁcant among all the curvature and interaction tests.
@@ -453,6 +402,8 @@ class Model:
             adopted for this reason.
         """
         
+        self.roles = { var : self.col_data[self.col_data['var_name'] == var].var_role.values[0] for var in self.split_vars}
+        
         if self.weight_var == list():
             node.y_mean = self.df.loc[node.idx, self.tgt].mean()
         else:
@@ -464,29 +415,71 @@ class Model:
         interaction_one_dof_stats = {}
         if self.interactions_on == True:
             interaction_one_dof_stats = self.interaction_test(node)
-            interaction_one_dof_stats = sorted(interaction_one_dof_stats.items(), key = lambda x: x[1],reverse=True)
-            top_pair, top_pair_pval = interaction_one_dof_stats[0][0], pvalue_for_one_dof(interaction_one_dof_stats[0][1])
 
+        # Sort vals by their one dof chi2 statistics
+        curv_one_dof_stats = sorted(curv_one_dof_stats.items(), key = lambda x: x[1], reverse=True)
+        interaction_one_dof_stats = sorted(interaction_one_dof_stats.items(), key = lambda x: x[1],reverse=True)
 
-        #@TODO Logic for interaction tests
-
-        curv_pval = { col : pvalue_for_one_dof(stat) for col, stat in curv_one_dof_stats.items()} 
+        interaction_pval = [ (col , pvalue_for_one_dof(stat)) for col, stat in interaction_one_dof_stats]
+        curv_pval = [ (col, pvalue_for_one_dof(stat)) for col, stat in curv_one_dof_stats]
         
         # Bonferonni correction (uses statsmodels)
-        curv_p_adj = multipletests([*curv_pval.values()], method='bonferroni')[1]
-        curv_pval = { k : curv_p_adj[idx] for idx, k in enumerate(curv_pval.keys())}
 
-        sorted_pvals = sorted(curv_pval.items(), key=lambda x: x[1])
+        # Tmp list of pvals to send to Bonferroni correction
+        tmp_curv_pval_list = list(zip(*curv_pval))[1]
+        curv_p_adj = multipletests([*tmp_curv_pval_list], method='bonferroni')[1]
+        curv_pval = [ (first, curv_p_adj[idx]) for idx, (first, _) in enumerate(curv_pval)]
 
-        # @TODO: correct this, does not print anything right now 
-        if node == self.top_node:
-            print()
-            print("Top-ranked variables and 1-df chi-squared values at root node")
-            for idx, (col, stat) in enumerate(sorted(self.one_df_chi2_at_root.items(),key=lambda x_y:x_y[1], reverse=True)):
-                print(" "*5 + f"{idx+1} {stat:4.4E} {col}")
-            print()
+        if self.interactions_on == True:
+            tmp_interact_pval_list = list(zip(*interaction_pval))[1]
+            interact_p_adj = multipletests([*tmp_interact_pval_list], method='bonferroni')[1]
+            interaction_pval = [ (first, interact_p_adj[idx]) for idx, (first, _) in enumerate(interaction_pval)]
 
-        return sorted_pvals[0][0]
+
+        # Put the best corrected curvature and interaction pvalues at the top of each list of tuples.
+        # They are sorted by one-dof-stat first so that the best one is the top one even if the pvalues are the same.
+
+
+        top_curv_var, top_var_pval = curv_pval[0]
+        # Select curvature variable with the lowest pvalue by default
+        best_var = top_curv_var
+
+        # Logic for interaction tests
+        if self.interactions_on == True and len(interaction_pval) > 0:
+            top_interact_pair, top_pair_pval = interaction_pval[0]
+            if top_var_pval > top_pair_pval:
+                # Select one of interacting pair
+                # if one is categorical, split at the one with lower curvature pval
+                # if both are numerical, split each at their mean
+                role_a, role_b = self.roles[top_interact_pair[0]], self.roles[top_interact_pair[1]]
+                if role_a in ['n','S'] and role_b in ['n','S']:
+                    cut_a, cut_b = self.df.loc[node.idx, top_interact_pair[0]].mean(), self.df.loc[node.idx, top_interact_pair[1]].mean()
+                    max_sse = -1
+                    for col, cut in zip(top_interact_pair, [cut_a, cut_b]): 
+                        right_idx = (self.df.loc[node.idx, col] > cut).index
+                        left_idx = self.df.drop(right_idx, axis=0).index
+                        left_sse = ( (self.df.loc[left_idx, self.tgt] - self.df.loc[left_idx, self.tgt].mean())**2 ).sum()
+                        right_sse = ( (self.df.loc[right_idx, self.tgt] - self.df.loc[right_idx, self.tgt].mean())**2 ).sum()
+                        node_sse = ( (self.df.loc[node.idx, self.tgt] - self.df.loc[node.idx, self.tgt].mean())**2 ).sum()
+                        p = 1, len(left_idx) / len(node.idx), len(right_idx) / len(node.idx)
+                        sse = p[0]*node_sse - p[1]*left_sse - p[2]*right_sse
+                        if sse > max_sse:
+                            max_sse = sse
+                            best_var = col
+                else:
+                    logger.log(logging.DEBUG, msg = f"UNTESTED CODE PATH HIT: interacting pair \
+                               {top_interact_pair[0]},{top_interact_pair[1]} with one or two categoricals")
+                    curv_pval_a = filter(lambda x : x[0] == top_interact_pair[0], curv_pval)[1]
+                    curv_pval_b = filter(lambda x : x[0] == top_interact_pair[1], curv_pval)[1]
+                    if curv_pval_a == curv_pval_b:
+                        # Make it random but deterministic if pvals match
+                        math.random.seed(len(node.idx))
+                        best_var = top_interact_pair[0] if math.random.randint(0,1) == 1 else top_interact_pair[1]
+                    else:
+                        # Select variable with lowest curvature pvalue 
+                        best_var = top_interact_pair[np.argmin([curv_pval_a, curv_pval_b])]
+
+        return best_var
 
     def fit(self):
         """ Build model from training data """

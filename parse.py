@@ -228,13 +228,7 @@ def parse_data(settings : Settings):
     idx_active = set(df.index.values.flatten()) - set(idx_missing_d.values.flatten()) - set(idx_zero_or_negative_weight.values.flatten())
     idx_active = list(idx_active)
     idx_active = pd.Series(idx_active).values
-    # Tally levels for categoricals
-    # tell user that separate categories will be created
-    # @TODO: Match levels output for 'm' and 's' variables with the reference.
-    # @NOTE: Levels match reference for 'c' roles but not other roles,
-    # but the 'm' columns do not appear in the split vars of the final tree,
-    # so at minimum we can skip for now.
-    
+    # @TODO: Check if output of min, max, levels, etc matches the reference 
 
     _missing_vals_in_categoricals_flag = False
     for col in categorical_vars:
