@@ -1,5 +1,5 @@
 """
-Build a tree similar to the GUIDE algorithm
+Build GUIDE-compatible tree models
 """
 import math
 import sys
@@ -8,13 +8,12 @@ from parse import Settings, RegressionType, SplitPointMethod
 from typing import List
 from pprint import pprint
 import logging
-import heapq
 import pdb
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import chi2_contingency, chi2
 from collections import defaultdict
-from itertools import combinations, product, chain
+from itertools import combinations, product
 from dill.source import getsource
 import pandas as pd
 from statsmodels.sandbox.stats.multicomp import multipletests
@@ -182,19 +181,44 @@ class Model:
                 x_uniq = _df[col].drop_duplicates().sort_values().values
                 max_r = int(round(x_uniq.shape[0] / 2 - 0.1))
                 max_r = max(max_r, 1)
-                # logger.log(level = logging.DEBUG, msg = f"finding best {max_r} of {len(x_uniq)} category combos")
                 
                 results = {'set' : [],'gain' : []}
-                subsets = [subset for subset in chain(*(combinations(x_uniq, r) for r in range(1, max_r + 1)))]
-                
+
+                # 1984 Breiman book pg 101. Reduce 2^L splits to L-1 splits to evaluate
+
+                _df.loc[:,self.tgt] = _df[self.tgt] < node.y_mean
+
+                def pi(j):
+                    """ prior probability of the class in the node """
+                    if j == 1: return _df[self.tgt].mean()
+                    if j == 0: return 1.0 - pi(1)
+                    raise "fail"
+                    
+                def N_j_l(j,s):
+                    """ num cases of class j in subset s"""
+                    assert j == 0 or j == 1
+                    return _df[(_df[self.tgt] == j) & (_df[col]== s)].shape[0]
+                    
+                def p(j, subset_l) -> float:
+                    """ When we sort categories by this value we get L-1 split points between them """
+                    assert j == 0 or j == 1
+                    return pi(j)*N_j_l(j, subset_l) / ( pi(1)*N_j_l(1, subset_l) + pi(0)*N_j_l(0, subset_l) )
+
+
+                sorted_ps = sorted([(s, p(1, s)) for s in x_uniq],key=lambda x:x[1])
+                sorted_ps = [s for s,_ in sorted_ps]
+                st = 0
+                en = 0
+                subsets = [tuple(sorted_ps[st:en]) for en in range(1,len(x_uniq))]
+
                 for subset in subsets:
                    left_idx = _df[_df[col].isin(subset)].index.values
                    right_idx = _df.drop(left_idx).index.values
 
                    # gini impurity of left and right nodes based on residual sign
-                   mean_left = (_df.loc[left_idx, self.tgt] <= node.y_mean).mean() 
-                   mean_right = (_df.loc[right_idx, self.tgt] <= node.y_mean).mean() 
-                   mean_node  = (_df[self.tgt] <= node.y_mean).mean()
+                   mean_left = _df.loc[left_idx, self.tgt].mean() 
+                   mean_right = _df.loc[right_idx, self.tgt].mean() 
+                   mean_node  = _df[self.tgt].mean()
 
                    Nall = node.idx.shape[0]
                    p = 1, len(left_idx)/Nall, len(right_idx)/Nall
@@ -207,7 +231,6 @@ class Model:
     
                    results['set'].append(subset)
                    results['gain'].append(gain)
-
 
                 idx_max = np.argmax(results['gain'])
                 return results['set'][idx_max], None
@@ -375,8 +398,7 @@ class Model:
             dof, stat = res.dof, res.statistic
             one_dof_stat = wilson_hilferty(stat=stat, dof=dof)
             one_dof_stats[(a,b)] = one_dof_stat
-        #one_dof_stats[(a,b)] = one_dof_stat
-        # convert dof to 1-df and get pvalue
+        
         return one_dof_stats
 
     def _get_best_variable(self, node) -> str:
@@ -644,9 +666,6 @@ class Model:
 #####################################################
 # Helper functions
 #####################################################
-def _sse(vals: np.ndarray):
-    """ calc sum of squares """
-    return np.sum(vals**2)
 
 def wilson_hilferty(stat, dof) -> np.float64:
     """ approximately convert chi-squared with dof degrees of freedom to 1 degree of freedom """

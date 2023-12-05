@@ -7,7 +7,7 @@
  ```
 1. The Makefile is very simple; you can enter the commands manually if you look at it 
 1. Normal operation and development: run *iterate.py* by typing `make` from this directory
-1. Run test suite with `make test` from this directory. 
+1. Run test suite with `make test` from this directory
 
 # Holistic Overview
 1. *parse.py* creates a Settings object from the .in, .dsc, and .txt files
@@ -15,14 +15,13 @@
 1. Each directory in the tests folder is a set of GUIDE files input, description, data, output, etc.
 
 # Todo 
-1. Put in fast categoricals
-1. Put in Interaction tests
+1. Wire up Interaction tests
 1. Write test for interaction tests from the 2002 paper
-1. Clean up parse 
-1. MyLint and MyPy to clean up the code
+1. MyLint and MyPy + code cleanup 
 1. Open the repo
 
 # Completed 
+1. Put in fast categoricals
 1. switched goal from "exact match to GUIDE v41.2 to 'GUIDE-Compatible implementation"
 1. match reference for unweighted greedy split of categoricals with no missing values 
 1. match reference with greedy split point, unweighted numeric variables only, no interaction tests, no missing values, no bootstrap collection for piecewise constant
@@ -45,7 +44,7 @@
 
 # Notes 
 ## Variable roles
-1. n, s, c, b
+1. Planned to include (only n and c in now) n, s, c, b
 1. For regression, variable can be used for splitting, node modeling, or both
 1. Categorical predictions not used for node modeling; if want that must dummy encode
 1. All 'n' vars converted to 's' for piecewise constant models (no regressor vars)
