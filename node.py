@@ -2,6 +2,7 @@
 Build GUIDE-compatible tree models
 """
 import math
+import random
 import sys
 from enum import Enum
 from parse import Settings, RegressionType, SplitPointMethod
@@ -108,6 +109,9 @@ class Model:
                 # numeric
                 
                 x_uniq = _df[col].drop_duplicates().sort_values()
+                if x_uniq.shape[0] == 1:
+                    # node already pure so should be Terminal node
+                    return None, False
                 cutpoints = x_uniq[:-1] + np.diff(x_uniq)/2
                 greatest_tot_sse = -999
                 best_cut = None
@@ -120,17 +124,11 @@ class Model:
                     left_mean = _df.loc[left_idx][self.tgt].mean()
                     right_mean = _df.loc[right_idx][self.tgt].mean()
 
-                    # unused for now            
-                    left_sse = ( (_df.loc[left_idx, self.tgt]- _df.loc[left_idx, self.tgt].mean())**2 ).sum()
-                    right_sse = ( (_df.loc[right_idx, self.tgt]- _df.loc[right_idx, self.tgt].mean())**2 ).sum()
-                    sse_sum2 = len(left_idx)*left_sse + len(right_idx)*right_sse
-
-
                     nAL = len(left_idx)
                     nAR = len(right_idx)
                     tot_items = nAL + nAR 
                     cut_sse = (nAL * nAR / tot_items) * (left_mean - right_mean)**2
-                    sse_tab = pd.concat([sse_tab,pd.DataFrame({'cut':cut,'sse':cut_sse, 'sse_sum2':sse_sum2},index=[idx])])
+                    sse_tab = pd.concat([sse_tab,pd.DataFrame({'cut':cut,'sse':cut_sse},index=[idx])])
 
 
                     if cut_sse > greatest_tot_sse and len(right_idx) >= self.MIN_SAMPLES_LEAF and len(left_idx) >= self.MIN_SAMPLES_LEAF:
@@ -157,6 +155,9 @@ class Model:
                 with an algorithm in Breiman et al. (1984, p.101).
                 """
                 x_uniq = _df[col].drop_duplicates().sort_values().values
+                if x_uniq.shape[0] == 1:
+                    # node already pure so should be Terminal node
+                    return None, False
                 max_r = int(round(x_uniq.shape[0] / 2 - 0.1))
                 max_r = max(max_r, 1)
                 
@@ -209,6 +210,9 @@ class Model:
     
                    results['set'].append(subset)
                    results['gain'].append(gain)
+
+                if len(results['gain']) == 0:
+                    pdb.set_trace()
 
                 idx_max = np.argmax(results['gain'])
                 return results['set'][idx_max], None
@@ -430,7 +434,7 @@ class Model:
         curv_p_adj = multipletests([*tmp_curv_pval_list], method='bonferroni')[1]
         curv_pval = [ (first, curv_p_adj[idx]) for idx, (first, _) in enumerate(curv_pval)]
 
-        if self.interactions_on == True:
+        if self.interactions_on == True and len(interaction_pval) > 0:
             tmp_interact_pval_list = list(zip(*interaction_pval))[1]
             interact_p_adj = multipletests([*tmp_interact_pval_list], method='bonferroni')[1]
             interaction_pval = [ (first, interact_p_adj[idx]) for idx, (first, _) in enumerate(interaction_pval)]
@@ -469,12 +473,13 @@ class Model:
                 else:
                     logger.log(logging.DEBUG, msg = f"UNTESTED CODE PATH HIT: interacting pair \
                                {top_interact_pair[0]},{top_interact_pair[1]} with one or two categoricals")
-                    curv_pval_a = filter(lambda x : x[0] == top_interact_pair[0], curv_pval)[1]
-                    curv_pval_b = filter(lambda x : x[0] == top_interact_pair[1], curv_pval)[1]
+                    curv_pval_a = [tup[1] for tup in curv_pval if tup[0] == top_interact_pair[0]][0]
+                    curv_pval_b = [tup[1] for tup in curv_pval if tup[0] == top_interact_pair[1]][0]
+                    
                     if curv_pval_a == curv_pval_b:
                         # Make it random but deterministic if pvals match
-                        math.random.seed(len(node.idx))
-                        best_var = top_interact_pair[0] if math.random.randint(0,1) == 1 else top_interact_pair[1]
+                        random.seed(len(node.idx))
+                        best_var = top_interact_pair[0] if random.randint(0,1) == 1 else top_interact_pair[1]
                     else:
                         # Select variable with lowest curvature pvalue 
                         best_var = top_interact_pair[np.argmin([curv_pval_a, curv_pval_b])]
@@ -558,9 +563,7 @@ class Model:
             node_list.append(curr)
 
         # generate the tree text
-        curr_node = self.top_node
-        curr_depth = 1
-        self._print_tree(curr_node, curr_depth)
+        self._print_tree(self.top_node, depth=1)
 
     def _print_tree(self, node, depth):
         """ saves tree text to Model class.  recursively process the tree to match the reference output """

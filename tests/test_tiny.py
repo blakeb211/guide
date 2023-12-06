@@ -3,14 +3,17 @@ import sys
 import math
 import os
 import pdb
+import pathos.pools as pp
 import re
 import logging
 import numpy as np
 import pandas as pd
+from collections import defaultdict
 sys.path.append("..")
 from parse import Settings, RegressionType, parse_data
-from node import Model
+from node import Model, TerminalData
 from sklearn.tree import DecisionTreeRegressor
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('Test Logger')
@@ -296,22 +299,28 @@ def test_unbiased_selection():
     """
     data_dir = "./data-unbiased-selection/"
 
-    def fit_and_tally():
+    def fit_and_tally(fname):
         settings = Settings(
             data_dir=data_dir,
             dsc_file="data.dsc",
-            out_file="cons.out",
             model=RegressionType.PIECEWISE_CONSTANT,
-            input_file="cons.in")
+            input_file="cons.in",
+            overwrite_data_txt=fname)
         parse_data(settings=settings)
         model = Model(settings)
         model.fit()
+        totals = {}
+        if not isinstance(model.top_node.type_specific_data, TerminalData):
+            totals[model.top_node.type_specific_data.split_var] = totals.get(model.top_node.type_specific_data.split_var,0) + 1
+
+        return totals
     
     def fit_and_tally_cart():
         model = DecisionTreeRegressor(max_depth=1,min_samples_leaf=6)
+    
 
-    count = 1000 # instances and test repetitions 
-    for i in range(count):
+    def run_simulation_iteration(i):
+        count = 1000 # instances and test repetitions 
         np.random.seed(seed=i)
         C5 = np.random.randint(0,5,size=count)
         C10 = np.random.randint(0,10,size=count)
@@ -336,12 +345,36 @@ def test_unbiased_selection():
         weak = pd.DataFrame(np.column_stack((X1,X2,X3_2,X4_2,X5,Y)),columns=col_list)
         strong = pd.DataFrame(np.column_stack((X1,X2,X3_3,X4_3,X5,Y)),columns=col_list)
 
-        with open(data_dir + "data-indep.txt","w") as f:
+        with open(data_dir + f"data-indep{i}.txt","w") as f:
             f.write(indep.to_string(col_space=10, index=False)) 
-        with open(data_dir + "data-weak.txt","w") as f:
+        with open(data_dir + f"data-weak{i}.txt","w") as f:
             f.write(weak.to_string(col_space=10, index=False)) 
-        with open(data_dir + "data-strong.txt","w") as f:
+        with open(data_dir + f"data-strong{i}.txt","w") as f:
             f.write(strong.to_string(col_space=10, index=False)) 
 
-        for file in ["data-indep.txt","data-weak.txt","data-strong.txt"]:
-            pass
+        logger.log(logging.INFO, f"{i}")
+
+        split_var_indep = fit_and_tally(f"data-indep{i}.txt")
+        split_var_weak = fit_and_tally(f"data-weak{i}.txt")
+        split_var_strong = fit_and_tally(f"data-strong{i}.txt")
+        return split_var_indep, split_var_weak, split_var_strong
+
+    pool = pp.ProcessPool(12)
+    results = pool.map(run_simulation_iteration, range(1000))
+
+    # collect results
+    big_dict_indep = defaultdict(list) 
+    big_dict_weak = defaultdict(list) 
+    big_dict_strong = defaultdict(list) 
+
+    for (little_indep, little_weak, little_strong) in results:
+        for key, _ in little_indep.items():
+            big_dict_indep[key] = big_dict_indep.get(key,0) + 1
+        for key, _ in little_weak.items():
+            big_dict_weak[key] = big_dict_weak.get(key,0) + 1
+        for key, _ in little_strong.items():
+            big_dict_strong[key] = big_dict_strong.get(key,0) + 1
+
+    results_df = pd.DataFrame([big_dict_indep,big_dict_weak,big_dict_strong],index=["indep","weak","strong"]).transpose()
+    results_df = results_df / 1000
+    print(results_df)

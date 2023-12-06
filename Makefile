@@ -9,4 +9,4 @@ test:
 	cd tests && pytest -rA --log-cli-level INFO .
 
 test_unbiased:
-	cd tests && pytest -rA --log-cli-level INFO -k 'test_unbiased' .
+	cd tests && pytest -rA --log-cli-level INFO -k 'test_unbiased' --tb=long .

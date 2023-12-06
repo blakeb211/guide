@@ -41,7 +41,7 @@ class SplitPointMethod(Enum):
 
 class Settings():
     """ The settings object holds model parameters. This should probably just be a dictionary. """ 
-    def __init__(self, data_dir, dsc_file, out_file, model, max_depth=10, min_samples_leaf=6, input_file=None):
+    def __init__(self, data_dir, dsc_file, model, out_file=None, max_depth=10, min_samples_leaf=6, input_file=None, overwrite_data_txt=None):
         self.datafile_name = None
         self.dsc_file = None
         self.datafile_start_line_idx = None
@@ -53,8 +53,9 @@ class Settings():
         self.MAX_DEPTH = max_depth
         self.MIN_SAMPLES_LEAF = min_samples_leaf  # The reference program has a formula to calculate this but we do not
         self.input_file = input_file
-        self.out_file = out_file
+        self.out_file = out_file                  # GUIDE output file can be given to be used for tree comparisons during testing
         self.interactions_on = False
+        self.overwrite_data_text=overwrite_data_txt # Use this argument filename in place of whatever is at top of .dsc file
         assert os.path.exists(self.data_dir +
                               self.dsc_file), f"{self.dsc_file} not found"
 
@@ -99,9 +100,15 @@ def parse_data(settings : Settings):
     description_file = settings.data_dir + settings.dsc_file
     assert os.path.exists(
         description_file), f"{description_file} not found"
+
     with open(description_file, "r") as f:
         lines = f.readlines()
-        settings.datafile_name = lines[0].rstrip('\n')
+
+        if settings.overwrite_data_text == None:
+            settings.datafile_name = lines[0].rstrip('\n')
+        else:
+            settings.datafile_name = settings.overwrite_data_text
+
         settings.missing_vals = lines[1].split()
         settings.datafile_start_line_idx = lines[2].rstrip('\n')
         # Create col_data locally and save to settings at end of function
@@ -159,7 +166,7 @@ def parse_data(settings : Settings):
     """
     # @TODO: Add option to parse settings object from a dataframe instead of data.txt
     assert os.path.exists(
-        settings.data_dir + settings.datafile_name), f"{description_file} not found"
+        settings.data_dir + settings.datafile_name), f"{settings.datafile_name} not found"
     df = pd.read_csv(
         settings.data_dir + settings.datafile_name,
         delim_whitespace=True,
