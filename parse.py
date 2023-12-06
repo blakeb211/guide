@@ -97,6 +97,8 @@ def parse_data(settings : Settings):
 
     # Parse description file
     description_file = settings.data_dir + settings.dsc_file
+    assert os.path.exists(
+        description_file), f"{description_file} not found"
     with open(description_file, "r") as f:
         lines = f.readlines()
         settings.datafile_name = lines[0].rstrip('\n')
@@ -113,8 +115,7 @@ def parse_data(settings : Settings):
                 "var_role"])
         for i in np.arange(3, len(lines)):
             col_data.iloc[i - 3] = lines[i].split()
-    assert os.path.exists(
-        settings.data_dir + settings.datafile_name), f"{row_data_file} not found"
+    
     print(">> Parsed description file <<")
     print('*' * 50)
     print(f"Datafile name            : {settings.datafile_name}")
@@ -156,6 +157,9 @@ def parse_data(settings : Settings):
      Number of split variables: 431
      Number of cases excluded due to 0 W or missing D variable: 1478
     """
+    # @TODO: Add option to parse settings object from a dataframe instead of data.txt
+    assert os.path.exists(
+        settings.data_dir + settings.datafile_name), f"{description_file} not found"
     df = pd.read_csv(
         settings.data_dir + settings.datafile_name,
         delim_whitespace=True,

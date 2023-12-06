@@ -10,6 +10,7 @@ import pandas as pd
 sys.path.append("..")
 from parse import Settings, RegressionType, parse_data
 from node import Model
+from sklearn.tree import DecisionTreeRegressor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('Test Logger')
@@ -54,7 +55,7 @@ def parse_output_file_for_tree_text(data_dir, fname):
                 break
 
         return tree_text
-        
+
 @pytest.fixture(scope='session')
 def tiny2(): 
     settings = Settings(
@@ -281,3 +282,66 @@ def test_baseball(baseball):
 
     reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
     compare_predicted_vals(reference, _predictions)
+
+def test_unbiased_selection():
+    """ Test Unbiased variable selection for This Program, and CART.
+        See the 2002 regression paper pg 367. """
+    """
+    1-  generate fresh data for     C5, C10, U, T, W, and Z
+    2-  write data.txt for independent, weakly dependent, strongly dependent cases
+    3-  fit each dataset with a piecewise constant model and CART 
+    4-  tally variable selected at root node
+    5-  repeat 1000 times
+    =   6000 total fits, 3000 for CART and 3000 for this program
+    """
+    data_dir = "./data-unbiased-selection/"
+
+    def fit_and_tally():
+        settings = Settings(
+            data_dir=data_dir,
+            dsc_file="data.dsc",
+            out_file="cons.out",
+            model=RegressionType.PIECEWISE_CONSTANT,
+            input_file="cons.in")
+        parse_data(settings=settings)
+        model = Model(settings)
+        model.fit()
+    
+    def fit_and_tally_cart():
+        model = DecisionTreeRegressor(max_depth=1,min_samples_leaf=6)
+
+    count = 1000 # instances and test repetitions 
+    for i in range(count):
+        np.random.seed(seed=i)
+        C5 = np.random.randint(0,5,size=count)
+        C10 = np.random.randint(0,10,size=count)
+        U = np.random.uniform(low=0.0,high=1.0,size=count)
+        T = np.random.choice(np.asarray([-1,1,-3,3]), size=count)
+        W = np.random.exponential(scale=1.0/1.0,size=count)
+        Z = np.random.standard_normal(size=count)
+        Y = np.random.standard_normal(size=count) # all cases
+
+        X1 = T # all cases
+        X2 = W # all cases 
+        X3_1 = Z
+        X3_2 = T + W + Z
+        X3_3 = W + 0.1*Z
+        X4_1 = C5
+        X4_2 = np.floor(U * C10 / 2) + 1
+        X4_3 = np.floor(U * C10 / 2) + 1
+        X5 = C10 # all cases
+
+        col_list = ["X1","X2","X3","X4","X5","Y"]
+        indep = pd.DataFrame(np.column_stack((X1,X2,X3_1,X4_1,X5,Y)),columns=col_list)
+        weak = pd.DataFrame(np.column_stack((X1,X2,X3_2,X4_2,X5,Y)),columns=col_list)
+        strong = pd.DataFrame(np.column_stack((X1,X2,X3_3,X4_3,X5,Y)),columns=col_list)
+
+        with open(data_dir + "data-indep.txt","w") as f:
+            f.write(indep.to_string(col_space=10, index=False)) 
+        with open(data_dir + "data-weak.txt","w") as f:
+            f.write(weak.to_string(col_space=10, index=False)) 
+        with open(data_dir + "data-strong.txt","w") as f:
+            f.write(strong.to_string(col_space=10, index=False)) 
+
+        for file in ["data-indep.txt","data-weak.txt","data-strong.txt"]:
+            pass
