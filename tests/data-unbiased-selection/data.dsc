@@ -1,4 +1,4 @@
-data.txt
+data-indep999.txt
 NA
 2
 1 X1 n

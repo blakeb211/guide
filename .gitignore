@@ -2,3 +2,4 @@ __pycache__/
 myenv/
 *.swp
 .ipynb_checkpoints/
+data-*.txt

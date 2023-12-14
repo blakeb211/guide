@@ -3,9 +3,10 @@ Build GUIDE-compatible tree models
 """
 import math
 import random
+import hashlib
 import sys
 from enum import Enum
-from parse import Settings, RegressionType, SplitPointMethod
+from parse import Settings, RegressionType, SplitPointMethod, parse_data
 from typing import List
 from pprint import pprint
 import logging
@@ -64,11 +65,13 @@ class Model:
     GUIDE-like model class
     """
     def __init__(self, settings: Settings):
+        parse_data(settings)
         self.df = settings.df
         self.tgt = settings.dependent_var
         self.weight_var = settings.weight_var
         self.split_vars = settings.split_vars
         self.col_data = settings.col_data
+        self.roles = { var : self.col_data[self.col_data['var_name'] == var].var_role.values[0] for var in self.split_vars}
         self.split_point_method = SplitPointMethod.Greedy
         self.model_type = RegressionType.PIECEWISE_CONSTANT
         self.MIN_SAMPLES_LEAF = settings.MIN_SAMPLES_LEAF
@@ -76,6 +79,7 @@ class Model:
         self.node_list = []
         self.idx_active = settings.idx_active
         self.interactions_on = settings.interactions_on
+        self.top_node_best_var = None
         self.top_node = Node(
             type_specific_data=InternalData(None, None, None, True),
             depth=0,
@@ -84,6 +88,8 @@ class Model:
         self.next_node_num = 1
         self.one_df_chi2_at_root = {}
         self.tree_text = [] 
+        self.settings = settings
+        
 
     def _get_next_node_num(self):
         ret_val = self.next_node_num
@@ -158,8 +164,6 @@ class Model:
                 if x_uniq.shape[0] == 1:
                     # node already pure so should be Terminal node
                     return None, False
-                max_r = int(round(x_uniq.shape[0] / 2 - 0.1))
-                max_r = max(max_r, 1)
                 
                 results = {'set' : [],'gain' : []}
 
@@ -301,7 +305,6 @@ class Model:
                             residuals[indexes_by_value[unique_vals[_bin]]] >= 0).sum()
                         chi_squared[1, _bin] = (
                             residuals[indexes_by_value[unique_vals[_bin]]] < 0).sum()
-                    
                     # remove cols if they are empty
                     chi_squared = remove_empty_cols(chi_squared)
 
@@ -406,8 +409,6 @@ class Model:
             adopted for this reason.
         """
         
-        self.roles = { var : self.col_data[self.col_data['var_name'] == var].var_role.values[0] for var in self.split_vars}
-        
         if self.weight_var == list():
             node.y_mean = self.df.loc[node.idx, self.tgt].mean()
         else:
@@ -421,9 +422,11 @@ class Model:
             interaction_one_dof_stats = self.interaction_test(node)
 
         # Sort vals by their one dof chi2 statistics
-        curv_one_dof_stats = sorted(curv_one_dof_stats.items(), key = lambda x: x[1], reverse=True)
-        interaction_one_dof_stats = sorted(interaction_one_dof_stats.items(), key = lambda x: x[1],reverse=True)
+        # curv_one_dof_stats = sorted(curv_one_dof_stats.items(), key = lambda x: x[1], reverse=True)
+        # interaction_one_dof_stats = sorted(interaction_one_dof_stats.items(), key = lambda x: x[1],reverse=True)
 
+        curv_one_dof_stats = list(curv_one_dof_stats.items())
+        interaction_one_dof_stats = list(interaction_one_dof_stats.items())
         interaction_pval = [ (col , pvalue_for_one_dof(stat)) for col, stat in interaction_one_dof_stats]
         curv_pval = [ (col, pvalue_for_one_dof(stat)) for col, stat in curv_one_dof_stats]
         
@@ -432,66 +435,94 @@ class Model:
         # Tmp list of pvals to send to Bonferroni correction
         tmp_curv_pval_list = list(zip(*curv_pval))[1]
         curv_p_adj = multipletests([*tmp_curv_pval_list], method='bonferroni')[1]
-        curv_pval = [ (first, curv_p_adj[idx]) for idx, (first, _) in enumerate(curv_pval)]
+        curv_pval = [ ((first,), curv_p_adj[idx]) for idx, (first, _) in enumerate(curv_pval)]
 
         if self.interactions_on == True and len(interaction_pval) > 0:
             tmp_interact_pval_list = list(zip(*interaction_pval))[1]
             interact_p_adj = multipletests([*tmp_interact_pval_list], method='bonferroni')[1]
             interaction_pval = [ (first, interact_p_adj[idx]) for idx, (first, _) in enumerate(interaction_pval)]
 
-
         # Put the best corrected curvature and interaction pvalues at the top of each list of tuples.
-        # They are sorted by one-dof-stat first so that the best one is the top one even if the pvalues are the same.
+       
+        # This approach is if instead of pre-sorting by chi-squared first. 
+        # We shuffle and sort by pval
+        all_pval = []
+        all_pval.extend(interaction_pval)
+        all_pval.extend(curv_pval)
+        
+        # Use hashlib to generate a hash value
+        dataframe_str = str(self.df.loc[node.idx].values)
+        hash_object = hashlib.md5(dataframe_str.encode())
+        rnd_seed = int(hash_object.hexdigest(), 16)
 
+        # The adjusted pvals are shuffled deterministically    
+        # so that cases where all pvalues are the same (e.g. all 1.0)
+        # do not make a biased selection.
+        random.seed(rnd_seed)
+        random.shuffle(all_pval)
+        all_pval = sorted(all_pval, key = lambda x: (x[1], len(x[0])))
+        
+        top_var_is_singlet = True if len(all_pval[0][0]) == 1 else False
 
-        top_curv_var, top_var_pval = curv_pval[0]
-        # Select curvature variable with the lowest pvalue by default
-        best_var = top_curv_var
+        all_curv_pval_are_same = len({pval for var, pval in curv_pval}) <= 1 
+        """
+        if all_curv_pval_are_same is True and node.node_num == 1:
+            print(f"random seed for pval == 1 {rnd_seed}") 
+        """
 
+        best_var = None
         # Logic for interaction tests
-        if self.interactions_on == True and len(interaction_pval) > 0:
-            top_interact_pair, top_pair_pval = interaction_pval[0]
-            if top_var_pval > top_pair_pval:
-                # Select one of interacting pair
-                # if one is categorical, split at the one with lower curvature pval
-                # if both are numerical, split each at their mean
-                role_a, role_b = self.roles[top_interact_pair[0]], self.roles[top_interact_pair[1]]
-                if role_a in ['n','S'] and role_b in ['n','S']:
-                    cut_a, cut_b = self.df.loc[node.idx, top_interact_pair[0]].mean(), self.df.loc[node.idx, top_interact_pair[1]].mean()
-                    max_sse = -1
-                    for col, cut in zip(top_interact_pair, [cut_a, cut_b]): 
-                        right_idx = (self.df.loc[node.idx, col] > cut).index
-                        left_idx = self.df.drop(right_idx, axis=0).index
-                        left_sse = ( (self.df.loc[left_idx, self.tgt] - self.df.loc[left_idx, self.tgt].mean())**2 ).sum()
-                        right_sse = ( (self.df.loc[right_idx, self.tgt] - self.df.loc[right_idx, self.tgt].mean())**2 ).sum()
-                        node_sse = ( (self.df.loc[node.idx, self.tgt] - self.df.loc[node.idx, self.tgt].mean())**2 ).sum()
-                        p = 1, len(left_idx) / len(node.idx), len(right_idx) / len(node.idx)
-                        sse = p[0]*node_sse - p[1]*left_sse - p[2]*right_sse
-                        if sse > max_sse:
-                            max_sse = sse
-                            best_var = col
+        if top_var_is_singlet == False:
+            top_interact_pair = all_pval[0][0]
+            # Select one of interacting pair
+            # if one is categorical, split at the one with lower curvature pval
+            # if both are numerical, split each at their mean
+            role_a, role_b = self.roles[top_interact_pair[0]], self.roles[top_interact_pair[1]]
+            if role_a in ['n','S'] and role_b in ['n','S']:
+                cut_a, cut_b = self.df.loc[node.idx, top_interact_pair[0]].mean(), self.df.loc[node.idx, top_interact_pair[1]].mean()
+                max_sse = None 
+                for col, cut in zip(top_interact_pair, [cut_a, cut_b]): 
+                    right_idx = (self.df.loc[node.idx, col] > cut).index
+                    left_idx = self.df.drop(right_idx, axis=0).index
+                    left_sse = ( (self.df.loc[left_idx, self.tgt] - self.df.loc[left_idx, self.tgt].mean())**2 ).sum()
+                    right_sse = ( (self.df.loc[right_idx, self.tgt] - self.df.loc[right_idx, self.tgt].mean())**2 ).sum()
+                    node_sse = ( (self.df.loc[node.idx, self.tgt] - self.df.loc[node.idx, self.tgt].mean())**2 ).sum()
+                    p = 1, len(left_idx) / len(node.idx), len(right_idx) / len(node.idx)
+                    sse = p[0]*node_sse - p[1]*left_sse - p[2]*right_sse
+                    if max_sse == None or sse > max_sse:
+                        max_sse = sse
+                        best_var = col
+            else:
+                logger.log(logging.DEBUG, msg = f"UNTESTED CODE PATH HIT: interacting pair \
+                            {top_interact_pair[0]},{top_interact_pair[1]} with one or two categoricals")
+                curv_pval_a = [tup[1] for tup in curv_pval if tup[0][0] == top_interact_pair[0]][0]
+                curv_pval_b = [tup[1] for tup in curv_pval if tup[0][0] == top_interact_pair[1]][0]
+                
+                if curv_pval_a == curv_pval_b:
+                    # Make it random but deterministic if pvals match
+                    random.seed(len(node.idx))
+                    best_var = top_interact_pair[0] if random.randint(0,1) == 1 else top_interact_pair[1]
                 else:
-                    logger.log(logging.DEBUG, msg = f"UNTESTED CODE PATH HIT: interacting pair \
-                               {top_interact_pair[0]},{top_interact_pair[1]} with one or two categoricals")
-                    curv_pval_a = [tup[1] for tup in curv_pval if tup[0] == top_interact_pair[0]][0]
-                    curv_pval_b = [tup[1] for tup in curv_pval if tup[0] == top_interact_pair[1]][0]
-                    
-                    if curv_pval_a == curv_pval_b:
-                        # Make it random but deterministic if pvals match
-                        random.seed(len(node.idx))
-                        best_var = top_interact_pair[0] if random.randint(0,1) == 1 else top_interact_pair[1]
-                    else:
-                        # Select variable with lowest curvature pvalue 
-                        best_var = top_interact_pair[np.argmin([curv_pval_a, curv_pval_b])]
+                    # Select variable with lowest curvature pvalue 
+                    best_var = top_interact_pair[np.argmin([curv_pval_a, curv_pval_b])]
+        else:
+            best_var = all_pval[0][0][0]
 
+        if self.top_node_best_var == None:
+            self.top_node_best_var = best_var
+        
+        if best_var == None:
+            logger.log(level = logging.INFO, msg = f"file with bad best_var = {self.settings.overwrite_data_text}")
+            pdb.set_trace()
+        
         return best_var
 
     def fit(self):
         """ Build model from training data """
-        node_list = [None]*200 # all nodes of tree
+        self.node_list = [None]*200 # all nodes of tree
         stack = [None]*200     # nodes that need processed
         stack.clear()
-        node_list.clear()
+        self.node_list.clear()
         self.top_node.node_num = self._get_next_node_num()
         stack.append(self.top_node)
         
@@ -516,7 +547,7 @@ class Model:
             
             if split_point == None:
                 curr.type_specific_data = TerminalData(value = curr.y_mean)
-                node_list.append(curr) 
+                self.node_list.append(curr) 
                 continue
 
             assert isinstance(curr.idx, np.ndarray)
@@ -546,7 +577,7 @@ class Model:
                     or curr.depth == self.MAX_DEPTH:
                         # Based on early stopping, make curr node a leaf 
                         curr.type_specific_data = TerminalData(value = curr.y_mean)
-                        node_list.append(curr) 
+                        self.node_list.append(curr) 
                         continue
            
             assert predicate is not None
@@ -560,7 +591,7 @@ class Model:
             curr.right = right_node
             stack.append(left_node)
             stack.append(right_node)
-            node_list.append(curr)
+            self.node_list.append(curr)
 
         # generate the tree text
         self._print_tree(self.top_node, depth=1)
@@ -636,20 +667,22 @@ class Model:
                 train = 'y'
             
             # Get to leaf node
-            while isinstance(curr.type_specific_data, InternalData):
-                feat = curr.type_specific_data.split_var
-                predicate = curr.type_specific_data.predicate
-                goes_left = predicate(row[feat]) 
-                if type(goes_left) != np.bool_ and type(goes_left) != bool:
-                    pdb.set_trace()
-                if goes_left == True:
-                    curr = curr.left
-                else:
-                    curr = curr.right
+            while True:
+                if isinstance(curr.type_specific_data, InternalData):
+                    feat = curr.type_specific_data.split_var
+                    predicate = curr.type_specific_data.predicate
+                    goes_left = predicate(row[feat]) 
+                    if type(goes_left) != np.bool_ and type(goes_left) != bool:
+                        pdb.set_trace()
+                    if goes_left == True:
+                        curr = curr.left
+                    else:
+                        curr = curr.right
                 if isinstance(curr.type_specific_data, TerminalData):
                     node = curr.node_num
                     observed = row[self.tgt]
                     predicted = self.df.loc[curr.idx, self.tgt].mean()
+                    break
 
             df2 = pd.DataFrame({'train' : train, 'node' : node, 'observed' : observed, 'predicted' : predicted}, index=[idx])
             predictions = pd.concat([predictions,df2])
@@ -674,9 +707,9 @@ def wilson_hilferty(stat, dof) -> np.float64:
     w2 = max(0, temp ** 3) 
 
     w = None
-    if stat < dof + 10 * math.sqrt(2*dof):
+    if stat < (dof + 10 * math.sqrt(2*dof)):
         w = w2
-    elif stat >= dof + 10 * math.sqrt(2*dof) and w2 < stat:
+    elif stat >= (dof + 10 * math.sqrt(2*dof) and w2 < stat):
         w = (w1 + w2) / 2
     else:
         w = w1

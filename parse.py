@@ -41,7 +41,7 @@ class SplitPointMethod(Enum):
 
 class Settings():
     """ The settings object holds model parameters. This should probably just be a dictionary. """ 
-    def __init__(self, data_dir, dsc_file, model, out_file=None, max_depth=10, min_samples_leaf=6, input_file=None, overwrite_data_txt=None):
+    def __init__(self, data_dir, dsc_file, model=RegressionType.PIECEWISE_CONSTANT, out_file=None, max_depth=10, min_samples_leaf=6, input_file=None, overwrite_data_txt=None):
         self.datafile_name = None
         self.dsc_file = None
         self.datafile_start_line_idx = None

@@ -1,0 +1,285 @@
+DEBUG:My Logger:random seed for pval == 1 5
+DEBUG:My Logger:random seed for pval == 1 5
+DEBUG:My Logger:random seed for pval == 1 5
+DEBUG:My Logger:random seed for pval == 1 5
+DEBUG:My Logger:random seed for pval == 1 4
+DEBUG:My Logger:random seed for pval == 1 5
+DEBUG:My Logger:random seed for pval == 1 6
+DEBUG:My Logger:random seed for pval == 1 6
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep0.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.000813  7.463636               
+5   3       X3        S -3.953254   2.84935               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep1.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.000097  6.387029               
+5   3       X3        S -2.710394  2.893593               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep2.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.000553  6.613978               
+5   3       X3        S -3.549123  3.530333               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep3.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.000015   7.72129               
+5   3       X3        S -3.546299  4.091393               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep4.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.001261  8.182922               
+5   3       X3        S -2.766972  3.065178               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep5.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.000683   5.40228               
+5   3       X3        S -3.597809  3.549184               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep6.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.000189  9.491002               
+5   3       X3        S -3.018949  3.599354               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep7.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S    0.0011  5.850516               
+5   3       X3        S -3.534363  3.558201               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep8.txt
+DEBUG:My Logger:random seed for pval == 1 5
+DEBUG:My Logger:random seed for pval == 1 5
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.002058  6.626992               
+5   3       X3        S -3.367981  2.808417               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+>> Parsed description file <<
+**************************************************
+Datafile name            : data-indep9.txt
+Missing value labels     : ['NA']
+Number of variables      : 6
+Variable types           : {'n': 3, 'c': 2, 'd': 1}
+**************************************************
+Number of rows datafile  : 1000
+Dependent variable       : Y
+Model type is            : RegressionType.PIECEWISE_CONSTANT
+Dropped missing d rows   : 0
+Converted 3 n variables to S variables
+
+  num var_name var_role       min       max levels missing
+3   1       X1        S      -3.0       3.0               
+4   2       X2        S  0.001543  7.695589               
+5   3       X3        S  -3.39563  3.388309               
+6   4       X4        c                          5        
+7   5       X5        c                         10        
+8   6        Y        d                                   
+Number of split variables: 5
+Max depth of tree     : 1
+Min samples per node  : 2
+Interaction tests done: False
+Traceback (most recent call last):
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/_config/config.py", line 619, in _get_deprecated_option
+    d = _deprecated_options[key]
+KeyError: 'mode.data_manager'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/bb/guide/tests/data-unbiased-selection/guide_top_var.py", line 45, in <module>
+    _model.fit()
+  File "/home/bb/guide/tests/data-unbiased-selection/../../node.py", line 530, in fit
+    split_point, na_left = self._get_split_point_greedy(node=curr, col=split_var)
+  File "/home/bb/guide/tests/data-unbiased-selection/../../node.py", line 127, in _get_split_point_greedy
+    right_idx = _df[_df[col] > cut].index
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/core/ops/common.py", line 81, in new_method
+    return method(self, other)
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/core/arraylike.py", line 56, in __gt__
+    return self._cmp_method(other, operator.gt)
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/core/series.py", line 6098, in _cmp_method
+    return self._construct_result(res_values, name=res_name)
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/core/series.py", line 3105, in _construct_result
+    out = self._constructor(result, index=self.index, dtype=dtype)
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/core/series.py", line 511, in __init__
+    manager = get_option("mode.data_manager")
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/_config/config.py", line 261, in __call__
+    return self.__func__(*args, **kwds)
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/_config/config.py", line 135, in _get_option
+    key = _get_single_key(pat, silent)
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/_config/config.py", line 129, in _get_single_key
+    key = _translate_key(key)
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/_config/config.py", line 642, in _translate_key
+    d = _get_deprecated_option(key)
+  File "/home/bb/guide/myenv/lib/python3.10/site-packages/pandas/_config/config.py", line 619, in _get_deprecated_option
+    d = _deprecated_options[key]
+KeyboardInterrupt

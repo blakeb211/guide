@@ -9,10 +9,10 @@ if __name__ == "__main__":
         dsc_file="data.dsc",
         model=RegressionType.PIECEWISE_CONSTANT,
         out_file="cons.out",
-        input_file='cons.in')
-    parse_data(settings=settings)
+        input_file="cons.in",
+        overwrite_data_txt="data-weak22.txt")
     model = Model(settings)
     model.fit()
     model.print()
     print("\n".join(model.tree_text))
-    model.predict_train_data(print_me = True)
+    # model.predict_train_data(print_me = True)

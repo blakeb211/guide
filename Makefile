@@ -6,7 +6,7 @@ run:
 	python3 iterate.py
 
 test:
-	cd tests && pytest -rA --log-cli-level INFO .
+	cd tests && pytest -rA --log-cli-level INFO test_tiny.py
 
 test_unbiased:
-	cd tests && pytest -rA --log-cli-level INFO -k 'test_unbiased' --tb=long .
+	cd tests && pytest -rA --log-cli-level INFO -vv --tb=long test_unbiased.py

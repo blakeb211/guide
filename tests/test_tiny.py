@@ -10,10 +10,8 @@ import numpy as np
 import pandas as pd
 from collections import defaultdict
 sys.path.append("..")
-from parse import Settings, RegressionType, parse_data
+from parse import Settings, RegressionType
 from node import Model, TerminalData
-from sklearn.tree import DecisionTreeRegressor
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('Test Logger')
@@ -67,7 +65,6 @@ def tiny2():
         out_file="cons.out",
         model=RegressionType.PIECEWISE_CONSTANT,
         max_depth=3, min_samples_leaf=2)
-    parse_data(settings=settings)
     model = Model(settings)
     model.fit()
     predictions = model.predict_train_data()
@@ -81,7 +78,6 @@ def strikes1():
         out_file="cons.out",
         model=RegressionType.PIECEWISE_CONSTANT,
         input_file="cons.in")
-    parse_data(settings=settings)
     model = Model(settings)
     model.fit()
     predictions = model.predict_train_data()
@@ -95,7 +91,6 @@ def strikes1_deep():
         out_file="cons.out",
         model=RegressionType.PIECEWISE_CONSTANT,
         input_file="cons.in")
-    parse_data(settings=settings)
     model = Model(settings)
     model.fit()
     predictions = model.predict_train_data()
@@ -110,7 +105,6 @@ def strikes2():
         out_file="cons.out",
         model=RegressionType.PIECEWISE_CONSTANT,
         input_file="cons.in")
-    parse_data(settings=settings)
     model = Model(settings)
     model.fit()
     predictions = model.predict_train_data()
@@ -124,7 +118,6 @@ def baseball():
         out_file="cons.out",
         model=RegressionType.PIECEWISE_CONSTANT,
         input_file="cons.in") 
-    parse_data(settings=settings)
     model = Model(settings)
     model.fit()
     predictions = model.predict_train_data()
@@ -151,7 +144,7 @@ def compare_predicted_vals(ref, this_prog):
     logger.log(logging.INFO, msg = f"mse reference                  {ref_mse}")
     logger.log(logging.INFO, msg = f"relative mse difference        {round(math.fabs(rel_mse_diff)*100.0,2)}%")
      
-    # assert titles_match.all() and train_y_or_n_matches.all() and (observed_differences < cutoff).all() and (prediction_differences < cutoff).all()
+    assert rel_mse_diff < 5 
 
 def compare_trees(ref_tree, tree_text):
     """ compare split variable and split points between two trees """
@@ -285,96 +278,3 @@ def test_baseball(baseball):
 
     reference = pd.read_csv(_settings.data_dir + "data.node", delim_whitespace=True)
     compare_predicted_vals(reference, _predictions)
-
-def test_unbiased_selection():
-    """ Test Unbiased variable selection for This Program, and CART.
-        See the 2002 regression paper pg 367. """
-    """
-    1-  generate fresh data for     C5, C10, U, T, W, and Z
-    2-  write data.txt for independent, weakly dependent, strongly dependent cases
-    3-  fit each dataset with a piecewise constant model and CART 
-    4-  tally variable selected at root node
-    5-  repeat 1000 times
-    =   6000 total fits, 3000 for CART and 3000 for this program
-    """
-    data_dir = "./data-unbiased-selection/"
-
-    def fit_and_tally(fname):
-        settings = Settings(
-            data_dir=data_dir,
-            dsc_file="data.dsc",
-            model=RegressionType.PIECEWISE_CONSTANT,
-            input_file="cons.in",
-            overwrite_data_txt=fname)
-        parse_data(settings=settings)
-        model = Model(settings)
-        model.fit()
-        totals = {}
-        if not isinstance(model.top_node.type_specific_data, TerminalData):
-            totals[model.top_node.type_specific_data.split_var] = totals.get(model.top_node.type_specific_data.split_var,0) + 1
-
-        return totals
-    
-    def fit_and_tally_cart():
-        model = DecisionTreeRegressor(max_depth=1,min_samples_leaf=6)
-    
-
-    def run_simulation_iteration(i):
-        count = 1000 # instances and test repetitions 
-        np.random.seed(seed=i)
-        C5 = np.random.randint(0,5,size=count)
-        C10 = np.random.randint(0,10,size=count)
-        U = np.random.uniform(low=0.0,high=1.0,size=count)
-        T = np.random.choice(np.asarray([-1,1,-3,3]), size=count)
-        W = np.random.exponential(scale=1.0/1.0,size=count)
-        Z = np.random.standard_normal(size=count)
-        Y = np.random.standard_normal(size=count) # all cases
-
-        X1 = T # all cases
-        X2 = W # all cases 
-        X3_1 = Z
-        X3_2 = T + W + Z
-        X3_3 = W + 0.1*Z
-        X4_1 = C5
-        X4_2 = np.floor(U * C10 / 2) + 1
-        X4_3 = np.floor(U * C10 / 2) + 1
-        X5 = C10 # all cases
-
-        col_list = ["X1","X2","X3","X4","X5","Y"]
-        indep = pd.DataFrame(np.column_stack((X1,X2,X3_1,X4_1,X5,Y)),columns=col_list)
-        weak = pd.DataFrame(np.column_stack((X1,X2,X3_2,X4_2,X5,Y)),columns=col_list)
-        strong = pd.DataFrame(np.column_stack((X1,X2,X3_3,X4_3,X5,Y)),columns=col_list)
-
-        with open(data_dir + f"data-indep{i}.txt","w") as f:
-            f.write(indep.to_string(col_space=10, index=False)) 
-        with open(data_dir + f"data-weak{i}.txt","w") as f:
-            f.write(weak.to_string(col_space=10, index=False)) 
-        with open(data_dir + f"data-strong{i}.txt","w") as f:
-            f.write(strong.to_string(col_space=10, index=False)) 
-
-        logger.log(logging.INFO, f"{i}")
-
-        split_var_indep = fit_and_tally(f"data-indep{i}.txt")
-        split_var_weak = fit_and_tally(f"data-weak{i}.txt")
-        split_var_strong = fit_and_tally(f"data-strong{i}.txt")
-        return split_var_indep, split_var_weak, split_var_strong
-
-    pool = pp.ProcessPool(12)
-    results = pool.map(run_simulation_iteration, range(1000))
-
-    # collect results
-    big_dict_indep = defaultdict(list) 
-    big_dict_weak = defaultdict(list) 
-    big_dict_strong = defaultdict(list) 
-
-    for (little_indep, little_weak, little_strong) in results:
-        for key, _ in little_indep.items():
-            big_dict_indep[key] = big_dict_indep.get(key,0) + 1
-        for key, _ in little_weak.items():
-            big_dict_weak[key] = big_dict_weak.get(key,0) + 1
-        for key, _ in little_strong.items():
-            big_dict_strong[key] = big_dict_strong.get(key,0) + 1
-
-    results_df = pd.DataFrame([big_dict_indep,big_dict_weak,big_dict_strong],index=["indep","weak","strong"]).transpose()
-    results_df = results_df / 1000
-    print(results_df)
