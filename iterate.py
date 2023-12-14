@@ -1,5 +1,5 @@
 """
-Change a few parameters and run the model. 
+Change a few parameters and run the model.
 Used for iterating on the project.
 """
 import pdb
@@ -18,4 +18,4 @@ if __name__ == "__main__":
     model.fit()
     model.print()
     print("\n".join(model.tree_text))
-    model.predict_train_data(print_me = True)
+    model.predict_train_data(print_me=True)

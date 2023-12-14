@@ -29,7 +29,16 @@ class SplitPointMethod(Enum):
 class Settings():
     """ The settings object holds model parameters. This should probably just be a dictionary. """
 
-    def __init__(self, data_dir, dsc_file, model=RegressionType.PIECEWISE_CONSTANT, out_file=None, max_depth=10, min_samples_leaf=6, input_file=None, overwrite_data_txt=None):
+    def __init__(
+            self,
+            data_dir,
+            dsc_file,
+            model=RegressionType.PIECEWISE_CONSTANT,
+            out_file=None,
+            max_depth=10,
+            min_samples_leaf=6,
+            input_file=None,
+            overwrite_data_txt=None):
         self.datafile_name = None
         self.dsc_file = None
         self.datafile_start_line_idx = None
@@ -42,10 +51,12 @@ class Settings():
         # The reference program has a formula to calculate this but we do not
         self.MIN_SAMPLES_LEAF = min_samples_leaf
         self.input_file = input_file
-        # GUIDE output file can be given to be used for tree comparisons during testing
+        # GUIDE output file can be given to be used for tree comparisons during
+        # testing
         self.out_file = out_file
         self.interactions_on = False
-        # Use this argument filename in place of whatever is at top of .dsc file
+        # Use this argument filename in place of whatever is at top of .dsc
+        # file
         self.overwrite_data_text = overwrite_data_txt
         assert os.path.exists(self.data_dir +
                               self.dsc_file), f"{self.dsc_file} not found"
@@ -62,7 +73,7 @@ def parse_data(settings: Settings):
     can be used to build models.
     """
     # Parse Input file if present
-    if settings.input_file != None:
+    if settings.input_file is not None:
         with open(settings.data_dir + settings.input_file, "r") as f:
             lines = f.readlines()
             for idx, l in enumerate(lines):
@@ -74,7 +85,7 @@ def parse_data(settings: Settings):
 
                 if "(1=default min. node size" in l and l.startswith('2'):
                     # parse lines[idx+1] to number
-                    _line = lines[idx+1].strip()
+                    _line = lines[idx + 1].strip()
                     # either a bracket is on the next line or not
                     # if not, we just strip the line and convert
                     # it to a number
@@ -94,7 +105,7 @@ def parse_data(settings: Settings):
     with open(description_file, "r") as f:
         lines = f.readlines()
 
-        if settings.overwrite_data_text == None:
+        if settings.overwrite_data_text is None:
             settings.datafile_name = lines[0].rstrip('\n')
         else:
             settings.datafile_name = settings.overwrite_data_text
@@ -161,7 +172,7 @@ def parse_data(settings: Settings):
         settings.data_dir + settings.datafile_name,
         delim_whitespace=True,
         na_values=settings.missing_vals,
-        header=int(settings.datafile_start_line_idx)-2)
+        header=int(settings.datafile_start_line_idx) - 2)
     assert df.shape[1] == col_data.shape[0], "dsc and txt file have unequal column counts"
     dependent_var = _vars_by_role(col_data, 'd')[0]
     print(f"Number of rows datafile  : {df.shape[0]}")
@@ -171,9 +182,9 @@ def parse_data(settings: Settings):
 
     # Remove rows of dataframe with non-positive weight or missing values in d, e, t, r or z variables)
     # @NOTE incomplete. Cases handled so far: missing value in d, nonpositive weight
-    dependent_var_null_rows = df[df[dependent_var].isnull() == True]
+    dependent_var_null_rows = df[df[dependent_var].isnull()]
     if len(dependent_var_null_rows) > 0:
-        idx_missing_d = df[df[dependent_var].isnull() == True].index
+        idx_missing_d = df[df[dependent_var].isnull()].index
     else:
         idx_missing_d = pd.Series([])
     print(f"Dropped missing d rows   : {len(idx_missing_d)}")
@@ -221,7 +232,7 @@ def parse_data(settings: Settings):
         col_data.loc[idx,
                      'missing'] = _missing_count if _missing_count > 0 else ' '
 
-    if _missing_vals_in_noncategorical_flag == True:
+    if _missing_vals_in_noncategorical_flag:
         print(f"Missing values found in non-categorical variables.")
 
     categorical_vars = _vars_by_role(
@@ -247,7 +258,7 @@ def parse_data(settings: Settings):
         else:
             col_data.loc[idx, 'missing'] = ' '
 
-    if _missing_vals_in_categoricals_flag == True:
+    if _missing_vals_in_categoricals_flag:
         print(f"Missing values found in categorical variables. Separate categories will be created.")
 
     # Report min, max of weights,
