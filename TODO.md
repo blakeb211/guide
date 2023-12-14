@@ -1,12 +1,10 @@
 # Todo 
-1. Root cause and fixing of unbiased selection test discrepancies
-  - is the data skewed?
-  - is the curvature test wrong?
-  - @NOTE When all chi_squared are under 1 and pvals are all 1, X4 is always selected 
 1. MyLint and MyPy + code cleanup 
+1. Add predict and train from arbitrary dataframes
 1. Open the repo
 
 # Completed 
+1. Root cause and fixing of unbiased selection test discrepancies
 1. Write test for interaction tests from the 2002 paper
 1. Wire up Interaction tests
 1. Put in fast categoricals
@@ -26,9 +24,8 @@
 1. Priors / Misclassification costs, where does it fit in?
 1. Missing values
 1. Weights
-1. Match 1-df chi squared value at root node (we are close but not exact match)
+1. @SPEED Convert to internal ndarrays instead of dataframes 
 1. Reduce dependencies
-1. Increase speed
 
 # Notes 
 ## Variable roles

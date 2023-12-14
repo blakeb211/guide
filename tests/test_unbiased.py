@@ -95,15 +95,18 @@ def test_unbiased_selection_no_interaction_tests():
 
     results_df = pd.DataFrame([big_dict_indep,big_dict_weak,big_dict_strong],index=["indep","weak","strong"]).transpose()
     results_df = results_df / SIM_COUNT 
-    
+    results_df = results_df.sort_index()
+
     diffs_from_mean = np.abs(results_df - 0.2)
     three_std_err = 0.05  
-    # This is more relaxed than what is in the 2002 paper. 
+    # These are not the exact criteria that are in Table 4 of the 2002 paper (see docs folder)
     # In the paper, all values are within .05 of the completely unbiased value of 0.2
+    # This is a good argument that unbiased selection is taking place but it could be quantified
+    # more thoroughly and a stronger argument could be made.
 
     outliers = 0
     outliers += (diffs_from_mean > three_std_err).sum().sum()
 
     logger.log(logging.INFO, results_df)
     logger.log(logging.INFO, f"outliers from unbiased (0.2) {outliers}")
-    assert outliers < 3 
+    assert outliers < 2 

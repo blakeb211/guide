@@ -3,20 +3,6 @@
 - parse description file
 - parse data file
 - Pre process (switching columns, dropping rows)
-
-Table: Variable role meanings
-| Abbreviation | Meaning                                                   |
-|--------------|-----------------------------------------------------------|
-| d            | Dependent variable                                       |
-| b            | Split and fit categorical variable using indicator variables |
-| c            | Split-only categorical variable                         |
-| i            | Fit-only categorical variable via indicators            |
-| s            | Split-only numerical variable                           |
-| n            | Split and fit numerical variable                        |
-| f            | Fit-only numerical variable                             |
-| m            | Missing-value flag variable                              |
-| p            | Periodic variable                                       |
-| w            | Weight                                                   |
 """
 
 import sys
@@ -31,13 +17,12 @@ from collections import Counter
 class RegressionType(Enum):
     """ Type of regression """
     PIECEWISE_CONSTANT = 1
-    LINEAR_PIECEWISE = 2
-    POISSON = 3
+    LINEAR_PIECEWISE = 2 # unused
 
 class SplitPointMethod(Enum):
     Greedy = 1
-    Median = 2
-    Systematic = 3
+    Median = 2 # unused
+    Systematic = 3 # unused
 
 class Settings():
     """ The settings object holds model parameters. This should probably just be a dictionary. """ 
