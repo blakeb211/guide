@@ -1,7 +1,10 @@
-from pprint import pprint
-from node import Node, Model
-from parse import parse_data, Settings, RegressionType
+"""
+Change a few parameters and run the model. 
+Used for iterating on the project.
+"""
 import pdb
+from node import Model
+from parse import Settings, RegressionType
 
 if __name__ == "__main__":
     settings = Settings(
@@ -15,4 +18,4 @@ if __name__ == "__main__":
     model.fit()
     model.print()
     print("\n".join(model.tree_text))
-    # model.predict_train_data(print_me = True)
+    model.predict_train_data(print_me = True)

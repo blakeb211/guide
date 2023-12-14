@@ -17,15 +17,18 @@ from collections import Counter
 class RegressionType(Enum):
     """ Type of regression """
     PIECEWISE_CONSTANT = 1
-    LINEAR_PIECEWISE = 2 # unused
+    LINEAR_PIECEWISE = 2  # unused
+
 
 class SplitPointMethod(Enum):
     Greedy = 1
-    Median = 2 # unused
-    Systematic = 3 # unused
+    Median = 2  # unused
+    Systematic = 3  # unused
+
 
 class Settings():
-    """ The settings object holds model parameters. This should probably just be a dictionary. """ 
+    """ The settings object holds model parameters. This should probably just be a dictionary. """
+
     def __init__(self, data_dir, dsc_file, model=RegressionType.PIECEWISE_CONSTANT, out_file=None, max_depth=10, min_samples_leaf=6, input_file=None, overwrite_data_txt=None):
         self.datafile_name = None
         self.dsc_file = None
@@ -36,11 +39,14 @@ class Settings():
         self.model = model
         self.dsc_file = dsc_file
         self.MAX_DEPTH = max_depth
-        self.MIN_SAMPLES_LEAF = min_samples_leaf  # The reference program has a formula to calculate this but we do not
+        # The reference program has a formula to calculate this but we do not
+        self.MIN_SAMPLES_LEAF = min_samples_leaf
         self.input_file = input_file
-        self.out_file = out_file                  # GUIDE output file can be given to be used for tree comparisons during testing
+        # GUIDE output file can be given to be used for tree comparisons during testing
+        self.out_file = out_file
         self.interactions_on = False
-        self.overwrite_data_text=overwrite_data_txt # Use this argument filename in place of whatever is at top of .dsc file
+        # Use this argument filename in place of whatever is at top of .dsc file
+        self.overwrite_data_text = overwrite_data_txt
         assert os.path.exists(self.data_dir +
                               self.dsc_file), f"{self.dsc_file} not found"
 
@@ -51,7 +57,7 @@ def _vars_by_role(df, char: str) -> list():
     return df[df['var_role'] == char].var_name.values.tolist()
 
 
-def parse_data(settings : Settings):
+def parse_data(settings: Settings):
     """ Parse the descr and data files. Modifies settings so it
     can be used to build models.
     """
@@ -80,7 +86,6 @@ def parse_data(settings : Settings):
                 if "(1=interaction tests, 2=skip them)" in l:
                     settings.interactions_on = l.startswith('1')
 
-
     # Parse description file
     description_file = settings.data_dir + settings.dsc_file
     assert os.path.exists(
@@ -107,7 +112,7 @@ def parse_data(settings : Settings):
                 "var_role"])
         for i in np.arange(3, len(lines)):
             col_data.iloc[i - 3] = lines[i].split()
-    
+
     print(">> Parsed description file <<")
     print('*' * 50)
     print(f"Datafile name            : {settings.datafile_name}")
@@ -156,7 +161,7 @@ def parse_data(settings : Settings):
         settings.data_dir + settings.datafile_name,
         delim_whitespace=True,
         na_values=settings.missing_vals,
-        header=int(settings.datafile_start_line_idx)-2) 
+        header=int(settings.datafile_start_line_idx)-2)
     assert df.shape[1] == col_data.shape[0], "dsc and txt file have unequal column counts"
     dependent_var = _vars_by_role(col_data, 'd')[0]
     print(f"Number of rows datafile  : {df.shape[0]}")
@@ -200,7 +205,8 @@ def parse_data(settings : Settings):
     print(f"Converted {n_var_idx.shape[0]} n variables to S variables")
 
    # If column type s, w, or d add min and max missing to the col_data table
-    numeric_var_names = _vars_by_role(col_data, 'S') + _vars_by_role(col_data, 'w')
+    numeric_var_names = _vars_by_role(
+        col_data, 'S') + _vars_by_role(col_data, 'w')
 
     _missing_vals_in_noncategorical_flag = False
     for col in numeric_var_names:
@@ -218,18 +224,21 @@ def parse_data(settings : Settings):
     if _missing_vals_in_noncategorical_flag == True:
         print(f"Missing values found in non-categorical variables.")
 
-    categorical_vars = _vars_by_role(col_data, 'c') + _vars_by_role(col_data, 'm')
+    categorical_vars = _vars_by_role(
+        col_data, 'c') + _vars_by_role(col_data, 'm')
 
     # active indexes used for model fitting
-    idx_active = set(df.index.values.flatten()) - set(idx_missing_d.values.flatten()) - set(idx_zero_or_negative_weight.values.flatten())
+    idx_active = set(df.index.values.flatten()) - set(idx_missing_d.values.flatten()
+                                                      ) - set(idx_zero_or_negative_weight.values.flatten())
     idx_active = list(idx_active)
     idx_active = pd.Series(idx_active).values
-    # @TODO: Check if output of min, max, levels, etc matches the reference 
+    # @TODO: Check if output of min, max, levels, etc matches the reference
 
     _missing_vals_in_categoricals_flag = False
     for col in categorical_vars:
         idx = col_data[col_data.var_name == col].index[0]
-        _level_count = df.loc[idx_active, col].value_counts(dropna=True).index.shape[0]
+        _level_count = df.loc[idx_active, col].value_counts(
+            dropna=True).index.shape[0]
         _missing_count = df.loc[idx_active, col].isnull().sum()
         col_data.loc[idx, 'levels'] = _level_count
         if _missing_count > 0:
@@ -256,9 +265,10 @@ def parse_data(settings : Settings):
     settings.col_data = col_data
     settings.df = df
     settings.idx_active = idx_active
-    settings.split_vars = _vars_by_role(col_data, 'S') + _vars_by_role(col_data, 'c')
+    settings.split_vars = _vars_by_role(
+        col_data, 'S') + _vars_by_role(col_data, 'c')
     settings.fit_vars = _vars_by_role(col_data, 'n')
-    settings.categorical_vars = _vars_by_role(col_data, 'c') 
+    settings.categorical_vars = _vars_by_role(col_data, 'c')
     settings.numeric_vars = numeric_var_names
     settings.dependent_var = dependent_var
     settings.weight_var = weight_var
