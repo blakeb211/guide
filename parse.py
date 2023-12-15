@@ -5,13 +5,12 @@
 - Pre process (switching columns, dropping rows)
 """
 
-import sys
 import os
 import pdb
 from enum import Enum
+from collections import Counter
 import numpy as np
 import pandas as pd
-from collections import Counter
 
 
 class RegressionType(Enum):
@@ -47,9 +46,9 @@ class Settings():
         self.data_dir = data_dir
         self.model = model
         self.dsc_file = dsc_file
-        self.MAX_DEPTH = max_depth
+        self.max_depth = max_depth
         # The reference program has a formula to calculate this but we do not
-        self.MIN_SAMPLES_LEAF = min_samples_leaf
+        self.min_samples_leaf = min_samples_leaf
         self.input_file = input_file
         # GUIDE output file can be given to be used for tree comparisons during
         # testing
@@ -81,7 +80,7 @@ def parse_data(settings: Settings):
                 if "(max. no. split levels)" in l:
                     # parse up to the first ( as a number
                     en = l.find('(')
-                    settings.MAX_DEPTH = int(l[0:en])
+                    settings.max_depth = int(l[0:en])
 
                 if "(1=default min. node size" in l and l.startswith('2'):
                     # parse lines[idx+1] to number
@@ -92,7 +91,7 @@ def parse_data(settings: Settings):
                     en = _line.find('(')
                     if en != -1:
                         _line = _line[0:en]
-                    settings.MIN_SAMPLES_LEAF = int(_line)
+                    settings.min_samples_leaf = int(_line)
 
                 if "(1=interaction tests, 2=skip them)" in l:
                     settings.interactions_on = l.startswith('1')
@@ -177,7 +176,7 @@ def parse_data(settings: Settings):
     dependent_var = _vars_by_role(col_data, 'd')[0]
     print(f"Number of rows datafile  : {df.shape[0]}")
     print(f"Dependent variable       : {dependent_var}")
-    num_missing_in_d = df[dependent_var].isnull().sum()
+    # num_missing_in_d = df[dependent_var].isnull().sum()
     print(f"Model type is            : {str(settings.model)}")
 
     # Remove rows of dataframe with non-positive weight or missing values in d, e, t, r or z variables)
@@ -269,10 +268,10 @@ def parse_data(settings: Settings):
     print(col_data[col_data.var_role != 'x'])
     print(
         f"Number of split variables: {len(_vars_by_role(col_data, 'c')) + len(_vars_by_role(col_data, 'S'))}")
-    print(f"Max depth of tree     : {settings.MAX_DEPTH}")
-    print(f"Min samples per node  : {settings.MIN_SAMPLES_LEAF}")
+    print(f"Max depth of tree     : {settings.max_depth}")
+    print(f"Min samples per node  : {settings.min_samples_leaf}")
     print(f"Interaction tests done: {settings.interactions_on}")
-    x_vars = _vars_by_role(col_data, 'x')
+    # x_vars = _vars_by_role(col_data, 'x')
     settings.col_data = col_data
     settings.df = df
     settings.idx_active = idx_active

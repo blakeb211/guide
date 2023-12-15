@@ -1,6 +1,6 @@
 # Tree model compatible with GUIDE (Loh et al)
 1. Handles numeric and categoric variables with no missing values
-1. Currently focusing on compatibility with the 2002 paper (see the docs folder)
+1. Focusing on compatibility before optimizing for speed 
 1. Original author's site: https://pages.stat.wisc.edu/~loh/guide.html 
 
 # How to run

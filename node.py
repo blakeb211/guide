@@ -4,28 +4,31 @@ Build GUIDE-compatible tree models
 import math
 import random
 import hashlib
-from parse import Settings, RegressionType, SplitPointMethod, parse_data
-from typing import List
 import logging
 import pdb
-import numpy as np
-from scipy.stats import chi2_contingency, chi2
 from collections import defaultdict
 from itertools import combinations, product
+import numpy as np
+from scipy.stats import chi2_contingency, chi2
 import pandas as pd
 from statsmodels.sandbox.stats.multicomp import multipletests
+from parse import Settings, RegressionType, SplitPointMethod, parse_data
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('My Logger')
 
 
 class TerminalData:
+    """ Class for a terminal node """
+
     def __init__(self, value):
         assert isinstance(value, float)
         self.value = value
 
 
 class InternalData:
+    """ Class for an internal node """
+
     def __init__(self, split_var, split_point, predicate, na_goes_left):
         self.split_point = split_point
         self.split_var = split_var
@@ -37,9 +40,8 @@ class Node:
     """ Node class """
 
     def __init__(self, node_data, depth: int, parent, indices, node_num=1):
-        assert isinstance(node_data, TerminalData) or \
-            isinstance(node_data, InternalData) or \
-            node_data is None
+        assert isinstance(node_data, (TerminalData, InternalData)) \
+            or node_data is None
 
         assert isinstance(depth, int)
         assert isinstance(parent, Node) or parent is None
@@ -77,8 +79,8 @@ class Model:
                                          == var].var_role.values[0] for var in self.split_vars}
         self.split_point_method = SplitPointMethod.Greedy
         self.model_type = RegressionType.PIECEWISE_CONSTANT
-        self.MIN_SAMPLES_LEAF = settings.MIN_SAMPLES_LEAF
-        self.MAX_DEPTH = settings.MAX_DEPTH
+        self.min_samples_leaf = settings.min_samples_leaf
+        self.max_depth = settings.max_depth
         self.node_list = []
         self.idx_active = settings.idx_active
         self.interactions_on = settings.interactions_on
@@ -93,6 +95,9 @@ class Model:
         self.tree_text = []
         self.settings = settings
 
+    def __name__(self):
+        return "Model"
+
     def _get_next_node_num(self):
         """ Get a node_number for a new node """
         ret_val = self.next_node_num
@@ -106,20 +111,19 @@ class Model:
         split_point is a tuple of categories for categorical column followed by None
         """
         _df = self.df.loc[node.idx, [col, self.tgt]]
+        x_uniq = _df[col].drop_duplicates().sort_values().values
         match self.col_data[self.col_data.var_name == col]['var_role'].iloc[0]:
 
             case 'S':
                 # numeric
-                x_uniq = _df[col].drop_duplicates().sort_values()
                 if x_uniq.shape[0] == 1:
                     # node already pure so should be Terminal node
                     return None, False
                 cutpoints = x_uniq[:-1] + np.diff(x_uniq) / 2
                 greatest_tot_sse = -999
                 best_cut = None
-                sse_tab = pd.DataFrame({'cut': [], 'sse': []})
 
-                for idx, cut in enumerate(cutpoints):
+                for cut in cutpoints:
                     right_idx = _df[_df[col] > cut].index
                     left_idx = _df.drop(right_idx, axis=0).index
                     left_mean = _df.loc[left_idx][self.tgt].mean()
@@ -130,12 +134,10 @@ class Model:
                     tot_items = nAL + nAR
                     cut_sse = (nAL * nAR / tot_items) * \
                         (left_mean - right_mean)**2
-                    sse_tab = pd.concat([sse_tab, pd.DataFrame(
-                        {'cut': cut, 'sse': cut_sse}, index=[idx])])
 
                     if cut_sse > greatest_tot_sse \
-                            and len(right_idx) >= self.MIN_SAMPLES_LEAF \
-                            and len(left_idx) >= self.MIN_SAMPLES_LEAF:
+                            and len(right_idx) >= self.min_samples_leaf \
+                            and len(left_idx) >= self.min_samples_leaf:
                         greatest_tot_sse = cut_sse
                         best_cut = cut
 
@@ -143,8 +145,8 @@ class Model:
                 return best_cut, False
 
             case 'c':
-                # categorical
                 """
+                Categorical case.
                 If X is a categorical predictor, we need to ﬁnd a split of the form X ∈ A,
                 where A is a subset of the values taken by X. We accomplish this by viewing
                 it as a classiﬁcation problem. Label each observation in the node as class 1
@@ -154,7 +156,6 @@ class Model:
                 (binomial) variances in L and R is minimized. This solution is quickly found
                 with an algorithm in Breiman et al. (1984, p.101).
                 """
-                x_uniq = _df[col].drop_duplicates().sort_values().values
                 if x_uniq.shape[0] == 1:
                     # node already pure so should be Terminal node
                     return None, False
@@ -166,27 +167,28 @@ class Model:
 
                 _df.loc[:, self.tgt] = _df[self.tgt] < node.y_mean
 
-                def pi(j):
+                def prior_prob(j):
                     """ prior probability of the class in the node """
                     if j == 1:
                         return _df[self.tgt].mean()
                     if j == 0:
-                        return 1.0 - pi(1)
-                    raise "fail"
+                        return 1.0 - prior_prob(1)
+                    return None
 
-                def N_j_l(j, s):
+                def N_j_l(j, subset):
                     """ num cases of class j in subset s"""
-                    assert j == 0 or j == 1
-                    return _df[(_df[self.tgt] == j) & (_df[col] == s)].shape[0]
+                    assert j in (0, 1)
+                    return _df[(_df[self.tgt] == j) & (
+                        _df[col] == subset)].shape[0]
 
-                def p(j, subset_l) -> float:
+                def prob(j, subset_l) -> float:
                     """ When we sort categories by this value we get L-1 split points """
-                    assert j == 0 or j == 1
-                    divisor = (pi(1) * N_j_l(1, subset_l) +
-                               pi(0) * N_j_l(0, subset_l))
-                    return pi(j) * N_j_l(j, subset_l) / divisor
+                    assert j in (0, 1)
+                    divisor = (prior_prob(1) * N_j_l(1, subset_l) +
+                               prior_prob(0) * N_j_l(0, subset_l))
+                    return prior_prob(j) * N_j_l(j, subset_l) / divisor
 
-                sorted_ps = sorted([(s, p(1, s))
+                sorted_ps = sorted([(s, prob(1, s))
                                    for s in x_uniq], key=lambda x: x[1])
                 sorted_ps = [s for s, _ in sorted_ps]
                 end = 0
@@ -204,20 +206,19 @@ class Model:
                     mean_node = _df[self.tgt].mean()
 
                     Nall = node.idx.shape[0]
-                    p = 1, len(left_idx) / Nall, len(right_idx) / Nall
+                    prob = 1, len(left_idx) / Nall, len(right_idx) / Nall
 
                     gini_node = 2 * mean_node * (1 - mean_node)
                     gini_left = 2 * mean_left * (1 - mean_left)
                     gini_right = 2 * mean_right * (1 - mean_right)
-                    gain = p[0] * gini_node - p[1] * \
-                        gini_left - p[2] * gini_right
+                    gain = prob[0] * gini_node - prob[1] * \
+                        gini_left - prob[2] * gini_right
                     gain = round(gain, 10)
 
                     results['set'].append(subset)
                     results['gain'].append(gain)
 
-                if len(results['gain']) == 0:
-                    pdb.set_trace()
+                assert len(results['gain']) != 0, "len(results) should not be zero"
 
                 idx_max = np.argmax(results['gain'])
                 return results['set'][idx_max], None
@@ -322,14 +323,14 @@ class Model:
     def interaction_test(self, node) -> dict:
         """ Per the 2002 regression paper, calc one degree of freedom
         chi2 stats for interacting pairs """
+        if not self.interactions_on:
+            return {} 
         one_dof_stats = {}
         pairs = [*combinations(self.split_vars, r=2)]
-        pvalues = {}
         one_dof_stats = {}
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean
 
-        for pval_idx, (a, b) in enumerate(pairs):
-
+        for (a, b) in pairs:
             # case: a and b numeric
             if self.roles[a] in ['S', 'n'] and self.roles[b] in ['S', 'n']:
                 chi_squared = np.zeros(shape=(2, 4))
@@ -360,22 +361,26 @@ class Model:
                 cat_pairs = list(product(alev, blev))
                 chi_squared = np.zeros(shape=(2, len(cat_pairs)))
                 for idx, (ci, cj) in enumerate(cat_pairs):
-                    chi_squared[0, idx] = (residuals[(self.df.loc[node.idx, a] == ci) & (
-                        self.df.loc[node.idx, b] == cj)] < 0).sum()
-                    chi_squared[1, idx] = (residuals[(self.df.loc[node.idx, a] == ci) & (
-                        self.df.loc[node.idx, b] == cj)] >= 0).sum()
+                    chi_squared[0, idx] = (
+                        residuals
+                        [(self.df.loc[node.idx, a] == ci) &
+                         (self.df.loc[node.idx, b] == cj)] < 0).sum()
+                    chi_squared[1, idx] = (
+                        residuals
+                        [(self.df.loc[node.idx, a] == ci) &
+                         (self.df.loc[node.idx, b] == cj)] >= 0).sum()
                 chi_squared = remove_empty_cols(chi_squared)
 
             # case: one numeric and one categoric
             elif (self.roles[a] == 'c' and self.roles[b] in ['S', 'n']) or \
                     (self.roles[a] in ['S', 'n'] and self.roles[b] == 'c'):
+                # ensure categorical variable is a
                 if self.roles[a] != 'c':
-                    # ensure categorical variable is a
                     a, b = b, a
+
                 alev = self.df.loc[node.idx, a].unique()
                 chi_squared = np.zeros(shape=(2, 2 * len(alev)))
-                groups = list(product(alev, ['lt', 'gt']))
-                for idx, (ci, cj) in enumerate(groups):
+                for idx, (ci, cj) in enumerate(list(product(alev, ['lt', 'gt']))):
                     if cj == 'lt':
                         bool_idx = self.df.loc[node.idx,
                                                b] <= self.df.loc[node.idx,
@@ -383,14 +388,13 @@ class Model:
                     else:
                         bool_idx = (self.df.loc[node.idx, b]
                                     > self.df.loc[node.idx, b].median())
-                    chi_squared[0, idx] = (residuals[(self.df.loc[node.idx, a] == ci) &
-                                                     bool_idx] <= 0).sum()
-                    chi_squared[1, idx] = (residuals[(self.df.loc[node.idx, a] == ci) &
-                                                     bool_idx] > 0).sum()
+                    chi_squared[0, idx] = (
+                        residuals[(self.df.loc[node.idx, a] == ci) & bool_idx] <=
+                        0).sum()
+                    chi_squared[1, idx] = (
+                        residuals[(self.df.loc[node.idx, a] == ci) & bool_idx] >
+                        0).sum()
                 chi_squared = remove_empty_cols(chi_squared)
-
-            else:
-                assert False, "Unreachable line reached. Likely caused by unhandled variable role."
 
             res = chi2_contingency(chi_squared)
             dof, stat = res.dof, res.statistic
@@ -422,75 +426,54 @@ class Model:
             every node, it may be possible to obtain a shorter tree. The latter strategy is
             adopted for this reason.
         """
+        _df = self.df.loc[node.idx]
 
-        if self.weight_var == list():
-            node.y_mean = self.df.loc[node.idx, self.tgt].mean()
+        if self.weight_var == []:
+            node.y_mean = _df[self.tgt].mean()
         else:
-            # @NOTE: This is a little scaffolding for weigh var which is not implemented yet
-            divisor = self.df.loc[node.idx, self.weight_var].sum()
-            node.y_mean = (self.df.loc[node.idx,
-                                       self.tgt] * self.df.loc[node.idx,
-                                                               self.weight_var]).sum() / divisor
+            raise NotImplementedError
+            divisor = _df.loc[node.idx, self.weight_var].sum()
+            node.y_mean = (
+                _df.loc[node.idx, self.tgt] * _df.loc
+                [node.idx, self.weight_var]).sum() / divisor
 
         curv_one_dof_stats = self.curvature_test(node)
-        interaction_one_dof_stats = {}
-        if self.interactions_on:
-            interaction_one_dof_stats = self.interaction_test(node)
+        interaction_one_dof_stats = self.interaction_test(node)
 
-        curv_one_dof_stats = list(curv_one_dof_stats.items())
-        interaction_one_dof_stats = list(interaction_one_dof_stats.items())
         interaction_pval = [(col, pvalue_for_one_dof(stat))
-                            for col, stat in interaction_one_dof_stats]
+                            for col, stat in interaction_one_dof_stats.items()]
         curv_pval = [(col, pvalue_for_one_dof(stat))
-                     for col, stat in curv_one_dof_stats]
+                     for col, stat in curv_one_dof_stats.items()]
 
-        # Bonferonni correction (uses statsmodels)
 
-        # Tmp list of pvals to send to Bonferroni correction
-        tmp_curv_pval_list = list(zip(*curv_pval))[1]
-        curv_p_adj = multipletests(
-            [*tmp_curv_pval_list], method='bonferroni')[1]
+        curv_p_adj = bonferonni_correction(curv_pval)
         curv_pval = [((first,), curv_p_adj[idx])
-                     for idx, (first, _) in enumerate(curv_pval)]
+                        for idx, (first, _) in enumerate(curv_pval)]
 
         if self.interactions_on and len(interaction_pval) > 0:
-            tmp_interact_pval_list = list(zip(*interaction_pval))[1]
-            interact_p_adj = multipletests(
-                [*tmp_interact_pval_list], method='bonferroni')[1]
+            interact_p_adj = bonferonni_correction(interaction_pval)
             interaction_pval = [(first, interact_p_adj[idx])
                                 for idx, (first, _) in enumerate(interaction_pval)]
 
-        # Put the best corrected curvature and interaction pvalues at the top
-        # of each list of tuples.
-
-        # This approach is if instead of pre-sorting by chi-squared first.
-        # We shuffle and sort by pval
         all_pval = []
         all_pval.extend(interaction_pval)
         all_pval.extend(curv_pval)
 
-        # Use hashlib to generate a hash value
-        dataframe_str = str(self.df.loc[node.idx].values)
-        hash_object = hashlib.md5(dataframe_str.encode())
-        rnd_seed = int(hash_object.hexdigest(), 16)
-
         # The adjusted pvals are shuffled deterministically
         # so that cases where all pvalues are the same (e.g. all 1.0)
         # do not make a biased selection.
+        dataframe_str = str(_df.iloc[:, :200].values)
+        hash_object = hashlib.md5(dataframe_str.encode())
+        rnd_seed = int(hash_object.hexdigest(), 16)
+
         random.seed(rnd_seed)
         random.shuffle(all_pval)
         all_pval = sorted(all_pval, key=lambda x: (x[1], len(x[0])))
 
         top_var_is_singlet = True if len(all_pval[0][0]) == 1 else False
 
-        all_curv_pval_are_same = len({pval for var, pval in curv_pval}) <= 1
-        """
-        if all_curv_pval_are_same is True and node.node_num == 1:
-            print(f"random seed for pval == 1 {rnd_seed}")
-        """
-
         best_var = None
-        # Logic for interaction tests
+        # Behavior if lowest pvalue is from an interaction test 
         if not top_var_is_singlet:
             top_interact_pair = all_pval[0][0]
             # Select one of interacting pair
@@ -499,39 +482,32 @@ class Model:
             role_a, role_b = self.roles[top_interact_pair[0]
                                         ], self.roles[top_interact_pair[1]]
             if role_a in ['n', 'S'] and role_b in ['n', 'S']:
-                cut_a, cut_b = self.df.loc[node.idx, top_interact_pair[0]].mean(
-                ), self.df.loc[node.idx, top_interact_pair[1]].mean()
+                cut_a, cut_b = _df[top_interact_pair[0]].mean(
+                ), _df[top_interact_pair[1]].mean()
                 max_sse = None
                 for col, cut in zip(top_interact_pair, [cut_a, cut_b]):
-                    right_idx = (self.df.loc[node.idx, col] > cut).index
-                    left_idx = self.df.drop(right_idx, axis=0).index
-                    left_sse = ((self.df.loc[left_idx,
-                                             self.tgt] - self.df.loc[left_idx,
-                                                                     self.tgt].mean())**2).sum()
-                    right_sse = ((self.df.loc[right_idx,
-                                              self.tgt] - self.df.loc[right_idx,
-                                                                      self.tgt].mean())**2).sum()
-                    node_sse = ((self.df.loc[node.idx,
-                                             self.tgt] - self.df.loc[node.idx,
-                                                                     self.tgt].mean())**2).sum()
-                    p = 1, len(left_idx) / \
-                        len(node.idx), len(right_idx) / len(node.idx)
+                    right_idx = (_df[col] > cut).index
+                    left_idx = _df.drop(right_idx, axis=0).index
+                    left_sse = (
+                        (_df.loc[left_idx, self.tgt] - _df.loc
+                         [left_idx, self.tgt].mean()) ** 2).sum()
+                    right_sse = (
+                        (_df.loc[right_idx, self.tgt] - _df.loc
+                         [right_idx, self.tgt].mean()) ** 2).sum()
+                    node_sse = (
+                        (_df[self.tgt] - _df[self.tgt].mean()) ** 2).sum()
+                    p = 1, len(left_idx) / len(node.idx), len(right_idx) / len(node.idx)
                     sse = p[0] * node_sse - p[1] * left_sse - p[2] * right_sse
                     if max_sse is None or sse > max_sse:
                         max_sse = sse
                         best_var = col
             else:
-                logger.log(
-                    logging.DEBUG, msg=f"UNTESTED CODE PATH HIT: interacting pair \
-                            {top_interact_pair[0]},{top_interact_pair[1]} with one or two categoricals")
                 curv_pval_a = [tup[1] for tup in curv_pval if tup[0]
                                [0] == top_interact_pair[0]][0]
                 curv_pval_b = [tup[1] for tup in curv_pval if tup[0]
                                [0] == top_interact_pair[1]][0]
 
                 if curv_pval_a == curv_pval_b:
-                    # Make it random but deterministic if pvals match
-                    random.seed(len(node.idx))
                     best_var = top_interact_pair[0] if random.randint(
                         0, 1) == 1 else top_interact_pair[1]
                 else:
@@ -544,11 +520,7 @@ class Model:
         if self.top_node_best_var is None:
             self.top_node_best_var = best_var
 
-        if best_var is None:
-            logger.log(
-                level=logging.INFO,
-                msg=f"file with bad best_var = {self.settings.overwrite_data_text}")
-            pdb.set_trace()
+        assert best_var is not None, "best_var should not be None"
 
         return best_var
 
@@ -576,10 +548,7 @@ class Model:
                 split_point, na_left = self._get_split_point_median(
                     node=curr, col=split_var)
             elif self.split_point_method == SplitPointMethod.Systematic:
-                raise "not implemented"
-
-            if False and curr.node_num == 14:
-                pdb.set_trace()
+                raise NotImplementedError 
 
             if split_point is None:
                 curr.node_data = TerminalData(value=curr.y_mean)
@@ -588,32 +557,29 @@ class Model:
 
             assert isinstance(curr.idx, np.ndarray)
             _df = self.df.loc[curr.idx]
-            predicate = None
 
             # create predicate (lambda) for splitting dataframe
             # can be printed with:
             #   from dill.source import getsource
             if isinstance(split_point, tuple):
                 def predicate(
-                    x, split_point=split_point): return x in split_point
+                    val, split_point=split_point): return val in split_point
             else:
                 if na_left:
                     def predicate(
-                        x, split_point=split_point): return x < split_point or np.isnan(x)
+                        val, split_point=split_point): return val < split_point or np.isnan(val)
                 else:
                     def predicate(
-                        x, split_point=split_point): return x < split_point
+                        val, split_point=split_point): return val < split_point
 
             # Split dataframe
-            # @NOTE can index a dataframe by a boolean but need to call .loc to index it with an index
-            # logger.log(logging.DEBUG, msg = f"splitting node {curr.node_num} with split_var = {split_var} at split point = {split_point}")
             left = _df[_df[split_var].map(predicate)].index.values
             right = _df[~_df[split_var].map(predicate)].index.values
             assert left.shape[0] + right.shape[0] == curr.idx.shape[0]
 
-            if left.shape[0] <= self.MIN_SAMPLES_LEAF or right.shape[0] <= self.MIN_SAMPLES_LEAF \
-                    or curr.depth == self.MAX_DEPTH:
-                # Based on early stopping, make curr node a leaf
+            # Based on early stopping, make curr node a leaf
+            if left.shape[0] <= self.min_samples_leaf or right.shape[0] <= self.min_samples_leaf \
+                    or curr.depth == self.max_depth:
                 curr.node_data = TerminalData(value=curr.y_mean)
                 self.node_list.append(curr)
                 continue
@@ -644,7 +610,7 @@ class Model:
         self._print_tree(self.top_node, depth=1)
 
     def _print_tree(self, node, depth):
-        """ saves tree text to Model class.  recursively process the tree to match the reference output """
+        """ Saves tree text to Model class. Uses recursive printing. """
         spacer = "  "
         # base case terminal node
         if node.left is None and node.right is None:
@@ -671,7 +637,8 @@ class Model:
         printable_split_point = ""
         if isinstance(node.node_data.split_point, tuple):
             printable_split_point = ", ".join(
-                ["\"" + str(i) + "\"" for idx, i in enumerate(node.node_data.split_point)])
+                ["\"" + str(i) + "\"" for idx,
+                 i in enumerate(node.node_data.split_point)])
         else:
             printable_split_point = node.node_data.split_point
 
@@ -685,10 +652,7 @@ class Model:
         self.tree_text.append(sr)
         self._print_tree(node.right, depth + 1)
 
-    def print(self):
-        pass
-
-    def _prune(node):
+    def _prune(self, node):
         """
         Unless stated otherwise, the trees presented here are pruned using the cost-
         complexity pruning method of CART with N -fold cross-validation, where N is
@@ -701,7 +665,10 @@ class Model:
         than p0 + s0 . The reader is referred to Breiman et al. (1984, Sec. 3.4) for further
         details on pruning and estimation of standard error.
         """
-        pass
+        raise NotImplementedError 
+
+    def predict(self, df_X, df_y):
+        raise NotImplementedError 
 
     def predict_train_data(self, print_me=False) -> pd.DataFrame:
         """ Generate model predictions on train data equivalent to the data.node file """
@@ -724,8 +691,9 @@ class Model:
                     feat = curr.node_data.split_var
                     predicate = curr.node_data.predicate
                     goes_left = predicate(row[feat])
-                    if type(goes_left) != np.bool_ and type(goes_left) != bool:
-                        pdb.set_trace()
+                    if type(goes_left) not in (np.bool_, bool):
+                        raise TypeError
+                        
                     if goes_left:
                         curr = curr.left
                     else:
@@ -754,7 +722,7 @@ class Model:
 
 
 def wilson_hilferty(stat, dof) -> np.float64:
-    """ approximately convert chi-squared with dof degrees of freedom to 1 degree of freedom """
+    """ Approximately convert chi-squared with dof degrees of freedom to 1 degree of freedom """
     if dof == 1:
         return stat
     if dof == 0:
@@ -772,14 +740,22 @@ def wilson_hilferty(stat, dof) -> np.float64:
         w = w1
     return w
 
+def sse():
+    # get_split_point_greedy and get_best_variable both have this calc
+    pass
 
 def pvalue_for_one_dof(stat):
     """ pvalue for a 1 dof chi squared statistic """
     return 1 - chi2.cdf(stat, 1)
-
 
 def remove_empty_cols(t: np.ndarray):
     """ Remove empty columns, modifying t in place """
     cols = t.shape[1]
     empty_cols = [c for c in range(cols) if t[:, c].sum() == 0]
     return np.delete(t, empty_cols, 1)
+
+def bonferonni_correction(pval):
+    """ Bonferonni correction (uses statsmodels) """
+    tmp_pval_list = list(zip(*pval))[1]
+    return multipletests(
+        [*tmp_pval_list], method='bonferroni')[1]

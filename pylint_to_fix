@@ -1,0 +1,6 @@
+node.py:22:0: C0115: Missing class docstring (missing-class-docstring)
+node.py:22:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+node.py:28:0: C0115: Missing class docstring (missing-class-docstring)
+node.py:28:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+node.py:39:4: R0913: Too many arguments (6/5) (too-many-arguments)
+

@@ -1,5 +1,7 @@
 # Todo 
 1. MyLint and MyPy + code cleanup 
+  - changing InternalData and TerminalData to namedtuple or dict
+  - simplify or split apart get_split_greedy
 1. Add predict and train from arbitrary dataframes
 1. Open the repo
 

@@ -1,7 +1,4 @@
-import pytest
 import sys
-import math
-import os
 import pdb
 import pathos.pools as pp
 import re
