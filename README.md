@@ -2,6 +2,7 @@
 1. Handles numeric and categoric variables with no missing values
 1. I'm still defining what subset of the (massive) program options that I'll support 
 1. Original author's site: https://pages.stat.wisc.edu/~loh/guide.html 
+1. Tree book that inspired the project: https://bgreenwell.github.io/treebook/
 
 # Usage 
  ```
@@ -16,6 +17,6 @@
 # Holistic Overview
 1. *parse.py* creates a Settings object from the .in, .dsc, and .txt files
 1. The Model class in *node.py* takes the settings object and builds the model
-1. Each directory in the tests folder is a set of GUIDE files input, 
+1. Each directory in the tests folder is a set of GUIDE files like input, 
 description, data, output, etc.
 

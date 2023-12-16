@@ -6,16 +6,20 @@
 1. Add predict for arbitrary dataframes
 1. MyLint and MyPy + code cleanup 
 1. Root cause and fixing of unbiased selection test discrepancies
-1. Write test for interaction tests from the 2002 paper
+1. Write test for unbiased selection from the 2002 paper
 1. Wire up Interaction tests
 1. Put in fast categoricals
 1. switched goal from "exact match to GUIDE v41.2 to 'GUIDE-Compatible implementation"
 1. match reference for unweighted greedy split of categoricals with no missing values 
 1. match reference with greedy split point, unweighted numeric variables only, no interaction tests, no missing values, no bootstrap collection for piecewise constant
-1. write predict to generate node file
+1. write test to compare the tree structure outputted by GUIDE
+1. write predict_train_data to generate node file (runs predict on the training data)
 1. write test that can compare node files
 
 # Wishlist
+1. Add node count comparison print out or test
+1. Add fraction of variance explained by model printout
+1. Add another test for interactions 
 1. Pruning
 1. Regression for piecewise linear 
   1. Bootstrap correction 

@@ -1,7 +1,7 @@
 """
-- parse input file
-- parse description file
-- parse data file
+- Parse input file
+- Parse description file
+- Parse data file
 - Pre process (switching columns, dropping rows)
 - Populate the settings object
 """
@@ -62,13 +62,13 @@ class Settings:
         # file
         self.overwrite_data_text = overwrite_data_txt
         self.missing_vals = []
-        self.df : pd.DataFrame = pd.DataFrame() 
-        self.idx_active : np.ndarray = np.ndarray(shape=0)
+        self.df: pd.DataFrame = pd.DataFrame()
+        self.idx_active: np.ndarray = np.ndarray(shape=0)
         self.split_vars = []
         self.categorical_vars = []
         self.numeric_vars = []
         self.dependent_var = None
-        self.weight_var = [] 
+        self.weight_var = []
         self.roles = {}
 
 
@@ -77,9 +77,10 @@ def _vars_by_role(df, char: str) -> List[str]:
     assert len(char) == 1, "variable roles are exactly one char long"
     return df[df["var_role"] == char].var_name.values.tolist()
 
+
 def parse_input_file(settings: Settings):
-    """ Read model parameters from the GUIDE input file and save them
-    to the settings object """
+    """Read model parameters from the GUIDE input file and save them
+    to the settings object"""
     lines = []
     with open(settings.data_dir + settings.input_file, "r", encoding="utf-8") as f:
         lines = f.readlines()
@@ -105,9 +106,10 @@ def parse_input_file(settings: Settings):
         if "(1=interaction tests, 2=skip them)" in l:
             settings.interactions_on = l.startswith("1")
 
+
 def parse_description_file(settings: Settings):
-    """ The GUIDE .dsc file has the name of data file,
-    the missing value labels, and the roles of each variable """
+    """The GUIDE .dsc file has the name of data file,
+    the missing value labels, and the roles of each variable"""
     lines = []
     with open(settings.data_dir + settings.dsc_file, "r", encoding="utf-8") as f_desc:
         lines = f_desc.readlines()
@@ -127,15 +129,18 @@ def parse_description_file(settings: Settings):
         col_data.iloc[i - 3] = lines[i].split()
     return col_data
 
+
 def parse_data(settings: Settings, show_output=True):
     """Parse the descr and data files. Modifies settings object so it
     can be used to build models.
     """
-    out_str = [] # build this string up and optionally output at end
+    out_str = []  # build this string up and optionally output at end
     # Parse Input file if present
 
     if settings.input_file is not None:
-        assert os.path.exists(settings.data_dir + settings.input_file), "input file not found"
+        assert os.path.exists(
+            settings.data_dir + settings.input_file
+        ), "input file not found"
         parse_input_file(settings)
 
     # Parse description file
@@ -169,7 +174,9 @@ def parse_data(settings: Settings, show_output=True):
     # Parse data file (.txt)
 
     # @TODO: Add option to parse settings object from a dataframe instead of data.txt
-    assert os.path.exists(settings.data_dir + settings.datafile_name), "datafile not found"
+    assert os.path.exists(
+        settings.data_dir + settings.datafile_name
+    ), "datafile not found"
 
     df = pd.read_csv(
         settings.data_dir + settings.datafile_name,
@@ -211,7 +218,9 @@ def parse_data(settings: Settings, show_output=True):
             df[_vars_by_role(col_data, "w")[0]] <= 0.0
         ].index
     if len(idx_zero_or_negative_weight) > 0:
-        out_str.append(f"Dropped rows w/ weight < 0   : {len(idx_zero_or_negative_weight)}")
+        out_str.append(
+            f"Dropped rows w/ weight < 0   : {len(idx_zero_or_negative_weight)}"
+        )
 
     # GUIDE converts some roles to others depending on model parameters
     # Convert n to S and report how many
@@ -267,7 +276,7 @@ def parse_data(settings: Settings, show_output=True):
             col_data.loc[idx, "missing"] = " "
 
     if _missing_vals_in_categoricals_flag:
-        out_str.append("Missing values found in categorical variables." )
+        out_str.append("Missing values found in categorical variables.")
         out_str.append(" Separate categories will be created.")
 
     # Report some data statistics and model params to the user
@@ -277,7 +286,9 @@ def parse_data(settings: Settings, show_output=True):
     out_str.append("\n")
     out_str.append(f"{col_data[col_data.var_role != 'x']}")
 
-    num_split_variables = len(_vars_by_role(col_data, 'c')) + len(_vars_by_role(col_data, 'S'))
+    num_split_variables = len(_vars_by_role(col_data, "c")) + len(
+        _vars_by_role(col_data, "S")
+    )
     out_str.append(f"Number of split variables: {num_split_variables}")
 
     out_str.append(f"Max depth of tree     : {settings.max_depth}")
@@ -289,7 +300,7 @@ def parse_data(settings: Settings, show_output=True):
     settings.idx_active = idx_active
     settings.split_vars = _vars_by_role(col_data, "S") + _vars_by_role(col_data, "c")
     settings.categorical_vars = _vars_by_role(col_data, "c")
-    settings.numeric_vars = set(numeric_var_names) - set(_vars_by_role(col_data, 'w'))
+    settings.numeric_vars = set(numeric_var_names) - set(_vars_by_role(col_data, "w"))
     settings.dependent_var = dependent_var
     settings.weight_var = weight_var
     settings.roles = {

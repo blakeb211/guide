@@ -101,6 +101,8 @@ def test_unbiased_selection_no_interaction_tests():
 
     results_df = pd.DataFrame([big_dict_indep, big_dict_weak, big_dict_strong], index=[
                               "indep", "weak", "strong"]).transpose()
+    
+    assert results_df.sum().sum() == SIM_COUNT * 3
     results_df = results_df / SIM_COUNT
     results_df = results_df.sort_index()
 

@@ -14,7 +14,7 @@
  National Science Foundation, National Institutes of Health,
  Bureau of Labor Statistics, USDA Economic Research Service, and Eli Lilly.
   
- This job was started on 12/03/23 at 13:39
+ This job was started on 12/16/23 at 16:43
   
  Least squares regression tree
  No pruning
@@ -69,7 +69,7 @@
  Constant fitted to cases with missing values in regressor variables
  Nodewise interaction tests on all variables
  Split values for N and S variables based on exhaustive search
- Maximum number of split levels: 4
+ Maximum number of split levels: 8
  Minimum node sample size: 10
  Top-ranked variables and 1-df chi-squared values at root node
       1  0.7840E+02   CAtBat
@@ -105,27 +105,45 @@
            4       92       92     1  1.890E+02  5.356E+04   CRuns 
            8T      11       11     1  3.521E+02  4.096E+05   - 
            9       81       81     1  1.669E+02  5.568E+03   CHits 
-          18T      45       45     1  1.176E+02  1.280E+03   CHits 
-          19T      36       36     1  2.285E+02  4.093E+03   AtBat 
+          18       45       45     1  1.176E+02  1.280E+03   CHits 
+          36       28       28     1  9.832E+01  5.422E+02   Walks 
+          72T      18       18     1  9.322E+01  6.538E+02   - 
+          73T      10       10     1  1.075E+02  2.458E+02   - 
+          37T      17       17     1  1.494E+02  8.841E+02   - 
+          19       36       36     1  2.285E+02  4.093E+03   AtBat 
+          38       22       22     1  2.581E+02  3.882E+03   CRBI 
+          76T      12       12     1  2.258E+02  2.010E+03   - 
+          77T      10       10     1  2.968E+02  3.556E+03   - 
+          39T      14       14     1  1.820E+02  9.367E+02   - 
            5       31       31     1  4.134E+02  2.305E+04   CRBI 
           10T      14       14     1  3.603E+02  8.065E+03   - 
           11T      17       17     1  4.572E+02  3.216E+04   - 
            3      140      140     1  7.910E+02  1.950E+05   RBI 
            6      108      108     1  6.771E+02  1.058E+05   AtBat 
           12       45       45     1  4.906E+02  5.777E+04   Years 
-          24T      25       25     1  5.411E+02  6.406E+04   HmRun 
+          24       25       25     1  5.411E+02  6.406E+04   HmRun 
+          48T      15       15     1  4.748E+02  4.462E+04   - 
+          49T      10       10     1  6.405E+02  8.314E+04   - 
           25T      20       20     1  4.275E+02  4.531E+04   - 
           13       63       63     1  8.104E+02  9.832E+04   League 
-          26T      31       31     1  8.605E+02  1.079E+05   CRuns 
-          27T      32       32     1  7.618E+02  8.732E+04   CHmRun 
+          26       31       31     1  8.605E+02  1.079E+05   CRuns 
+          52T      10       10     1  6.845E+02  3.199E+04   - 
+          53       21       21     1  9.443E+02  1.245E+05   CRBI 
+         106T      10       10     1  1.001E+03  1.597E+05   - 
+         107T      11       11     1  8.930E+02  9.925E+04   - 
+          27       32       32     1  7.618E+02  8.732E+04   CHmRun 
+          54       22       22     1  7.386E+02  1.131E+05   CWalks 
+         108T      10       10     1  7.457E+02  2.948E+04   - 
+         109T      12       12     1  7.327E+02  1.918E+05   - 
+          55T      10       10     1  8.128E+02  3.259E+04   - 
            7       32       32     1  1.175E+03  3.115E+05   Walks 
           14T      11       11     1  7.949E+02  1.127E+05   - 
           15       21       21     1  1.375E+03  3.052E+05   PutOuts 
           30T      10       10     1  1.250E+03  1.343E+05   - 
           31T      11       11     1  1.488E+03  4.599E+05   - 
   
- Number of terminal nodes of final tree: 12
- Total number of nodes of final tree: 23
+ Number of terminal nodes of final tree: 21
+ Total number of nodes of final tree: 41
  Second best split variable (based on curvature test) at root node is CRuns
   
  Regression tree:
@@ -137,9 +155,21 @@
        Node 8: Salary-mean = 352.07573
      Node 4: CRuns > 28.500000 or NA
        Node 9: CHits <= 182.00000
-         Node 18: Salary-mean = 117.60000
+         Node 18: CHits <= 132.00000
+           Node 36: Walks <= 31.000000
+             Node 72: Salary-mean = 93.222222
+           Node 36: Walks > 31.000000 or NA
+             Node 73: Salary-mean = 107.50000
+         Node 18: CHits > 132.00000 or NA
+           Node 37: Salary-mean = 149.35294
        Node 9: CHits > 182.00000 or NA
-         Node 19: Salary-mean = 228.47686
+         Node 19: AtBat <= 415.50000
+           Node 38: CRBI <= 114.50000
+             Node 76: Salary-mean = 225.84725
+           Node 38: CRBI > 114.50000 or NA
+             Node 77: Salary-mean = 296.75000
+         Node 19: AtBat > 415.50000 or NA
+           Node 39: Salary-mean = 181.96429
    Node 2: CAtBat > 1322.0000 or NA
      Node 5: CRBI <= 162.00000
        Node 10: Salary-mean = 360.28571
@@ -149,14 +179,29 @@
    Node 3: RBI <= 78.500000
      Node 6: AtBat <= 369.00000
        Node 12: Years <= 12.500000
-         Node 24: Salary-mean = 541.10004
+         Node 24: HmRun <= 7.0000000
+           Node 48: Salary-mean = 474.83340
+         Node 24: HmRun > 7.0000000 or NA
+           Node 49: Salary-mean = 640.50000
        Node 12: Years > 12.500000 or NA
          Node 25: Salary-mean = 427.50000
      Node 6: AtBat > 369.00000 or NA
        Node 13: League = "A"
-         Node 26: Salary-mean = 860.47235
+         Node 26: CRuns <= 455.50000
+           Node 52: Salary-mean = 684.50000
+         Node 26: CRuns > 455.50000 or NA
+           Node 53: CRBI <= 513.00000
+             Node 106: Salary-mean = 1000.7143
+           Node 53: CRBI > 513.00000 or NA
+             Node 107: Salary-mean = 892.95455
        Node 13: League /= "A"
-         Node 27: Salary-mean = 761.80725
+         Node 27: CHmRun <= 70.500000
+           Node 54: CWalks <= 233.50000
+             Node 108: Salary-mean = 745.70000
+           Node 54: CWalks > 233.50000 or NA
+             Node 109: Salary-mean = 732.70833
+         Node 27: CHmRun > 70.500000 or NA
+           Node 55: Salary-mean = 812.83320
    Node 3: RBI > 78.500000 or NA
      Node 7: Walks <= 52.500000
        Node 14: Salary-mean = 794.92427
@@ -205,17 +250,57 @@ Node 9: Intermediate node
  A case goes into Node 18 if CHits <= 182.00000
  CHits mean = 174.01235
  ----------------------------
-Node 18: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      117.6        22.05        0.000    
- Salary mean = 117.600
+Node 18: Intermediate node
+ A case goes into Node 36 if CHits <= 132.00000
+ CHits mean = 118.75556
  ----------------------------
-Node 19: Terminal node
+Node 36: Intermediate node
+ A case goes into Node 72 if Walks <= 31.000000
+ Walks mean = 30.071429
+ ----------------------------
+Node 72: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      228.5        21.43        0.000    
- Salary mean = 228.477
+ Constant      93.22        15.47        0.000    
+ Salary mean = 93.2222
+ ----------------------------
+Node 73: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      107.5        21.68       0.4399E-08
+ Salary mean = 107.500
+ ----------------------------
+Node 37: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      149.4        20.71       0.5582E-12
+ Salary mean = 149.353
+ ----------------------------
+Node 19: Intermediate node
+ A case goes into Node 38 if AtBat <= 415.50000
+ AtBat mean = 377.86111
+ ----------------------------
+Node 38: Intermediate node
+ A case goes into Node 76 if CRBI <= 114.50000
+ CRBI mean = 112.13636
+ ----------------------------
+Node 76: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      225.8        17.45       0.2243E-08
+ Salary mean = 225.847
+ ----------------------------
+Node 77: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      296.8        15.74       0.7426E-07
+ Salary mean = 296.750
+ ----------------------------
+Node 39: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      182.0        22.25        0.000    
+ Salary mean = 181.964
  ----------------------------
 Node 5: Intermediate node
  A case goes into Node 10 if CRBI <= 162.00000
@@ -245,11 +330,21 @@ Node 12: Intermediate node
  A case goes into Node 24 if Years <= 12.500000
  Years mean = 12.444444
  ----------------------------
-Node 24: Terminal node
+Node 24: Intermediate node
+ A case goes into Node 48 if HmRun <= 7.0000000
+ HmRun mean = 7.0000000
+ ----------------------------
+Node 48: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      541.1        10.69       0.1317E-09
- Salary mean = 541.100
+ Constant      474.8        8.706       0.5046E-06
+ Salary mean = 474.833
+ ----------------------------
+Node 49: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      640.5        7.025       0.6155E-04
+ Salary mean = 640.500
  ----------------------------
 Node 25: Terminal node
  Coefficients of least squares regression functions:
@@ -261,17 +356,57 @@ Node 13: Intermediate node
  A case goes into Node 26 if League = "A"
  League mode = "N"
  ----------------------------
-Node 26: Terminal node
- Coefficients of least squares regression functions:
- Regressor    Coefficient  t-stat      p-value
- Constant      860.5        14.59       0.3997E-14
- Salary mean = 860.472
+Node 26: Intermediate node
+ A case goes into Node 52 if CRuns <= 455.50000
+ CRuns mean = 644.77419
  ----------------------------
-Node 27: Terminal node
+Node 52: Terminal node
  Coefficients of least squares regression functions:
  Regressor    Coefficient  t-stat      p-value
- Constant      761.8        14.58        0.000    
- Salary mean = 761.807
+ Constant      684.5        12.10       0.7158E-06
+ Salary mean = 684.500
+ ----------------------------
+Node 53: Intermediate node
+ A case goes into Node 106 if CRBI <= 513.00000
+ CRBI mean = 620.38095
+ ----------------------------
+Node 106: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      1001.        7.918       0.2403E-04
+ Salary mean = 1000.71
+ ----------------------------
+Node 107: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      893.0        9.401       0.2792E-05
+ Salary mean = 892.955
+ ----------------------------
+Node 27: Intermediate node
+ A case goes into Node 54 if CHmRun <= 70.500000
+ CHmRun mean = 69.875000
+ ----------------------------
+Node 54: Intermediate node
+ A case goes into Node 108 if CWalks <= 233.50000
+ CWalks mean = 256.77273
+ ----------------------------
+Node 108: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      745.7        13.73       0.2419E-06
+ Salary mean = 745.700
+ ----------------------------
+Node 109: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      732.7        5.796       0.1200E-03
+ Salary mean = 732.708
+ ----------------------------
+Node 55: Terminal node
+ Coefficients of least squares regression functions:
+ Regressor    Coefficient  t-stat      p-value
+ Constant      812.8        14.24       0.1772E-06
+ Salary mean = 812.833
  ----------------------------
 Node 7: Intermediate node
  A case goes into Node 14 if Walks <= 52.500000
@@ -299,7 +434,7 @@ Node 31: Terminal node
  Constant      1488.        7.277       0.2671E-04
  Salary mean = 1488.01
  ----------------------------
- Proportion of variance (R-squared) explained by tree model: 0.6213
+ Proportion of variance (R-squared) explained by tree model: 0.6368
  
  Observed and fitted values are stored in data.node
- Elapsed time in seconds: 0.21552E-1
+ Elapsed time in seconds: 0.22525E-1

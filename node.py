@@ -71,7 +71,7 @@ class Model:
     """
 
     def __init__(self, settings: Settings, show_parse_output=True):
-        """ init """
+        """init"""
         parse_data(settings, show_output=show_parse_output)
         self.df = settings.df
         self.tgt = settings.dependent_var
@@ -83,7 +83,7 @@ class Model:
         self.model_type = RegressionType.PIECEWISE_CONSTANT
         self.min_samples_leaf = settings.min_samples_leaf
         self.max_depth = settings.max_depth
-        self.node_list : List[Node] = []
+        self.node_list: List[Node] = []
         self.idx_active = settings.idx_active
         self.interactions_on = settings.interactions_on
         self.top_node_best_var = None
@@ -94,12 +94,12 @@ class Model:
             indices=self.idx_active,
         )
         self.next_node_num = 1
-        self.one_df_chi2_at_root : Dict[tuple,float] = {}
-        self.tree_text : List[str] = []
+        self.one_df_chi2_at_root: Dict[tuple, float] = {}
+        self.tree_text: List[str] = []
         self.settings = settings
 
     def __name__(self):
-        """ __name """
+        """__name"""
         return "Model"
 
     def _get_next_node_num(self):
@@ -322,7 +322,7 @@ class Model:
                     ret_one_dof_stat[col] = one_dof_stat
 
                 case _:
-                    raise NotImplementedError 
+                    raise NotImplementedError
 
         return ret_one_dof_stat
 
@@ -332,7 +332,7 @@ class Model:
         if not self.interactions_on:
             return {}
         pairs = [*combinations(self.split_vars, r=2)]
-        one_dof_stats : Dict[tuple, float] = {}
+        one_dof_stats: Dict[tuple, float] = {}
         residuals = self.df.loc[node.idx, self.tgt] - node.y_mean
 
         for a, b in pairs:
@@ -426,7 +426,7 @@ class Model:
         return one_dof_stats
 
     def _get_best_variable(self, node) -> str:
-        """ Find best unbiased splitter among self.split_vars.
+        """Find best unbiased splitter among self.split_vars.
         1. Curvature tests
         2. Interaction test per the 2002 Regression paper. Note that the docs folder
         has a picture from the 2021 slideshow with another level of tests using linear
@@ -504,6 +504,7 @@ class Model:
         best_var = None
         # Behavior if lowest pvalue is from an interaction test
         if not top_var_is_singlet:
+            # logger.log(logging.INFO, msg="interaction var picked")
             top_interact_pair = all_pval[0][0]
             # Select one of interacting pair
             # if one is categorical, split at the one with lower curvature pval
@@ -692,8 +693,8 @@ class Model:
 
         str_left_node = (
             (depth - 1) * spacer
-            + f"Node {node.node_num}: {node.node_data.split_var} " +
-            f"{left_sym} {printable_split_point}"
+            + f"Node {node.node_num}: {node.node_data.split_var} "
+            + f"{left_sym} {printable_split_point}"
         )
         self.tree_text.append(str_left_node)
         self._print_tree(node.left, depth + 1)
@@ -721,8 +722,8 @@ class Model:
         """
         raise NotImplementedError
 
-    def predict(self, df_X : pd.DataFrame) -> pd.DataFrame:
-        """ Calc predictions for a test dataframe """
+    def predict(self, df_X: pd.DataFrame) -> pd.DataFrame:
+        """Calc predictions for a test dataframe"""
         predictions = pd.DataFrame(columns=["node", "predicted"])
 
         for idx, row in df_X.iterrows():
@@ -811,7 +812,7 @@ class Model:
 #####################################################
 
 
-def wilson_hilferty(stat, dof) -> float: 
+def wilson_hilferty(stat, dof) -> float:
     """Approximately convert chi-squared with dof degrees of freedom to 1 degree of freedom"""
     if dof == 1:
         return stat
