@@ -4,6 +4,8 @@
 1. Original author's site: https://pages.stat.wisc.edu/~loh/guide.html 
 1. Tree book that inspired the project: https://bgreenwell.github.io/treebook/
 
+[![Python application](https://github.com/blakeb211/guide/actions/workflows/python-app.yml/badge.svg?branch=master&event=push)](https://github.com/blakeb211/guide/actions/workflows/python-app.yml)
+
 # Usage 
  ```
  python3.10 -m venv myenv  # need 3.10 or newer for match statements
