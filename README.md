@@ -15,7 +15,7 @@
 1. Normal operation and development: edit and run *iterate.py* (or just type `make`)
 1. Run dataset test suite with `make test`
 1. Run unbiased selection test (could take 10 min) `make test_unbiased`
-1. 1. Todo list [Link to TODO.md](TODO.md)
+1. Todo list [Link to TODO.md](TODO.md)
 
 # Holistic Overview
 1. *parse.py* creates a Settings object from the .in, .dsc, and .txt files
