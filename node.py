@@ -79,7 +79,7 @@ class Model:
         self.split_vars = settings.split_vars
         self.col_data = settings.col_data
         self.roles = settings.roles
-        self.split_point_method = SplitPointMethod.GREEDY
+        selF.split_point_method = SplitPointMethod.GREEDY
         self.model_type = RegressionType.PIECEWISE_CONSTANT
         self.min_samples_leaf = settings.min_samples_leaf
         self.max_depth = settings.max_depth
