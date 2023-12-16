@@ -1,8 +1,9 @@
 # Todo 
-1. Add Github Action CI/CD
-1. Open the repo
-
+1. Decide what order to attack the wishlist
+2. 
 # Completed 
+1. Open the repo
+1. Add Github Action CI/CD
 1. Add predict for arbitrary dataframes
 1. MyLint and MyPy + code cleanup 
 1. Root cause and fixing of unbiased selection test discrepancies
