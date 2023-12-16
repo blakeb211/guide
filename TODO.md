@@ -1,11 +1,10 @@
 # Todo 
-1. MyLint and MyPy + code cleanup 
-  - changing InternalData and TerminalData to namedtuple or dict
-  - simplify or split apart get_split_greedy
-1. Add predict and train from arbitrary dataframes
+1. Add Github Action CI/CD
 1. Open the repo
 
 # Completed 
+1. Add predict for arbitrary dataframes
+1. MyLint and MyPy + code cleanup 
 1. Root cause and fixing of unbiased selection test discrepancies
 1. Write test for interaction tests from the 2002 paper
 1. Wire up Interaction tests
@@ -26,7 +25,8 @@
 1. Priors / Misclassification costs, where does it fit in?
 1. Missing values
 1. Weights
-1. @SPEED Convert to internal ndarrays instead of dataframes 
+1. Variable importance
+1. Convert to internal ndarrays instead of dataframes 
 1. Reduce dependencies
 
 # Notes 

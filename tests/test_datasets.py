@@ -1,22 +1,20 @@
-import pytest
+"""
+An efficient set of tests to be run frequently and by CI/CD.
+"""
 import sys
 import math
-import os
 import pdb
 import re
 import logging
-import pathos.pools as pp
+import pytest
 import numpy as np
 import pandas as pd
-from collections import defaultdict
 sys.path.append("..")
-from node import Model, TerminalData
+from node import Model
 from parse import Settings, RegressionType
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('Test Logger')
-
-# helpers
 
 
 def represents_num(s):
@@ -25,8 +23,7 @@ def represents_num(s):
         float(s)
     except ValueError:
         return False
-    else:
-        return True
+    return True
 
 # These tests scrape data from the GUIDE output and compare
 
@@ -36,22 +33,22 @@ def parse_output_file_for_tree_text(data_dir, fname):
         May strip this down to separate functions if they
         are needed to test against.
     """
-    SECT3 = "Regression tree:"
-    SECT3END = "***********"
-    with open(data_dir + fname) as f:
+    sect3_st = "Regression tree:"
+    sect3_end = "***********"
+    with open(data_dir + fname, encoding="utf-8") as f:
         lines = f.readlines()
         tree_text = ""
         for idx, l in enumerate(lines):
-            if l.strip().startswith(SECT3):
+            if l.strip().startswith(sect3_st):
                 index = idx
                 end_index = -1
                 start_found = False
-                while (True):
-                    if start_found == False and lines[index].strip(
+                while True:
+                    if start_found is False and lines[index].strip(
                     ).startswith("Node 1"):
                         idx = index
                         start_found = True
-                    if lines[index].strip().startswith(SECT3END):
+                    if lines[index].strip().startswith(sect3_end):
                         end_index = index
                         break
                     index = index + 1
@@ -134,7 +131,6 @@ def baseball():
 
 def compare_predicted_vals(ref, this_prog):
     """ compare program output to the .node file (train data run through the model) """
-    cutoff = 1E-3
     titles_match = this_prog.columns == ref.columns
     train_y_or_n_matches = this_prog.train == ref.train
     observed_differences = np.abs(this_prog.observed - ref.observed)
@@ -146,7 +142,8 @@ def compare_predicted_vals(ref, this_prog):
 
     logger.log(
         logging.INFO,
-        msg=f"num cases match?               {this_prog.shape[0] == ref.shape[0]} this_prog, ref = {this_prog.shape[0]},{ref.shape[0]}")
+        msg=f"num cases match?               {this_prog.shape[0] == ref.shape[0]} " + 
+        f"this_prog, ref = {this_prog.shape[0]},{ref.shape[0]}")
     logger.log(
         logging.INFO,
         msg=f"column titles match?           {titles_match.all()}")
@@ -179,10 +176,10 @@ def compare_trees(ref_tree, tree_text):
     regex = r"""Node\s(\d*):\s(\S+)\s([<>=//]+)(.*)"""
     first_point_of_diff = None
 
-    for lr, lp in zip(ref_tree, tree_text):
+    for line_ref, line_prog in zip(ref_tree, tree_text):
         # returns list of tup so we take index 0
-        rtup = re.findall(regex, lr)[0]
-        ptup = re.findall(regex, lp)[0]
+        rtup = re.findall(regex, line_ref)[0]
+        ptup = re.findall(regex, line_prog)[0]
         if rtup[1] != ptup[1]:
             first_point_of_diff = f"split var at node {ptup[0]}"
             break
@@ -200,7 +197,7 @@ def compare_trees(ref_tree, tree_text):
         if represents_num(rtup[3]):
             # if one split point is num, both should be numbers since we have the same split_var,
             # but if something weird happened we want to know
-            assert (represents_num(ptup[3]))
+            assert represents_num(ptup[3])
             split_point_same = np.isclose(float(ptup[3]), float(rtup[3]))
         else:
             # handle comparing categories
@@ -210,16 +207,13 @@ def compare_trees(ref_tree, tree_text):
 
         if not split_point_same:
             first_point_of_diff = f"split point at node {ptup[0]}"
+            # Log our tree's first point of difference with the reference tree
+            logger.log(
+                logging.INFO,
+                msg=f"1st tree difference w\\ ref     {first_point_of_diff}")
+            if first_point_of_diff is not None:
+                logger.log(logging.INFO, msg=f"************ {line_prog} vs {line_ref}")
             break
-
-    # Log our tree's first point of difference with the reference tree
-    logger.log(
-        logging.INFO,
-        msg=f"1st tree difference w\\ ref     {first_point_of_diff}")
-    if first_point_of_diff is not None:
-        logger.log(logging.INFO, msg=f"************ {lp} vs {lr}")
-    # assert first_point_of_diff == None
-
 
 def test_tiny2(tiny2):
     """ Compare predictions of fitted model on the training data to
@@ -324,3 +318,11 @@ def test_baseball(baseball):
         _settings.data_dir + "data.node",
         delim_whitespace=True)
     compare_predicted_vals(reference, _predictions)
+
+def test_predict_method(baseball):
+    """ Make sure running model.predict() method works """
+    _settings, _model, _predictions = baseball
+    test_df = _settings.df.drop(columns=['Salary'])
+    predict_method_output = _model.predict(test_df)
+    max_diff = (predict_method_output.predicted - _predictions.predicted).abs().max()
+    assert max_diff < 0.1

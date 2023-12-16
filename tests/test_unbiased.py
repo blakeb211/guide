@@ -1,3 +1,13 @@
+""" Test Unbiased variable selection for This Program, and CART.
+See the 2002 regression paper, Table 4, pg 367.
+1-  generate fresh data for     C5, C10, U, T, W, and Z
+2-  write data.txt for independent, weakly dependent, strongly dependent cases
+3-  fit each dataset with a piecewise constant model
+4-  tally variable selected at root node
+5-  repeat 1000 times = 3000 total fits
+6-  compare the counts divided by 1000 (frequency) to 0.2, 
+    which is the complete unbiased case (5 variables 1000 sims)
+"""
 import sys
 import pdb
 import pathos.pools as pp
@@ -6,7 +16,7 @@ import logging
 import numpy as np
 import pandas as pd
 sys.path.append("..")
-from node import Model, InternalData
+from node import Model
 from parse import Settings, RegressionType
 
 
@@ -15,16 +25,6 @@ logger = logging.getLogger('Test Logger')
 
 
 def test_unbiased_selection_no_interaction_tests():
-    """ Test Unbiased variable selection for This Program, and CART.
-        See the 2002 regression paper pg 367. """
-    """
-    1-  generate fresh data for     C5, C10, U, T, W, and Z
-    2-  write data.txt for independent, weakly dependent, strongly dependent cases
-    3-  fit each dataset with a piecewise constant model and CART
-    4-  tally variable selected at root node
-    5-  repeat 1000 times
-    =   6000 total fits, 3000 for CART and 3000 for this program
-    """
     data_dir = "./data-unbiased-selection/"
 
     def fit_and_tally(fname):
@@ -34,7 +34,7 @@ def test_unbiased_selection_no_interaction_tests():
             model=RegressionType.PIECEWISE_CONSTANT,
             input_file="cons.in",
             overwrite_data_txt=fname)
-        model = Model(settings)
+        model = Model(settings, show_parse_output=False)
         model.fit()
         return model.top_node_best_var
 
@@ -70,11 +70,11 @@ def test_unbiased_selection_no_interaction_tests():
             np.column_stack(
                 (X1, X2, X3_3, X4_3, X5, Y)), columns=col_list)
 
-        with open(data_dir + f"data-indep{i}.txt", "w") as f:
+        with open(data_dir + f"data-indep{i}.txt", "w", encoding="utf-8") as f:
             f.write(indep.to_string(col_space=10, index=False))
-        with open(data_dir + f"data-weak{i}.txt", "w") as f:
+        with open(data_dir + f"data-weak{i}.txt", "w", encoding="utf-8") as f:
             f.write(weak.to_string(col_space=10, index=False))
-        with open(data_dir + f"data-strong{i}.txt", "w") as f:
+        with open(data_dir + f"data-strong{i}.txt", "w", encoding="utf-8") as f:
             f.write(strong.to_string(col_space=10, index=False))
 
         split_var_indep = fit_and_tally(f"data-indep{i}.txt")
@@ -108,12 +108,11 @@ def test_unbiased_selection_no_interaction_tests():
     three_std_err = 0.05
     # These are not the exact criteria that are in Table 4 of the 2002 paper (see docs folder)
     # In the paper, all values are within .05 of the completely unbiased value of 0.2
-    # This is a good argument that unbiased selection is taking place but it could be quantified
-    # more thoroughly and a stronger argument could be made.
 
     outliers = 0
     outliers += (diffs_from_mean > three_std_err).sum().sum()
 
-    logger.log(logging.INFO, results_df)
-    logger.log(logging.INFO, f"outliers from unbiased (0.2) {outliers}")
+    logger.log(logging.INFO, "\n%s" % results_df.to_string())
+    logger.log(logging.INFO, "outliers from unbiased (0.2) %s" % outliers)
+
     assert outliers < 2
