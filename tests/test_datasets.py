@@ -318,7 +318,6 @@ def test_baseball(baseball):
         _settings.data_dir + "data.node",
         delim_whitespace=True)
     compare_predicted_vals(reference, _predictions)
-    assert False
 
 def test_predict_method(baseball):
     """ Make sure running model.predict() method works """
