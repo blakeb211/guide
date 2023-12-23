@@ -1,4 +1,7 @@
 # Todo 
+1. Add one paragraph summary of what is Guide and what has been done so far
+1. Add CONTRIBUTORS.md file
+1. Try settings class as a @dataclass to get ride of huge constructor
 1. Decide what order to attack the wishlist
 2. 
 # Completed 
@@ -10,12 +13,12 @@
 1. Write test for unbiased selection from the 2002 paper
 1. Wire up Interaction tests
 1. Put in fast categoricals
-1. switched goal from "exact match to GUIDE v41.2 to 'GUIDE-Compatible implementation"
-1. match reference for unweighted greedy split of categoricals with no missing values 
-1. match reference with greedy split point, unweighted numeric variables only, no interaction tests, no missing values, no bootstrap collection for piecewise constant
-1. write test to compare the tree structure outputted by GUIDE
-1. write predict_train_data to generate node file (runs predict on the training data)
-1. write test that can compare node files
+1. Switched goal from "exact match to GUIDE v41.2 to 'GUIDE-Compatible implementation"
+1. Match reference for unweighted greedy split of categoricals with no missing values 
+1. Match reference with greedy split point, unweighted numeric variables only, no interaction tests, no missing values, no bootstrap collection for piecewise constant
+1. Write test to compare the tree structure outputted by GUIDE
+1. Write predict_train_data to generate node file (runs predict on the training data)
+1. Write test that can compare node files
 
 # Wishlist
 1. Add node count comparison print out or test
