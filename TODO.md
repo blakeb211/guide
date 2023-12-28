@@ -1,12 +1,27 @@
 # Current feature goal
-1. Improve output match with the reference, adding necessary features until variable importance can be calculated on arbitrary tabular datasets and used in production for data reduction tasks.
+1. Improve output match with the reference, adding necessary features until variable importance can be calculated on arbitrary tabular datasets. There are several features above the variable importance item on the wishlist become some or all of them are required before adding that functionality. 
 
 # Current supported features
-1. Handles numeric and categoric variables with no missing values
+1. Handles numeric and categoric variables for regression with a linear constant model type, with no missing values
 
-# Todo 
-1. Decide what order to attack the wishlist
-2. Put goals at top of TODO
+# Wishlist
+1. Replace settings class with a dictionary
+1. Add node count comparison to testing output. I believe it differs a fair bit from the reference for some tests. Would want to reduce the gap if it does.
+1. Add another test for the interaction test part of the code. 
+1. Convert Node and Model's internal data from pandas dataframe to numpy.ndarray due to much slower indexing operations. 
+1. Missing values
+1. Add Pruning with some common options like 0-SE or 1-SE. 
+1. Regression for piecewise linear 
+  1. Bootstrap correction 
+  1. Will have to implement more variable roles
+  1. Bootstrap bias correction is for linear models 
+1. Classification
+1. Add "fraction of variance explained by model" to printed output
+1. Priors / Misclassification costs, where does it fit in?
+1. Weights
+1. Variable importance
+1. Reduce dependencies e.g. we can calculate bonferroni correction with just numpy and some equations and remove the statsmodels dependency
+
 # Completed 
 1. Add one paragraph summary of what is Guide and what has been done so far
 1. Add CONTRIBUTORS.md file
@@ -25,22 +40,6 @@
 1. Write predict_train_data to generate node file (runs predict on the training data)
 1. Write test that can compare node files
 
-# Wishlist
-1. Add node count comparison to testing output. I believe it differs a fair bit from the reference for some tests. Want to reduce the gap.
-1. Add fraction of variance explained by model printout
-1. Add another test for the interaction test part of the code. 
-1. Add Pruning with some common options like 0-SE or 1-SE
-1. Regression for piecewise linear 
-  1. Bootstrap correction 
-  1. Will have to implement more variable roles
-  1. Bootstrap bias correction is for linear models 
-1. Classification
-1. Priors / Misclassification costs, where does it fit in?
-1. Missing values
-1. Weights
-1. Variable importance
-1. Convert to internal ndarrays instead of dataframes 
-1. Reduce dependencies
 
 # Notes 
 ## Variable roles
