@@ -49,7 +49,7 @@ Node 1: num1 > 3.8499999999999996
  source ./myenv/bin/activate 
  pip install -r requirements.txt
  ```
-1. Normal operation and development: *python main.py*
+1. Normal operation and development: `python main.py`
 1. Run dataset test suite with `pytest -rA --log-cli-level INFO test_datasets.py` These tests compare this program's output to the GUIDE output (called 'this prog' and 'reference' respectively in the code).
 1. Run unbiased selection test. (could take 10 min) `pytest -rA --log-cli-level INFO -vv --tb=long test_unbiased.py`
 1. Look at the TODO list and CONTRIBUTING.md to make your contribution [Link to TODO.md](TODO.md)
