@@ -9,7 +9,7 @@ import pandas as pd
 
 if __name__ == "__main__":
     settings = Settings(
-        data_dir="./tests/data-baseball/",
+        data_dir="./tests/data-tiniest2/",
         dsc_file="data.dsc",
         model=RegressionType.PIECEWISE_CONSTANT,
         out_file="cons.out",
@@ -17,6 +17,5 @@ if __name__ == "__main__":
     )
     model = Model(settings)
     model.fit()
-    print(f"Nodes in final tree = {len(model.node_list)}")
     print("\n".join(model.tree_text))
     # model.predict_train_data(print_me=True)

@@ -1,9 +1,9 @@
-# Makefile for running iterate.py
+# Makefile for running main.py
 
 .PHONY: run
 
 run:
-	python3 iterate.py
+	python3 main.py
 
 test:
 	cd tests && pytest -rA --log-cli-level INFO test_datasets.py

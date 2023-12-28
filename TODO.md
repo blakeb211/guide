@@ -1,10 +1,15 @@
+# Current feature goal
+1. Improve output match with the reference, adding necessary features until variable importance can be calculated on arbitrary tabular datasets and used in production for data reduction tasks.
+
+# Current supported features
+1. Handles numeric and categoric variables with no missing values
+
 # Todo 
+1. Decide what order to attack the wishlist
+2. Put goals at top of TODO
+# Completed 
 1. Add one paragraph summary of what is Guide and what has been done so far
 1. Add CONTRIBUTORS.md file
-1. Try settings class as a @dataclass to get ride of huge constructor
-1. Decide what order to attack the wishlist
-2. 
-# Completed 
 1. Open the repo
 1. Add Github Action CI/CD
 1. Add predict for arbitrary dataframes
@@ -21,10 +26,10 @@
 1. Write test that can compare node files
 
 # Wishlist
-1. Add node count comparison print out or test
+1. Add node count comparison to testing output. I believe it differs a fair bit from the reference for some tests. Want to reduce the gap.
 1. Add fraction of variance explained by model printout
-1. Add another test for interactions 
-1. Pruning
+1. Add another test for the interaction test part of the code. 
+1. Add Pruning with some common options like 0-SE or 1-SE
 1. Regression for piecewise linear 
   1. Bootstrap correction 
   1. Will have to implement more variable roles
@@ -52,7 +57,6 @@
     -  numeric-var <= 10   or NA  missing values to the left
     -  numeric-var <= -inf or NA  numeric var equals NA; NA goes left all else goes right
 1. What does M column - missing value flag (codes for missing values)
-  - these are only present in some datasets. Save it as a future feature.
 
 Table: Variable role meanings
 | Abbreviation | Meaning                                                   |

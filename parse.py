@@ -27,7 +27,6 @@ class SplitPointMethod(Enum):
     MEDIAN = 2  # unused
     SYSTEMATIC = 3  # unused
 
-
 class Settings:
     """The settings object holds model parameters. This should probably just be a dictionary."""
 
